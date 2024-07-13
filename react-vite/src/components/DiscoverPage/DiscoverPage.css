@@ -6,19 +6,20 @@ html, body {
 }
 
 #root {
-  flex: 1;
   display: flex;
-  flex-direction: column;
+  height: 100vh; /* ensure the root takes full viewport height */
 }
 
 .discover-page {
   display: flex;
   align-items: flex-start;
   height: 100vh; /* ensure full viewport height */
+  width: 100%; /* make sure it takes the full width */
 }
 
+
 .sidebar {
-  height: 100vh;
+  height: 100vh; /* ensure it takes the full height */
   width: 50px;
   background-color: #1E1F22;
   padding: 20px 0; /* remove left/right padding to be flush with left side */
@@ -26,6 +27,7 @@ html, body {
   flex-direction: column;
   align-items: center; /* center icons horizontally */
 }
+
 
 .sidebar-nav ul {
   list-style: none;
@@ -64,11 +66,12 @@ html, body {
 }
 
 .middle-bar-nav {
+  width: 180px;
   background-color: #2B2D31;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* distribute space between channel-nav and profile-nav */
-  height: 100vh;
+  height: 100vh; /* ensure it takes the full height */
   padding: 0;
 }
 
@@ -108,8 +111,10 @@ html, body {
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  padding: 20px;
 }
 
 .hero-section {
@@ -127,11 +132,12 @@ html, body {
 }
 
 .server-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 10px 0px 0px 0px;
+  display: flex;
+  flex-wrap: wrap; /* allows the items to wrap into multiple rows */
   gap: 20px;
+  padding: 10px 0 0 0;
 }
+
 
 .server-card {
   background-color: #232428;

@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
-import { thunkLogout } from "../../redux/session"; 
-import "./DiscoverPage.css"; 
+import { thunkLogout } from "../../redux/session";
+import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the button
+import ServerForm from "../Servers/ServerFormModal";
+import "./DiscoverPage.css";
 
 function DiscoverPage() {
   const dispatch = useDispatch();
@@ -16,10 +18,6 @@ function DiscoverPage() {
     }
   }, [dispatch, user]);
 
-  useEffect(() => {
-    console.log('Servers state:', servers);
-  }, [servers]);
-
   const handleLogout = () => {
     dispatch(thunkLogout());
   };
@@ -28,13 +26,10 @@ function DiscoverPage() {
     return <Navigate to="/" />;
   }
 
-  if (!Array.isArray(servers)) {
-    return <div>Unexpected error: servers is not an array</div>;
-  }
-
   return (
     <div className="discover-page">
       <div className="sidebar">
+        {/* sidebar content with icons of servers */}
         <nav className="sidebar-nav">
           <ul>
             {servers.map((server) => (
@@ -47,11 +42,10 @@ function DiscoverPage() {
               </li>
             ))}
             <li className="server-icon">
-              <Link to="/add-server">
-                <div className="icon-circle add-server-icon">
-                  +
-                </div>
-              </Link>
+              <OpenModalButton
+                modalComponent={<ServerForm />}
+                buttonText="+"
+              />
             </li>
           </ul>
         </nav>

@@ -11,11 +11,13 @@ def create_server():
     form = ServerForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
+        avatar_url = upload_file_to_s3(request.files['avatar']) if 'avatar' in request.files else None
+        banner_url = upload_file_to_s3(request.files['banner']) if 'banner' in request.files else None
         server = Server(
             name=form.data['name'],
             description=form.data['description'],
-            avatar_url=form.data['avatar_url'],
-            banner_url=form.data['banner_url'],
+            avatar_url=avatar_url,
+            banner_url=banner_url,
             category=form.data['category'],
             creator_id=current_user.id,
         )
@@ -65,6 +67,10 @@ def update_server(id):
 def delete_server(id):
     server = Server.query.get(id)
     if server and server.creator_id == current_user.id:
+        if server.avatar_url:
+            delete_file_from_s3(server.avatar_url)
+        if server.banner_url:
+            delete_file_from_s3(server.banner_url)
         db.session.delete(server)
         db.session.commit()
         return {'message': 'Server deleted'}

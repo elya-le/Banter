@@ -5,7 +5,6 @@ import SignupFormPage from '../components/SignupFormPage';
 import DiscoverPage from '../components/DiscoverPage/DiscoverPage';
 import WelcomePage from '../components/WelcomePage';
 
-
 export const router = createBrowserRouter([
   {
     element: <Layout />,
