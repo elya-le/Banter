@@ -2,7 +2,7 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy import func
-
+from .user_server_membership import user_server_membership
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
     servers = db.relationship('Server', back_populates='creator', cascade='all, delete-orphan')
+    joined_servers = db.relationship('Server', secondary=user_server_membership, back_populates='members')
 
     @property
     def password(self):
@@ -40,6 +41,7 @@ class User(db.Model, UserMixin):
             'avatar_url': self.avatar_url,
             'status': self.status,
             'servers': [server.to_dict() for server in self.servers],
+            'joined_servers': [server.to_dict() for server in self.joined_servers],
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }

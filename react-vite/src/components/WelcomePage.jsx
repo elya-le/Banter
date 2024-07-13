@@ -6,7 +6,7 @@ function HomePage() {
   const user = useSelector((state) => state.session.user);
 
   if (user) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/discover-page" />;
   }
 
   return (

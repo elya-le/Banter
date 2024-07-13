@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session"; 
-import "./Dashboard.css"; 
+import "./DiscoverPage.css"; 
 
-function Dashboard() {
+function DiscoverPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   const servers = useSelector((state) => state.servers.servers);
@@ -25,7 +25,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard">
+    <div className="discover-page">
       <div className="sidebar">
         {/* sidebar content with icons of servers */}
         <nav className="sidebar-nav">
@@ -65,9 +65,9 @@ function Dashboard() {
       <div className="main-content">
         <div className="hero-section">
           <h1>Find your community on Discord</h1>
-          <p>From gaming, to music, to learning, there's a place for you.</p>
+          <p>From gaming, to music, to learning, there&apos;s a place for you.</p>
         </div>
-        <h1>Find your community on Discord</h1>
+        <h1>Featured communities</h1>
         <div className="server-grid">
           {servers.map((server) => (
             <div key={server.id} className="server-card">
@@ -87,4 +87,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DiscoverPage;

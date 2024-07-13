@@ -11,7 +11,7 @@ html, body {
   flex-direction: column;
 }
 
-.dashboard {
+.discover-page {
   display: flex;
   align-items: flex-start;
   height: 100vh; /* ensure full viewport height */
@@ -48,7 +48,7 @@ html, body {
 .icon-circle {
   width: 36px;
   height: 36px;
-  background-color: #7289da;
+  background-color: #313338;
   color: white;
   font-size: 24px;
   display: flex;
@@ -123,7 +123,7 @@ html, body {
   padding: 50px;
   border-radius: 10px;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .server-grid {
@@ -135,11 +135,11 @@ html, body {
 
 .server-card {
   background-color: #232428;
-  min-width: 240px; /* minimum width for server cards */
-  max-width: 340px; /* maximum width for server cards */
-  min-height: 300px; /* minimum width for server cards */
-  max-height: 300px; /* maximum width for server cards */
-  border-radius: 10px;
+  min-width: 240px; 
+  max-width: 340px; 
+  min-height: 300px; 
+  max-height: 300px; 
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;

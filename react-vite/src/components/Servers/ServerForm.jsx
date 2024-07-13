@@ -21,7 +21,7 @@ function ServerForm() {
 
     const result = await dispatch(thunkCreateServer(serverData));
     if (!result.errors) {
-      navigate("/dashboard");
+      navigate("/discover-page");
     }
   };
 
