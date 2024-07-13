@@ -14,6 +14,7 @@ def create_server():
         server = Server(
             name=form.data['name'],
             description=form.data['description'],
+            avatar_url=form.data['avatar_url'], 
             creator_id=current_user.id,
         )
         db.session.add(server)
@@ -45,6 +46,7 @@ def update_server(id):
         if form.validate_on_submit():
             server.name = form.data['name']
             server.description = form.data['description']
+            server.avatar_url = form.data['avatar_url']
             db.session.commit()
             return jsonify(server.to_dict())
         return {'errors': form.errors}, 400
@@ -59,4 +61,3 @@ def delete_server(id):
         db.session.commit()
         return {'message': 'Server deleted'}
     return {'error': 'Server not found or unauthorized'}, 404
-

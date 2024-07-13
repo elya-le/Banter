@@ -1,0 +1,164 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard {
+  display: flex;
+  align-items: flex-start;
+  height: 100vh; /* ensure full viewport height */
+}
+
+.sidebar {
+  height: 100vh;
+  width: 50px;
+  background-color: #1E1F22;
+  padding: 20px 0; /* remove left/right padding to be flush with left side */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center icons horizontally */
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center; /* center icon-column */
+}
+
+.server-icon {
+  width: 40px;
+  padding: 0;
+  margin: 0;
+}
+
+.icon-circle {
+  width: 36px;
+  height: 36px;
+  background-color: #7289da;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.add-server-icon {
+  background-color: #313338; 
+  color: #22A559;/* green background for the add server icon */
+}
+
+.middle-bar-nav {
+  background-color: #2B2D31;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* distribute space between channel-nav and profile-nav */
+  height: 100vh;
+  padding: 0;
+}
+
+.channel-nav {
+  min-height: 200px;
+  width: 180px;
+  padding: 5px;
+  flex-grow: 1; /* allow it to grow */
+}
+
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  background-color: #232428;
+  border-top: 1px solid #333;
+}
+
+.profile-info {
+  font-size: 12px;
+  padding: 0 0 0 10px;
+  margin: 5px 0 0 0;
+  min-width: 100px;
+  max-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* align text to the left */
+}
+
+.logout-button {
+  padding: 0;
+  min-height: 30px;
+  margin: 10px 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 440px;
+  text-align: center;
+  background-color: #5865F2;
+  padding: 50px;
+  border-radius: 10px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.server-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.server-card {
+  background-color: #232428;
+  min-width: 240px; /* minimum width for server cards */
+  max-width: 340px; /* maximum width for server cards */
+  min-height: 300px; /* minimum width for server cards */
+  max-height: 300px; /* maximum width for server cards */
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.server-banner {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.server-info {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.server-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

@@ -10,6 +10,7 @@ class Server(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
+    avatar_url = db.Column(db.String(255), nullable=True)
     creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
@@ -21,6 +22,7 @@ class Server(db.Model):
             'id': self.id,
             'name': self.name,
             'description': self.description,
+            'avatar_url': self.avatar_url,
             'creator_id': self.creator_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
