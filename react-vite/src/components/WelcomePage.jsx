@@ -1,6 +1,6 @@
-
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import "../index.css";
 
 function HomePage() {
   const user = useSelector((state) => state.session.user);
@@ -18,22 +18,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-
-
-// import { useOutletContext } from "react-router-dom";
-
-// function WelcomePage() {
-//   const { sessionUser } = useOutletContext();
-
-//   return (
-//     <div className="home-page">
-//       <h1>
-//         {/* {sessionUser ? `Welcome, ${sessionUser.username}, Find your community on Discord` : 'Welcome! Open Discord in your browser'} */}
-//         {sessionUser ? `Find your community on Discord` : 'Welcome! Open Discord in your browser'}
-//       </h1>
-//     </div>
-//   );
-// }
-
-// export default WelcomePage;

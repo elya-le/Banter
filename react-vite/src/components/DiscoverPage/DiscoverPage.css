@@ -5,10 +5,10 @@ html, body {
   display: flex;
 }
 
-#root {
+/* #root {
   display: flex;
-  height: 100vh; /* ensure the root takes full viewport height */
-}
+  height: 100vh; 
+} */
 
 .discover-page {
   display: flex;

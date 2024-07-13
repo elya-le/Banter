@@ -82,8 +82,8 @@
 }
 
 .demo-button {
-  box-sizing: border-box; /* Apply box-sizing to default state */
-  border: 1px solid transparent; /* Default border to prevent size change */
+  box-sizing: border-box; /* apply box-sizing to default state */
+  /* border: 1px solid transparent; default border to prevent size change */
   background-color: white; 
   color: #1E1F22;
   font-weight: bold;
@@ -92,10 +92,10 @@
 
 .demo-button:hover {
   box-sizing: border-box;
-  background-color: white; 
-  color: #22A559;
+  background-color: #22A559; 
+  color: white;
   font-weight: bold;
-  border: 1px solid #22A559;
+  /* border: 1px solid; */
 }
 
 .sign-up-link {

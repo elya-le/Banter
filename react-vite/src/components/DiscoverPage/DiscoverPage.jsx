@@ -90,7 +90,7 @@ function DiscoverPage() {
       </div>
       <div className="main-content">
         <div className="hero-section">
-          <h1>Find your community on Discord</h1>
+          <h1>Welcome {user.username}! Find your community on Discord</h1>
           <p>From gaming, to music, to learning, there&apos;s a place for you.</p>
         </div>
         <h1>Featured communities</h1>
