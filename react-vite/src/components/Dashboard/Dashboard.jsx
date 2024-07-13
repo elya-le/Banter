@@ -67,6 +67,7 @@ function Dashboard() {
           <h1>Find your community on Discord</h1>
           <p>From gaming, to music, to learning, there's a place for you.</p>
         </div>
+        <h1>Find your community on Discord</h1>
         <div className="server-grid">
           {servers.map((server) => (
             <div key={server.id} className="server-card">

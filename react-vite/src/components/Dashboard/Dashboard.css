@@ -129,6 +129,7 @@ html, body {
 .server-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  padding: 10px 0px 0px 0px;
   gap: 20px;
 }
 

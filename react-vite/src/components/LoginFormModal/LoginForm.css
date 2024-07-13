@@ -13,13 +13,13 @@
 
 
 .login-sign-up-container {
-  padding: 20px;
+  padding: 50px 10px;
   border-radius: 5px;
   background-color: rgb(49, 51, 56);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 400px;
+  width: 380px;
 }
 
 .login-sign-up-header {
@@ -75,6 +75,27 @@
   color: #E74C3C;
   font-weight:lighter;
   font-style: italic;
+}
+
+.log-in-submit {
+  font-weight: bold;
+}
+
+.demo-button {
+  box-sizing: border-box; /* Apply box-sizing to default state */
+  border: 1px solid transparent; /* Default border to prevent size change */
+  background-color: white; 
+  color: #1E1F22;
+  font-weight: bold;
+  
+}
+
+.demo-button:hover {
+  box-sizing: border-box;
+  background-color: white; 
+  color: #22A559;
+  font-weight: bold;
+  border: 1px solid #22A559;
 }
 
 .sign-up-link {
