@@ -2,14 +2,14 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import LoginButton from "./LoginButton";
 import SignupButton from "./SignupButton";
-import "./Navigation.css";
+import "./TopNavigation.css";
 
-function Navigation() {
+function TopNavigation() {
 
   const user = useSelector(state => state.session.user);
 
   return (
-    <nav className="navigation-bar">
+    <nav className="top-navigation-bar">
       <NavLink to="/" className="home-link">Discord</NavLink>
       <div className="auth-buttons">
         {!user && <SignupButton className="signup-button" />}
@@ -21,4 +21,4 @@ function Navigation() {
   );
 }
 
-export default Navigation;
+export default TopNavigation;
