@@ -16,6 +16,10 @@ function DiscoverPage() {
     }
   }, [dispatch, user]);
 
+  useEffect(() => {
+    console.log('Servers state:', servers);
+  }, [servers]);
+
   const handleLogout = () => {
     dispatch(thunkLogout());
   };
@@ -24,10 +28,13 @@ function DiscoverPage() {
     return <Navigate to="/" />;
   }
 
+  if (!Array.isArray(servers)) {
+    return <div>Unexpected error: servers is not an array</div>;
+  }
+
   return (
     <div className="discover-page">
       <div className="sidebar">
-        {/* sidebar content with icons of servers */}
         <nav className="sidebar-nav">
           <ul>
             {servers.map((server) => (

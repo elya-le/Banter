@@ -3,7 +3,7 @@ const ADD_SERVER = 'servers/addServer';
 const UPDATE_SERVER = 'servers/updateServer';
 const REMOVE_SERVER = 'servers/removeServer';
 
-// Action creators
+// action creators
 const setServers = (servers) => ({
   type: SET_SERVERS,
   payload: servers,
@@ -29,9 +29,10 @@ export const thunkFetchServers = () => async (dispatch) => {
   const response = await fetch('/api/servers/');
   if (response.ok) {
     const data = await response.json();
-    dispatch(setServers(data));
+    dispatch(setServers(data.servers)); // accessing the servers array directly
   }
 };
+
 
 export const thunkCreateServer = (serverData) => async (dispatch) => {
   const response = await fetch('/api/servers/', {
@@ -76,10 +77,10 @@ export const thunkDeleteServer = (id) => async (dispatch) => {
   }
 };
 
-// Initial state
+// initial state
 const initialState = { servers: [] };
 
-// Reducer
+// reducer
 function serversReducer(state = initialState, action) {
   switch (action.type) {
     case SET_SERVERS:
