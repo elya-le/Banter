@@ -37,17 +37,25 @@ export const thunkFetchServers = () => async (dispatch) => {
 export const thunkCreateServer = (serverData) => async (dispatch) => {
   const response = await fetch('/api/servers/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(serverData),
+    body: serverData, // send the FormData object directly
   });
   if (response.ok) {
     const data = await response.json();
     dispatch(addServer(data));
+    return data; // return the newly created server's data
   } else if (response.status < 500) {
     const errorMessages = await response.json();
     return errorMessages;
   } else {
     return { server: 'Something went wrong. Please try again' };
+  }
+};
+
+export const thunkFetchServer = (id) => async (dispatch) => {
+  const response = await fetch(`/api/servers/${id}`);
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(addServer(data)); // add or update the server in the state
   }
 };
 

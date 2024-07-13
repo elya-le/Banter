@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the button
-import ServerForm from "../Servers/ServerFormModal";
+import ServerFormModal from "../Servers/ServerFormModal"; // Ensure you import the correct component
 import "./DiscoverPage.css";
 
 function DiscoverPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   const servers = useSelector((state) => state.servers.servers);
+
+  // modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -20,6 +23,14 @@ function DiscoverPage() {
 
   const handleLogout = () => {
     dispatch(thunkLogout());
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   if (!user) {
@@ -41,10 +52,12 @@ function DiscoverPage() {
                 </Link>
               </li>
             ))}
-            <li className="server-icon">
+            <li>
               <OpenModalButton
-                modalComponent={<ServerForm />}
+                modalComponent={<ServerFormModal onClose={handleCloseModal} />}
                 buttonText="+"
+                onButtonClick={handleOpenModal}
+                className="add-server-icon"
               />
             </li>
           </ul>
@@ -84,6 +97,7 @@ function DiscoverPage() {
           ))}
         </div>
       </div>
+      {isModalOpen && <ServerFormModal onClose={handleCloseModal} />}
     </div>
   );
 }
