@@ -6,6 +6,10 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the button
 import ServerFormModal from "../Servers/ServerFormModal"; // Ensure you import the correct component
 import "./DiscoverPage.css";
+import { FaCompass } from "react-icons/fa6";
+
+
+
 
 function DiscoverPage() {
   const dispatch = useDispatch();
@@ -60,6 +64,14 @@ function DiscoverPage() {
                 className="add-server-icon"
               />
             </li>
+            <li>
+              <Link to="/discover-page" className="discover-page-icon">
+                {/* replace with discover icon */}
+                <div className="discover-icon">
+                <FaCompass />
+                </div>
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -84,7 +96,8 @@ function DiscoverPage() {
         <h1>Featured communities</h1>
         <div className="server-grid">
           {servers.map((server) => (
-            <div key={server.id} className="server-card">
+            <Link to={`/servers/${server.id}`} key={server.id} className="server-card-link">
+            <div className="server-card">
               <img src={server.banner_url} alt={`${server.name} banner`} className="server-banner"/>
               <div className="server-info">
                 <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar"/>
@@ -94,6 +107,7 @@ function DiscoverPage() {
                 </div>
               </div>
             </div>
+            </Link>
           ))}
         </div>
       </div>

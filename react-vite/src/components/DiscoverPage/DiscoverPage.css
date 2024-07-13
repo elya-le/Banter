@@ -87,6 +87,27 @@ html, body {
   color: white; 
   border-radius: 30%;
 }
+
+.discover-icon {
+  width: 36px;
+  height: 36px;
+  background-color: #313338;
+  color: #22A559;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.discover-icon:hover {
+  background-color: #22A559; 
+  color: white; 
+  border-radius: 30%;
+}
+
 .middle-bar-nav {
   width: 180px;
   background-color: #2B2D31;

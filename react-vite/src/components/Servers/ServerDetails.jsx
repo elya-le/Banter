@@ -7,6 +7,9 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the 
 import ServerFormModal from "../Servers/ServerFormModal"; // ensure you import the correct component
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
+import { FaCompass } from "react-icons/fa";
+
+
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -67,6 +70,14 @@ function ServerDetailPage() {
                 onButtonClick={handleOpenModal}
                 className="add-server-icon"
               />
+            </li>
+            <li>
+              <Link to="/discover-page" className="discover-page-icon">
+                {/* replace with discover icon */}
+                <div className="discover-icon">
+                <FaCompass />
+                </div>
+              </Link>
             </li>
           </ul>
         </nav>
