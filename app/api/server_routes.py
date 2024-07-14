@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, Server, User
 from app.forms.server_form import ServerForm
-from app.utils.s3_helpers import upload_file_to_s3, delete_file_from_s3
 
 server_routes = Blueprint('servers', __name__)
 
@@ -12,7 +11,7 @@ def create_server():
     form = ServerForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        avatar_url = upload_file_to_s3(request.files['avatar']) if 'avatar' in request.files else None
+        avatar_url = form.data['avatar_url'] if 'avatar_url' in form.data else None
         server = Server(
             name=form.data['name'],
             description=form.data['description'],
@@ -65,10 +64,6 @@ def update_server(id):
 def delete_server(id):
     server = Server.query.get(id)
     if server and server.creator_id == current_user.id:
-        if server.avatar_url:
-            delete_file_from_s3(server.avatar_url)
-        if server.banner_url:
-            delete_file_from_s3(server.banner_url)
         db.session.delete(server)
         db.session.commit()
         return {'message': 'Server deleted'}

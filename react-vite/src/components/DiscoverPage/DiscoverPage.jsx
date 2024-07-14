@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session";
-import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the button
-import ServerFormModal from "../Servers/ServerFormModal"; // Ensure you import the correct component
+import OpenModalButton from "../OpenModalButton/OpenModalButton"; // Import the OpenModalButton
+import ServerFormModal from "../Servers/ServerFormModal"; // Import the ServerFormModal
 import "./DiscoverPage.css";
 import { FaCompass } from "react-icons/fa6";
-
-
-
 
 function DiscoverPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   const servers = useSelector((state) => state.servers.servers);
-
-  // modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -27,14 +21,6 @@ function DiscoverPage() {
 
   const handleLogout = () => {
     dispatch(thunkLogout());
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
   };
 
   if (!user) {
@@ -58,17 +44,16 @@ function DiscoverPage() {
             ))}
             <li>
               <OpenModalButton
-                modalComponent={<ServerFormModal onClose={handleCloseModal} />}
+                modalComponent={<ServerFormModal />}
                 buttonText="+"
-                onButtonClick={handleOpenModal}
-                className="add-server-icon"
+                className="create-server-button"
               />
             </li>
             <li>
               <Link to="/discover-page" className="discover-page-icon">
                 {/* replace with discover icon */}
                 <div className="discover-icon">
-                <FaCompass />
+                  <FaCompass />
                 </div>
               </Link>
             </li>
@@ -97,21 +82,20 @@ function DiscoverPage() {
         <div className="server-grid">
           {servers.map((server) => (
             <Link to={`/servers/${server.id}`} key={server.id} className="server-card-link">
-            <div className="server-card">
-              <img src={server.banner_url} alt={`${server.name} banner`} className="server-banner"/>
-              <div className="server-info">
-                <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar"/>
-                <div>
-                  <h2>{server.name}</h2>
-                  <p>{server.description}</p>
+              <div className="server-card">
+                <img src={server.banner_url} alt={`${server.name} banner`} className="server-banner"/>
+                <div className="server-info">
+                  <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar"/>
+                  <div>
+                    <h2>{server.name}</h2>
+                    <p>{server.description}</p>
+                  </div>
                 </div>
               </div>
-            </div>
             </Link>
           ))}
         </div>
       </div>
-      {isModalOpen && <ServerFormModal onClose={handleCloseModal} />}
     </div>
   );
 }

@@ -1,8 +1,72 @@
-.server-name-middle-bar-nav{
-  padding: 10px;
-  border-bottom: .5px solid black;
-  font-size: 12px;
+.server-name-container {
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  border-bottom: 0.5px solid black;
+  padding: 0 10px; /* add padding to the container instead */
+  height: 40px; /* set a fixed height to align items */
+  position: relative; /* make this element the reference for the dropdown */
+  cursor: pointer; /* Make the cursor a pointer */
 }
+
+.server-name-middle-bar-nav {
+  /* border: 1px solid blue; */
+  font-size: 14px;
+  line-height: 1.5; /* Adjust the line-height */
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  /* border: 1px solid red; */
+  margin: 0 10px; 
+  display: flex;
+  align-items: center; 
+  cursor: pointer; /* Ensure the icon has a pointer cursor */
+}
+
+.server-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  background-color: #0e0e0e;
+  margin: 45px 5px;
+  padding: 5px 5px;
+  width: 170px;
+  border-radius: 3px;
+  font-size: 12px;
+  /* gap: 10px; */
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.server-dropdown-menu a {
+  color: gray;
+  padding: 10px; /* add padding for better click area */
+  width: 100%; /* make the link take the full width */
+  text-decoration: none; /* remove underline */
+  display: block; /* make the link a block element */
+  box-sizing: border-box; /* ensure padding is included in the width */
+}
+
+.server-dropdown-menu a:hover {
+  background-color: #4752C4;
+  color: white; /* change color on hover */
+  border-radius: 3px;
+}
+
+/* .server-dropdown-menu a {
+  color: gray !important;
+} */
+
+/* .server-dd-hover {
+  width: 160px !important;
+  border-radius: 3;
+  padding: 5px;
+  background-color: #4752C4;
+  color: white;
+} */
 
 .channel-nav {
   /* border: 1px solid red; */

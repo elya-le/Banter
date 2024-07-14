@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { thunkLogin } from "../../redux/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -10,6 +10,7 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const modalRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,49 +47,61 @@ function LoginFormModal() {
     }
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [closeModal]);
+
   return (
     <>
-    <div className="modal-overlay">
-      <div className="login-sign-up-container">
-        <div className="login-sign-up-header">
-          <h1>Welcome back!</h1>
-          <p>We are so excited to see you again!</p>
+      <div className="modal-overlay">
+        <div className="login-sign-up-container" ref={modalRef}>
+          <div className="login-sign-up-header">
+            <h1>Welcome back!</h1>
+            <p>We are so excited to see you again!</p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="email-password-input">
+              <div className="input-group">
+                <label>
+                  <span>
+                    EMAIL
+                    {errors.email && <p className="error">{errors.email}</p>}
+                  </span>
+                  <input
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </label>
+                <label>
+                  <span>
+                    PASSWORD
+                    {errors.password && <p className="error">{errors.password}</p>}
+                  </span>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </label>
+              </div>
+            </div>
+            <button type="submit" className="log-in-submit">Log In</button>
+            <button type="button" onClick={handleDemoLogin} className="demo-button">Log In as Demo User</button>
+          </form>
         </div>
-        <form onSubmit={handleSubmit}>
-        <div className="email-password-input">
-          <div className="input-group">
-            <label>
-              <span>
-                EMAIL
-                {errors.email && <p className="error">{errors.email}</p>}
-              </span>
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                />
-            </label>
-            <label>
-              <span>
-                PASSWORD
-                {errors.password && <p className="error">{errors.password}</p>}
-              </span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </label>
-          </div>
-          </div>
-          <button type="submit" className="log-in-submit">Log In</button>
-          <button type="button" onClick={handleDemoLogin} className="demo-button">Log In as Demo User</button>
-        </form>
       </div>
-
-    </div>
     </>
   );
 }

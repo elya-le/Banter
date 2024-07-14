@@ -68,7 +68,7 @@ html, body {
   border-radius: 30%;
 }
 
-.add-server-icon {
+.create-server-button {
   width: 36px;
   height: 36px;
   background-color: #313338; 
@@ -82,7 +82,7 @@ html, body {
   cursor: pointer; /* add pointer cursor on hover */
 }
 
-.add-server-icon:hover {
+.create-server-button:hover {
   background-color: #22A559; 
   color: white; 
   border-radius: 30%;

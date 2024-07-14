@@ -3,13 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link, useParams } from "react-router-dom";
 import { thunkFetchServers, thunkFetchServer } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session";
-import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the button
-import ServerFormModal from "../Servers/ServerFormModal"; // ensure you import the correct component
+import OpenModalButton from "../OpenModalButton/OpenModalButton"; 
+import ServerFormModal from "../Servers/ServerFormModal"; 
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
-import { FaCompass } from "react-icons/fa";
-
-
+import { FaCompass, FaChevronDown, FaTimes } from "react-icons/fa";
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -19,8 +17,9 @@ function ServerDetailPage() {
   const server = useSelector((state) => state.servers.servers.find((s) => s.id === parseInt(id)));
 
   // modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // fetch servers and server details when user/id changes
   useEffect(() => {
     if (user) {
       dispatch(thunkFetchServers());
@@ -28,16 +27,30 @@ function ServerDetailPage() {
     }
   }, [dispatch, user, id]);
 
+  // fvent listener for closing dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.server-name-container') && !event.target.closest('.server-dropdown-menu')) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = () => {
     dispatch(thunkLogout());
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+    toggleDropdown();
   };
 
   if (!user) {
@@ -65,17 +78,16 @@ function ServerDetailPage() {
             ))}
             <li>
               <OpenModalButton
-                modalComponent={<ServerFormModal onClose={handleCloseModal} />}
+                modalComponent={<ServerFormModal />}
                 buttonText="+"
-                onButtonClick={handleOpenModal}
-                className="add-server-icon"
+                className="create-server-button"
               />
             </li>
             <li>
               <Link to="/discover-page" className="discover-page-icon">
                 {/* replace with discover icon */}
                 <div className="discover-icon">
-                <FaCompass />
+                  <FaCompass />
                 </div>
               </Link>
             </li>
@@ -84,16 +96,40 @@ function ServerDetailPage() {
       </div>
       <div className="middle-bar-nav">
         {server.banner_url ? (
-          <div className="server-banner">
+          <div className="server-banner" onClick={toggleDropdown}>
             <img src={server.banner_url} alt={`${server.name} banner`} />
-            <h1 className="server-name-middle-bar-nav">{server.name}</h1>
+            <div className="server-name-container" onClick={toggleDropdown}>
+              <h1 className="server-name-middle-bar-nav">{server.name}</h1>
+              {dropdownOpen ? (
+                <FaTimes className="dropdown-icon" onClick={handleIconClick} />
+              ) : (
+                <FaChevronDown className="dropdown-icon" onClick={handleIconClick} />
+              )}
+            </div>
           </div>
         ) : (
-          <h1 className="server-name-middle-bar-nav">{server.name}</h1>
+          <div className="server-name-container" onClick={toggleDropdown}>
+            <h1 className="server-name-middle-bar-nav">{server.name}</h1>
+            {dropdownOpen ? (
+              <FaTimes className="dropdown-icon" onClick={handleIconClick} />
+            ) : (
+              <FaChevronDown className="dropdown-icon" onClick={handleIconClick} />
+            )}
+          </div>
+        )}
+        {dropdownOpen && (
+          <ul className="server-dropdown-menu">
+            <li>
+              <Link to="/settings" className="server-dd-hover">Edit Server</Link>
+            </li>
+            <li>
+              <Link to="/members" className="server-dd-hover">Create Channel</Link>
+            </li>
+          </ul>
         )}
         <div className="channel-nav">
           <p>Channels</p>
-          {/* Render channels associated with the server */}
+          {/* fender channels associated with the server */}
           {server.channels && server.channels.length > 0 ? (
             <ul>
               {server.channels.map((channel) => (
@@ -114,10 +150,10 @@ function ServerDetailPage() {
         </div>
       </div>
       <div className="server-main-content">
-        {/* Render real-time chat or server description based on the presence of channel chat content */}
+        {/* fender real-time chat or server description based on the presence of channel chat content */}
         {server.channels && server.channels.length > 0 ? (
           <div className="chat">
-            {/* Real-time chat component goes here */}
+            {/* feal-time chat component goes here */}
             <p>Real-time chat will be here...</p>
           </div>
         ) : (
@@ -136,7 +172,6 @@ function ServerDetailPage() {
           </div>
         )}
       </div>
-      {isModalOpen && <ServerFormModal onClose={handleCloseModal} />}
     </div>
   );
 }
