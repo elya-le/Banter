@@ -62,9 +62,9 @@ export const thunkFetchServer = (id) => async (dispatch) => {
 export const thunkUpdateServer = (id, serverData) => async (dispatch) => {
   const response = await fetch(`/api/servers/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(serverData),
+    body: serverData, // remove the Content-Type header and send FormData directly
   });
+
   if (response.ok) {
     const data = await response.json();
     dispatch(updateServer(data));
@@ -75,6 +75,7 @@ export const thunkUpdateServer = (id, serverData) => async (dispatch) => {
     return { server: 'Something went wrong. Please try again' };
   }
 };
+
 
 export const thunkDeleteServer = (id) => async (dispatch) => {
   const response = await fetch(`/api/servers/${id}`, {

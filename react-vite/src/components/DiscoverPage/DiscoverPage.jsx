@@ -46,7 +46,7 @@ function DiscoverPage() {
               <OpenModalButton
                 modalComponent={<ServerFormModal />}
                 buttonText="+"
-                className="create-server-button"
+                className="create-server-icon"
               />
             </li>
             <li>
@@ -60,7 +60,7 @@ function DiscoverPage() {
           </ul>
         </nav>
       </div>
-      <div className="middle-bar-nav">
+      <div className="side-nav">
         <div className="channel-nav">
           {/* channel nav content */}
         </div>

@@ -1,0 +1,61 @@
+body {
+  background-color: #313338;
+}
+
+
+.edit-server-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; 
+  background-color: #313338;
+  border-radius: 8px;
+  margin: 0 auto;
+  color: white;
+  justify-content: center;
+}
+
+.edit-side-nav {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between;  */
+  height: 100vh;
+  font-size: 12px;
+  width: 240px;
+  background-color: #2B2D31;
+  /* border: 1px solid red; */
+}
+
+/* ---------- edit side-nav links ---------- */
+
+.delete-server-link {
+  color: gray;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 5px;
+  padding: 8px 10px;
+  /* border: 1px solid blue; */
+
+}
+
+.delete-server-link:hover {
+  background-color: #404249;
+  width: 230px;
+  margin: 5px;
+  border-radius: 3px;
+  color: white;
+  /* border: 1px solid green; */
+}
+
+.edit-server-nav {
+  padding: 5px;
+  /* border: 1px solid red; */
+}
+
+.edit-server-input {
+  display: flex;
+  flex-direction: column;
+  width: 400px; 
+  background-color: #313338;
+  flex-direction: column;
+  padding: 20px;
+}

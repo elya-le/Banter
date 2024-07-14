@@ -5,6 +5,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import DiscoverPage from '../components/DiscoverPage/DiscoverPage';
 import WelcomePage from '../components/WelcomePage';
 import ServerDetails from '../components/Servers/ServerDetails';
+import EditServerForm from '../components/Servers/EditServerForm';
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "servers/:id",
-        element: <ServerDetails />, // Update to match the correct file structure
+        element: <ServerDetails />,
+      },
+      {
+        path: "servers/:id/edit",
+        element: <EditServerForm />
       },
     ],
   },

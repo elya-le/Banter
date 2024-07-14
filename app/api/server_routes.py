@@ -51,9 +51,9 @@ def update_server(id):
         if form.validate_on_submit():
             server.name = form.data['name']
             server.description = form.data['description']
-            server.avatar_url = form.data['avatar_url']
-            server.banner_url = form.data['banner_url']
-            server.category = form.data['category']
+            server.avatar_url = form.data.get('avatar_url', server.avatar_url)
+            server.banner_url = form.data.get('banner_url', server.banner_url)
+            server.category = form.data.get('category', server.category)
             db.session.commit()
             return jsonify(server.to_dict())
         return {'errors': form.errors}, 400

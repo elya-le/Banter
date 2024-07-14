@@ -1,9 +1,3 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
 
 /* #root {
   display: flex;
@@ -18,99 +12,11 @@ html, body {
 }
 
 
-.sidebar {
-  height: 100vh; /* ensure it takes the full height */
-  width: 50px;
-  background-color: #1E1F22;
-  padding: 20px 0; /* remove left/right padding to be flush with left side */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center icons horizontally */
-  font-weight: 100 !important;
-}
 
-
-.sidebar-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-weight: 100 !important;
-}
-
-.sidebar-nav li {
-  margin-bottom: 5px;
-  display: flex;
-  justify-content: center; /* center icon-column */
-  font-weight: 100 !important;
-}
-
-.server-icon {
-  width: 40px;
-  padding: 0;
-  margin: 0;
-}
-
-.icon-circle {
-  width: 36px;
-  height: 36px;
-  background-color: #313338;
-  color: white;
-  font-size: 24px;
-  font-weight: 100 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  text-decoration: none;
-}
-
-.icon-circle:hover {
-  border-radius: 30%;
-}
-
-.create-server-button {
-  width: 36px;
-  height: 36px;
-  background-color: #313338; 
-  color: #22A559; 
-  border: none; /* remove default button border */
-  border-radius: 50%; /* make it circular */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px; /* ensure the font size matches the rest */
-  cursor: pointer; /* add pointer cursor on hover */
-}
-
-.create-server-button:hover {
-  background-color: #22A559; 
-  color: white; 
-  border-radius: 30%;
-}
-
-.discover-icon {
-  width: 36px;
-  height: 36px;
-  background-color: #313338;
-  color: #22A559;
-  font-size: 16px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  text-decoration: none;
-}
-
-.discover-icon:hover {
-  background-color: #22A559; 
-  color: white; 
-  border-radius: 30%;
-}
 
 .middle-bar-nav {
   width: 180px;
-  background-color: #2B2D31;
+ 
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* distribute space between channel-nav and profile-nav */

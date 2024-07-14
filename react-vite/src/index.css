@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+/* ---------- global font ---------- */
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -12,8 +13,7 @@ body {
   background-color: #313338;
   height: 100vh;
   display: flex;
-  /* justify-content: center;
-  align-items: center; */
+
 }
 
 a {
@@ -31,6 +31,22 @@ h2 {
   font-weight: normal;
   margin-bottom: 20px;
 }
+
+h3 {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 14px;
+  /* border: 1px solid red; */
+}
+
+h4 {
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid blue;
+  padding: 14px;
+}
+
 
 button {
   background-color: #5865F2;
@@ -51,10 +67,118 @@ button:hover {
 .home-page {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: center !important;
+  align-items: center !important;
   text-align: center;
   padding: 20px;
   /* width: 100%;  */
   height: 100vh;  /* ensure it takes full height */
+}
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  height: 100vh; /* ensure it takes the full height */
+  width: 70px;
+  background-color: #1E1F22;
+  padding: 10px 0; /* remove left/right padding to be flush with left side */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center icons horizontally */
+  font-weight: 100 !important;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-weight: 100 !important;
+}
+.sidebar-nav li {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: center; /* center icon-column */
+  font-weight: 100 !important;
+}
+
+/* ---------- sidebar icons ---------- */
+.server-icon {
+  padding: 0;
+  margin: 0;
+}
+
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #313338;
+  color: white;
+  font-size: 24px;
+  font-weight: 100 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.icon-circle:hover {
+  border-radius: 30%;
+}
+
+.create-server-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #313338; 
+  color: #22A559; 
+  border: none; /* remove default button border */
+  border-radius: 50%; /* make it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* ensure the font size matches the rest */
+  cursor: pointer; /* add pointer cursor on hover */
+}
+
+.create-server-icon:hover {
+  background-color: #22A559; 
+  color: white; 
+  border-radius: 30%;
+}
+
+.discover-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #313338;
+  color: #22A559;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.discover-icon:hover {
+  background-color: #22A559; 
+  color: white; 
+  border-radius: 30%;
+}
+/* ---------- side-nav ---------- */
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  height: 100vh;
+  font-size: 12px;
+  width: 240px;
+  background-color: #2B2D31;
+  /* border: 1px solid red; */
+}
+
+.server-banner {
+  padding: 0px;
+  margin: 0px;
+  /* height: 100px;
+  object-fit: cover; */
 }
