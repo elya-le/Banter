@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.models import db, Server, User
 from app.forms.server_form import ServerForm
+from app.utils.s3_helper import upload_file_to_s3, allowed_file
 
 server_routes = Blueprint('servers', __name__)
 
@@ -11,7 +12,14 @@ def create_server():
     form = ServerForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        avatar_url = form.data['avatar_url'] if 'avatar_url' in form.data else None
+        avatar_url = None
+        if 'avatar' in request.files and allowed_file(request.files['avatar'].filename):
+            upload_result = upload_file_to_s3(request.files['avatar'], 'avatars/servers')
+            if "url" in upload_result:
+                avatar_url = upload_result["url"]
+            else:
+                return jsonify(upload_result), 400
+
         server = Server(
             name=form.data['name'],
             description=form.data['description'],
@@ -51,8 +59,25 @@ def update_server(id):
         if form.validate_on_submit():
             server.name = form.data['name']
             server.description = form.data['description']
-            server.avatar_url = form.data.get('avatar_url', server.avatar_url)
-            server.banner_url = form.data.get('banner_url', server.banner_url)
+            
+            # handle avatar upload
+            if 'avatar' in request.files:
+                avatar_file = request.files['avatar']
+                avatar_upload = upload_file_to_s3(avatar_file)
+                if "url" in avatar_upload:
+                    server.avatar_url = avatar_upload["url"]
+                else:
+                    return avatar_upload, 400  # return error if upload failed
+
+            # handle banner upload
+            if 'banner' in request.files:
+                banner_file = request.files['banner']
+                banner_upload = upload_file_to_s3(banner_file)
+                if "url" in banner_upload:
+                    server.banner_url = banner_upload["url"]
+                else:
+                    return banner_upload, 400  # return error if upload failed
+
             server.category = form.data.get('category', server.category)
             db.session.commit()
             return jsonify(server.to_dict())

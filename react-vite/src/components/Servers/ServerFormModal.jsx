@@ -64,6 +64,8 @@ function ServerFormModal() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                    minLength={1} // enforce min length constraint
+                    maxLength={100} // enforce max length constraint
                   />
                 </label>
                 <label>
@@ -75,6 +77,7 @@ function ServerFormModal() {
                     type="text"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    maxLength={255} // enforce max length constraint
                   />
                 </label>
                 <label className="upload-label">
@@ -83,6 +86,7 @@ function ServerFormModal() {
                     type="file"
                     className="file-input"
                     onChange={(e) => setAvatarFile(e.target.files[0])}
+                    accept="image/*" // ensure only images can be uploaded
                   />
                 </label>
               </div>

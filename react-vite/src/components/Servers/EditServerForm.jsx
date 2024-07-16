@@ -27,12 +27,15 @@ function EditServerForm() {
 
   // state to track if the popup should be red
   const [popupRed, setPopupRed] = useState(false);
+
+  // fetch server details if not already in state
   useEffect(() => {
     if (!server) {
       dispatch(thunkFetchServer(id));
     }
   }, [dispatch, id, server]);
 
+  // update state when server details are fetched
   useEffect(() => {
     if (server) {
       setName(server.name);
@@ -48,57 +51,60 @@ function EditServerForm() {
     setHasUnsavedChanges(name !== initialName || description !== initialDescription);
   }, [name, description, initialName, initialDescription]);
 
-
+  // handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    if (avatarFile) formData.append("avatar_url", avatarFile);
-    if (bannerFile) formData.append("banner_url", bannerFile);
+    if (avatarFile) formData.append("avatar", avatarFile); // use 'avatar' key for the file
+    if (bannerFile) formData.append("banner", bannerFile); // use 'banner' key for the file
     formData.append("category", category);
 
-    console.log("Submitting form data:", formData);
+    console.log("submitting form data:", formData);
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
-      console.log("Update successful, navigating to server details page");
-      navigate(`/servers/${id}`); // ------- correct this redirection later!!! 
+      console.log("update successful, navigating to server details page");
+      navigate(`/servers/${id}`);
     } else {
-      console.log("Update failed, result:", result);
+      console.log("update failed, result:", result);
     }
   };
 
+  // handle server deletion
   const handleDelete = async (e) => {
     e.preventDefault();
-    console.log("Deleting server with id:", id);
+    console.log("deleting server with id:", id);
     await dispatch(thunkDeleteServer(id));
-    navigate('/discover-page'); // ------ correct this redirection later!!! 
+    navigate('/discover-page');
   };
 
+  // handle form reset
   const handleReset = () => {
     setName(initialName);
     setDescription(initialDescription);
     setHasUnsavedChanges(false);
   };
 
+  // handle input change
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
     setHasUnsavedChanges(true);
   };
 
-
+  // handle form close
   const handleClose = (e) => {
     if (hasUnsavedChanges) {
       e.preventDefault();
       setPopupRed(true);
-      setTimeout(() => setPopupRed(false), 5000); // turn the popup red for 5 seconds
+      setTimeout(() => setPopupRed(false), 2000); // turn the popup red for 2 seconds
     } else {
       navigate(`/servers/${id}`);
     }
   };
 
   if (!server) {
-    return <div>Loading...</div>;
+    return <div>loading...</div>;
   }
 
   return (
@@ -106,7 +112,7 @@ function EditServerForm() {
       <div className="edit-side-nav">
         <h3>{name}</h3>
         <a href="#" onClick={handleDelete} className="delete-server-link">
-          Delete Server
+          delete server
           <FaTrash className="delete-icon" />
         </a>
       </div>
@@ -120,7 +126,7 @@ function EditServerForm() {
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>
-              <span>Server Name</span>
+              <span>server name</span>
               <input
                 type="text"
                 value={name}
@@ -131,7 +137,7 @@ function EditServerForm() {
           </div>
           <div className="input-group">
             <label>
-              <span>Description</span>
+              <span>description</span>
               <input
                 type="text"
                 value={description}
@@ -141,7 +147,7 @@ function EditServerForm() {
           </div>
           <div className="input-group">
             <label>
-              <span>Avatar</span>
+              <span>avatar</span>
               <input
                 type="file"
                 onChange={(e) => setAvatarFile(e.target.files[0])}
@@ -150,7 +156,7 @@ function EditServerForm() {
           </div>
           <div className="input-group">
             <label>
-              <span>Banner</span>
+              <span>banner</span>
               <input
                 type="file"
                 onChange={(e) => setBannerFile(e.target.files[0])}
@@ -159,7 +165,7 @@ function EditServerForm() {
           </div>
           <div className="input-group">
             <label>
-              <span>Category</span>
+              <span>category</span>
               <input
                 type="text"
                 value={category}
@@ -167,20 +173,20 @@ function EditServerForm() {
               />
             </label>
           </div>
+          {hasUnsavedChanges && (
+            <div className={`unsaved-changes-popup ${popupRed ? "red-popup" : ""}`}>
+              <div className="unsaved-changes-message">
+                <span>careful — you have unsaved changes!</span>
+              </div>
+              <div className="unsaved-changes-link">
+                <a href="#" onClick={handleReset} className="popup-link">reset</a>
+              </div>
+              <div className="unsaved-changes-button">
+                <button onClick={handleSubmit} className="save-changes-button">save changes</button>
+              </div>
+            </div>
+          )}
         </form>
-        {hasUnsavedChanges && (
-          <div className={`unsaved-changes-popup ${popupRed ? "red-popup" : ""}`}>
-            <div className="unsaved-changes-message">
-              <span>Careful — you have unsaved changes!</span>
-            </div>
-            <div className="unsaved-changes-link">
-              <a href="#" onClick={handleReset} className="popup-link">Reset</a>
-            </div>
-            <div className="unsaved-changes-button">
-              <button onClick={handleSubmit} className="save-changes-button">Save Changes</button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
