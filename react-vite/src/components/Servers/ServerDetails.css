@@ -50,19 +50,51 @@
   z-index: 1000;
 }
 
-.server-dropdown-menu a {
+/* .server-dropdown-menu a {
+  color: gray;
+  padding: 10px; 
+  width: 100%; 
+  text-decoration: none; 
+  display: block; 
+  box-sizing: border-box; 
+}
+
+
+.server-dropdown-menu a:hover {
+  background-color: #4752C4;
+  color: white; 
+  border-radius: 3px;
+} */
+
+.server-dropdown-menu a,
+.server-dropdown-menu .create-channel-link {
   color: gray;
   padding: 10px; /* add padding for better click area */
   width: 100%; /* make the link take the full width */
   text-decoration: none; /* remove underline */
   display: block; /* make the link a block element */
   box-sizing: border-box; /* ensure padding is included in the width */
+  background: none; /* make background transparent */
+  border: none; /* remove border */
+  text-align: left; /* align text to the left */
+  cursor: pointer; /* make it look clickable */
+  font-size: 14px; /* adjust font size to match */
 }
 
-.server-dropdown-menu a:hover {
+.server-dropdown-menu a:hover,
+.server-dropdown-menu .create-channel-link:hover {
   background-color: #4752C4;
   color: white; /* change color on hover */
   border-radius: 3px;
+}
+
+button.create-channel-link {
+  margin-top: 0 !important; /* override the margin-top  */
+}
+
+
+li.create-channel-item {
+  margin-top: 0 !important; /* optional */
 }
 
 /* ---------- channel list ---------- */

@@ -4,12 +4,14 @@ from sqlalchemy.sql import text
 def seed_servers():
     print("Seeding servers...")
 
-    # Clear out existing servers before seeding
-    print("Deleting existing servers...")
-    db.session.execute(text("DELETE FROM user_server_membership"))  # Clear user-server memberships first
-    db.session.execute(text("DELETE FROM servers"))  # Then clear servers
+    # clear out existing servers before seeding
+    print("Deleting existing servers...")  # -------------- delete print before deploy
+
+    db.session.execute(text("DELETE FROM user_server_membership"))  # clear user-server memberships first
+    db.session.execute(text("DELETE FROM servers"))  # then clear servers
     db.session.commit()
-    print("Existing servers deleted.")
+    print("Existing servers deleted")  # -------------- delete print before deploy
+
 
     servers = [
         Server(
@@ -48,7 +50,7 @@ def seed_servers():
 
     db.session.bulk_save_objects(servers)
     db.session.commit()
-    print("Servers seeded.")
+    print("Servers seeded")    # -------------- delete print before deploy
 
     user = User.query.get(1)
     categories = set()
@@ -59,7 +61,8 @@ def seed_servers():
             categories.add(server.category)
 
     db.session.commit()
-    print("User joined servers.")
+    print("User joined servers")  # -------------- delete print before deploy
+
 
 def undo_servers():
     print("Undoing servers...")
@@ -70,4 +73,5 @@ def undo_servers():
         db.session.execute(text("DELETE FROM user_server_membership"))
         db.session.execute(text("DELETE FROM servers"))
     db.session.commit()
-    print("Servers undone.")
+    print("Servers undon")  # -------------- delete print before deploy
+

@@ -124,8 +124,12 @@ function ServerDetailPage() {
               <li>
                 <Link to={`/servers/${id}/edit`} className="server-dd-hover">Edit Server</Link>
               </li>
-              <li>
-                <Link to="/members" className="server-dd-hover">Create Channel</Link>
+              <li className="server-dd-hover create-channel-item">
+                <OpenModalButton
+                  modalComponent={<ChannelFormModal serverId={id} />}
+                  buttonText="Create Channel"
+                  className="create-channel-link"
+                />
               </li>
             </ul>
           )}
@@ -135,7 +139,7 @@ function ServerDetailPage() {
             <div className="create-channel-tooltip-wrapper">
               <OpenModalButton
                 modalComponent={<ChannelFormModal serverId={id} />}
-                buttonText={<FaPlus />} // Use the FaPlus icon
+                buttonText={<FaPlus />} 
                 className="create-channel-icon"
               />
               <div className="tooltip">Create Channel</div>
