@@ -27,11 +27,11 @@ def get_unique_filename(filename):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def upload_file_to_s3(file, folder, acl="public-read"):
+def upload_file_to_s3(file, folder):
     try:
         # ensure the filename is unique
         filename = get_unique_filename(file.filename)
-        file_path = f"{folder}/{filename}"  # specify folder to organize uploads
+        file_path = f"{folder}/{filename}"
         
         # upload the file to S3
         s3_client.upload_fileobj(
@@ -39,13 +39,12 @@ def upload_file_to_s3(file, folder, acl="public-read"):
             AWS_BUCKET_NAME,
             file_path,
             ExtraArgs={
-                "ACL": acl,
                 "ContentType": file.content_type
             }
         )
         
         # generate the file URL
-        file_url = f"{S3_LOCATION}{file_path}"  # include folder in file path
+        file_url = f"{S3_LOCATION}{file_path}"
         return {"url": file_url}
     except Exception as e:
         return {"errors": str(e)}

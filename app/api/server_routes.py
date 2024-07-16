@@ -31,6 +31,7 @@ def create_server():
         return jsonify(server.to_dict()), 201
     return {'errors': form.errors}, 400
 
+
 @server_routes.route('/', methods=['GET'])
 @login_required
 def get_servers():
@@ -61,18 +62,18 @@ def update_server(id):
             server.description = form.data['description']
             
             # handle avatar upload
-            if 'avatar' in request.files:
+            if 'avatar' in request.files and allowed_file(request.files['avatar'].filename):
                 avatar_file = request.files['avatar']
-                avatar_upload = upload_file_to_s3(avatar_file)
+                avatar_upload = upload_file_to_s3(avatar_file, 'avatars/servers')
                 if "url" in avatar_upload:
                     server.avatar_url = avatar_upload["url"]
                 else:
                     return avatar_upload, 400  # return error if upload failed
 
             # handle banner upload
-            if 'banner' in request.files:
+            if 'banner' in request.files and allowed_file(request.files['banner'].filename):
                 banner_file = request.files['banner']
-                banner_upload = upload_file_to_s3(banner_file)
+                banner_upload = upload_file_to_s3(banner_file, 'banners/servers')
                 if "url" in banner_upload:
                     server.banner_url = banner_upload["url"]
                 else:
@@ -83,6 +84,7 @@ def update_server(id):
             return jsonify(server.to_dict())
         return {'errors': form.errors}, 400
     return {'error': 'Server not found or unauthorized'}, 404
+
 
 @server_routes.route('/<int:id>', methods=['DELETE'])
 @login_required

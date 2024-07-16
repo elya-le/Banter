@@ -61,20 +61,20 @@ function EditServerForm() {
     if (bannerFile) formData.append("banner", bannerFile); // use 'banner' key for the file
     formData.append("category", category);
 
-    console.log("submitting form data:", formData);
+    console.log("Submitting form data:", formData);
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
-      console.log("update successful, navigating to server details page");
+      console.log("Update successful, navigating to server details page");
       navigate(`/servers/${id}`);
     } else {
-      console.log("update failed, result:", result);
+      console.log("Update failed, result:", result);
     }
   };
 
   // handle server deletion
   const handleDelete = async (e) => {
     e.preventDefault();
-    console.log("deleting server with id:", id);
+    console.log("Deleting server with id:", id);
     await dispatch(thunkDeleteServer(id));
     navigate('/discover-page');
   };

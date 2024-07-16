@@ -68,6 +68,7 @@ export const thunkUpdateServer = (id, serverData) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(updateServer(data));
+    return data; // add this line to return data if successful
   } else if (response.status < 500) {
     const errorMessages = await response.json();
     return errorMessages;
@@ -75,6 +76,7 @@ export const thunkUpdateServer = (id, serverData) => async (dispatch) => {
     return { server: 'Something went wrong. Please try again' };
   }
 };
+
 
 
 export const thunkDeleteServer = (id) => async (dispatch) => {
