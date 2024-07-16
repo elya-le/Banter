@@ -121,3 +121,59 @@ SCHEMA = os.environ.get("SCHEMA")
 # -------- below this line is for your migration file alembic
 
 # file_template = %%(year)d%%(month).2d%%(day).2d_%%(hour).2d%%(minute).2d%%(second).2d_%(slug)s
+
+
+
+
+
+# [alembic]
+
+# script_location = alembic
+
+
+# file_template = %%Y%%m%%d_%%(rev)s
+
+
+# transactional_ddl = true
+
+# output_encoding = utf-8
+
+
+# [loggers]
+# keys = root,sqlalchemy,alembic,flask_migrate
+
+# [handlers]
+# keys = console
+
+# [formatters]
+# keys = generic
+
+# [logger_root]
+# level = WARN
+# handlers = console
+# qualname =
+
+# [logger_sqlalchemy]
+# level = WARN
+# handlers =
+# qualname = sqlalchemy.engine
+
+# [logger_alembic]
+# level = INFO
+# handlers =
+# qualname = alembic
+
+# [logger_flask_migrate]
+# level = INFO
+# handlers =
+# qualname = flask_migrate
+
+# [handler_console]
+# class = StreamHandler
+# args = (sys.stderr,)
+# level = NOTSET
+# formatter = generic
+
+# [formatter_generic]
+# format = %(levelname)-5.5s [%(name)s] %(message)s
+# datefmt = %H:%M:%S
