@@ -2,6 +2,15 @@ from app.models import db, Server, User, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_servers():
+    print("Seeding servers...")
+
+    # Clear out existing servers before seeding
+    print("Deleting existing servers...")
+    db.session.execute(text("DELETE FROM user_server_membership"))  # Clear user-server memberships first
+    db.session.execute(text("DELETE FROM servers"))  # Then clear servers
+    db.session.commit()
+    print("Existing servers deleted.")
+
     servers = [
         Server(
             name='Midjourney',
@@ -39,6 +48,7 @@ def seed_servers():
 
     db.session.bulk_save_objects(servers)
     db.session.commit()
+    print("Servers seeded.")
 
     user = User.query.get(1)
     categories = set()
@@ -49,8 +59,10 @@ def seed_servers():
             categories.add(server.category)
 
     db.session.commit()
+    print("User joined servers.")
 
 def undo_servers():
+    print("Undoing servers...")
     if environment == "production":
         db.session.execute(f"TRUNCATE table {SCHEMA}.user_server_membership RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.servers RESTART IDENTITY CASCADE;")
@@ -58,3 +70,4 @@ def undo_servers():
         db.session.execute(text("DELETE FROM user_server_membership"))
         db.session.execute(text("DELETE FROM servers"))
     db.session.commit()
+    print("Servers undone.")

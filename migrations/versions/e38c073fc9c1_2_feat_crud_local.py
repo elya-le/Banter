@@ -1,16 +1,22 @@
-"""create channels table
+"""2 feat CRUD local
 
-Revision ID: d62148045f16
+Revision ID: e38c073fc9c1
 Revises: 
-Create Date: 2024-07-15 20:58:13.436857
+Create Date: 2024-07-16 10:28:51.499736
 
 """
 from alembic import op
 import sqlalchemy as sa
 
 
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
+
+
 # revision identifiers, used by Alembic.
-revision = 'd62148045f16'
+revision = 'e38c073fc9c1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -60,6 +66,12 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('user_id', 'server_id')
     )
+
+    if environment == "production":
+      op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 

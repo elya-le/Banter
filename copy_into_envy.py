@@ -1,4 +1,3 @@
-
 from __future__ import with_statement
 
 import logging
@@ -116,3 +115,4 @@ SCHEMA = os.environ.get("SCHEMA")
 #     op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
+#     op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
