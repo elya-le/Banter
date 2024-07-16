@@ -65,18 +65,155 @@
   border-radius: 3px;
 }
 
-/* .server-dropdown-menu a {
-  color: gray !important;
-} */
+/* ---------- channel list ---------- */
 
-/* .server-dd-hover {
-  width: 160px !important;
-  border-radius: 3;
+
+.channel-list-container {
+  min-height: 200px;
+  width: 240px;
   padding: 5px;
-  background-color: #4752C4;
-  color: white;
-} */
+  flex-grow: 1; /* allow it to grow */
+  /* border: 1px solid red; */
+}
 
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 14px 10px 0px;
+  /* border: 1px solid green; */
+}
+
+.create-channel-icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  background: none;
+  color: #80848E;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px;
+  /* border: 1px solid green; */
+}
+
+.create-channel-icon:hover {
+  color: white;
+  background-color:transparent;
+}
+
+
+/* ---- remove the default marker from list items */
+
+ul {
+  list-style-type: none;
+  padding: 0; /* remove default padding */
+  margin: 0; /* remove default margin */
+}
+
+li {
+  text-align: start !important; /* ensure text starts at the left */
+}
+
+
+
+
+.channel-list-item {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  font-size: 18px;
+  color: #80848E;
+  padding: 8px 10px;
+  margin: 3px;
+  border-radius: 4px;
+  background-color: transparent; /* ensure background is transparent by default */
+}
+
+.channel-list-item:hover{
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  font-size: 18px;
+  color: #80848E;
+  padding: 8px 10px;
+  margin: 3px;
+  border-radius: 4px;
+  background-color: #35373C;
+}
+
+.channel-icon, .settings-icon {
+  color: #80848E;
+
+}
+
+.settings-icon {
+  margin-left: auto;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.channel-name {
+  flex-grow: 1;
+  margin-left: 8px;
+  color: #80848E;
+  font-size: 16px;
+}
+
+.settings-icon:hover {
+  color: white;
+}
+
+.channel-name:hover {
+  color: white;
+}
+
+
+/* ------- tooltip styling  ------- */
+.settings-icon .tooltip, .create-channel-tooltip-wrapper .tooltip {
+  visibility: hidden;
+  background-color: #111;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 165%; /* position the tooltip above the icon */
+  left: 50%;
+  transform: translateX(-50%); /* center the tooltip */
+  width: 100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px; /* Smaller font size */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.settings-icon .tooltip::after, .create-channel-tooltip-wrapper .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #111 transparent transparent transparent;
+}
+
+.settings-icon:hover .tooltip, .create-channel-tooltip-wrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.create-channel-tooltip-wrapper {
+  position: relative;
+}
+
+/* ---------- main content chat ---------- */
 
 .server-main-content {
   display: flex;
@@ -106,7 +243,7 @@
 
 .welcome-message p {
   font-size: 12px;
-  color: grey;
+  color: #80848E;
   margin-bottom: 20px;
   text-align: left;
   white-space: normal;

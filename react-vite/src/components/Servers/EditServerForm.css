@@ -2,7 +2,6 @@ body {
   background-color: #313338;
 }
 
-
 .edit-server-container {
   display: flex;
   flex-direction: row;
@@ -17,24 +16,22 @@ body {
 .edit-side-nav {
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between;  */
   height: 100vh;
   font-size: 12px;
   width: 240px;
   background-color: #2B2D31;
-  /* border: 1px solid red; */
 }
 
-/* ---------- edit side-nav links ---------- */
-
 .delete-server-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: gray;
   font-size: 14px;
   font-weight: 500;
   margin: 5px;
   padding: 8px 10px;
-  /* border: 1px solid blue; */
-
+  text-decoration: none; 
 }
 
 .delete-server-link:hover {
@@ -42,13 +39,10 @@ body {
   width: 230px;
   margin: 5px;
   border-radius: 3px;
-  color: white;
-  /* border: 1px solid green; */
 }
 
 .edit-server-nav {
   padding: 5px;
-  /* border: 1px solid red; */
 }
 
 .edit-server-input {
@@ -58,4 +52,94 @@ body {
   background-color: #313338;
   flex-direction: column;
   padding: 20px;
+}
+
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background-color: #313338;
+  border: 2px solid #B5BAC1;
+  border-radius: 50%;
+  color: #B5BAC1;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 100 !important;
+}
+
+.close-link:hover {
+  background-color: #383C42;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  background-color: #1E1F22;
+  color: white;
+}
+
+.input-group input[type="file"] {
+  color: white;
+}
+
+.unsaved-changes-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #111;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  white-space: nowrap;
+  min-width: 600px; /* Adjust the width as needed */
+}
+
+.unsaved-changes-popup span {
+  margin-right: auto;
+}
+
+.unsaved-changes-popup button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.unsaved-changes-popup button:hover {
+  background-color: #404249;
+}
+
+.unsaved-changes-popup button:last-child {
+  background-color: #2D7D46;
+}
+
+.unsaved-changes-popup button:last-child:hover {
+  background-color: #248037;
 }

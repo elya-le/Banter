@@ -61,7 +61,7 @@ function DiscoverPage() {
         </nav>
       </div>
       <div className="side-nav">
-        <div className="channel-nav">
+        <div className="category-nav">
           {/* channel nav content */}
         </div>
         <div className="profile-nav">

@@ -16,7 +16,6 @@
 
 .middle-bar-nav {
   width: 180px;
- 
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* distribute space between channel-nav and profile-nav */
@@ -24,7 +23,7 @@
   padding: 0;
 }
 
-.channel-nav {
+.category-nav {
   min-height: 200px;
   width: 180px;
   padding: 5px;

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { thunkFetchServer, thunkUpdateServer, thunkDeleteServer } from "../../redux/servers";
+import { FaTrash, FaTimes  } from "react-icons/fa";
 import "./EditServerForm.css";
 
 function EditServerForm() {
@@ -12,12 +13,17 @@ function EditServerForm() {
     state.servers.servers.find((s) => s.id === parseInt(id))
   );
 
-  // Initialize state with empty strings to ensure controlled components
+  // initialize state with empty strings to ensure controlled components
   const [name, setName] = useState(server ? server.name : "");
   const [description, setDescription] = useState(server ? server.description : "");
   const [avatarFile, setAvatarFile] = useState(null);
   const [bannerFile, setBannerFile] = useState(null);
   const [category, setCategory] = useState(server ? server.category : "");
+
+  // track initial values to reset to if needed
+  const [initialName, setInitialName] = useState(server ? server.name : "");
+  const [initialDescription, setInitialDescription] = useState(server ? server.description : "");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
     if (!server) {
@@ -30,6 +36,8 @@ function EditServerForm() {
       setName(server.name);
       setDescription(server.description);
       setCategory(server.category);
+      setInitialName(server.name);
+      setInitialDescription(server.description);
     }
   }, [server]);
 
@@ -46,7 +54,7 @@ function EditServerForm() {
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
       console.log("Update successful, navigating to server details page");
-      navigate(`/discover-page`);  // correct this redirection later!!! 
+      navigate(`/servers/${id}`); // correct this redirection later!!! 
     } else {
       console.log("Update failed, result:", result);
     }
@@ -59,6 +67,17 @@ function EditServerForm() {
     navigate('/discover-page'); // correct this redirection later!!! 
   };
 
+  const handleReset = () => {
+    setName(initialName);
+    setDescription(initialDescription);
+    setHasUnsavedChanges(false);
+  };
+
+  const handleInputChange = (setter) => (e) => {
+    setter(e.target.value);
+    setHasUnsavedChanges(true);
+  };
+
   if (!server) {
     return <div>Loading...</div>;
   }
@@ -67,10 +86,18 @@ function EditServerForm() {
     <div className="edit-server-container">
       <div className="edit-side-nav">
         <h3>{name}</h3>
-        <a href="#" onClick={handleDelete} className="delete-server-link">Delete Server</a>
+        <a href="#" onClick={handleDelete} className="delete-server-link">
+          Delete Server
+          <FaTrash className="delete-icon" />
+        </a>
       </div>
       <div className="edit-server-input">
-        <h1>{name}&apos;s server details</h1>
+        <div className="edit-header">
+          <h1>{name}&apos;s server details</h1>
+          <Link to={`/servers/${id}`} className="close-link">
+            <FaTimes className="close-icon" />
+          </Link>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>
@@ -78,7 +105,7 @@ function EditServerForm() {
               <input
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleInputChange(setName)}
                 required
               />
             </label>
@@ -89,7 +116,7 @@ function EditServerForm() {
               <input
                 type="text"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={handleInputChange(setDescription)}
               />
             </label>
           </div>
@@ -117,12 +144,18 @@ function EditServerForm() {
               <input
                 type="text"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={handleInputChange(setCategory)}
               />
             </label>
           </div>
-          <button type="submit">Update Server</button>
         </form>
+        {hasUnsavedChanges && (
+          <div className="unsaved-changes-popup">
+            <span>Careful — you have unsaved changes!</span>
+            <button onClick={handleReset}>Reset</button>
+            <button onClick={handleSubmit}>Save Changes</button>
+          </div>
+        )}
       </div>
     </div>
   );

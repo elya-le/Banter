@@ -47,6 +47,15 @@ h4 {
   padding: 14px;
 }
 
+h5 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #80848E;
+  text-transform: uppercase;
+  padding: 0px;
+  /* border: 1px solid blue; */
+}
+
 
 button {
   background-color: #5865F2;

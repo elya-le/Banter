@@ -9,7 +9,7 @@ import ServerFormModal from "../Servers/ServerFormModal";
 import ChannelFormModal from "../Channels/ChannelFormModal"; 
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
-import { FaCompass, FaChevronDown, FaTimes } from "react-icons/fa";
+import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -133,25 +133,41 @@ function ServerDetailPage() {
               </li>
             </ul>
           )}
-          <div className="channel-nav">
-            <p>Channels</p>
+        <div className="channel-list-container">
+          <div className="channel-header">
+            <h5>Channels</h5>
+            <div className="create-channel-tooltip-wrapper">
+              <OpenModalButton
+                modalComponent={<ChannelFormModal serverId={id} />}
+                buttonText={<FaPlus />} // Use the FaPlus icon
+                className="create-channel-icon"
+              />
+              <div className="tooltip">Create Channel</div>
+            </div>
+          </div>
+          <div className="channel-list">
             <ul>
               {channels && channels.length > 0 ? (
                 channels.map((channel) => (
-                  <li key={channel.id}>{channel.name}</li>
+                  <li key={channel.id}>
+                    <div className="channel-list-item">
+                      <FaHashtag className="channel-icon" />
+                      <div className="channel-name">
+                        {channel.name.toLowerCase()}
+                      </div>
+                      <div className="settings-icon">
+                        <FaCog />
+                        <div className="tooltip">Edit Channel</div>
+                      </div>
+                    </div>
+                  </li>
                 ))
               ) : (
                 <p>No channels</p>
               )}
-              <li>
-                <OpenModalButton
-                  modalComponent={<ChannelFormModal serverId={id} />}
-                  buttonText="+"
-                  className="create-channel-icon"
-                />
-              </li>
             </ul>
           </div>
+        </div>
           <div className="profile-nav">
             <div className="profile-info">
               <span>{user.username}</span>
