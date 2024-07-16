@@ -20,6 +20,7 @@ class Server(db.Model):
 
     creator = db.relationship('User', back_populates='servers')
     members = db.relationship('User', secondary=user_server_membership, back_populates='joined_servers')
+    channels = db.relationship('Channel', back_populates='server', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -29,6 +30,7 @@ class Server(db.Model):
             'avatar_url': self.avatar_url,
             'banner_url': self.banner_url,
             'category': self.category,
+            'channels': [channel.to_dict() for channel in self.channels],
             'creator_id': self.creator_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at,

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link, useParams } from "react-router-dom";
 import { thunkFetchServers, thunkFetchServer } from "../../redux/servers";
+import { thunkFetchChannels } from "../../redux/channels";
 import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton"; 
 import ServerFormModal from "../Servers/ServerFormModal"; 
+import ChannelFormModal from "../Channels/ChannelFormModal"; 
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes } from "react-icons/fa";
@@ -15,6 +17,7 @@ function ServerDetailPage() {
   const user = useSelector((state) => state.session.user);
   const servers = useSelector((state) => state.servers.servers);
   const server = useSelector((state) => state.servers.servers.find((s) => s.id === parseInt(id)));
+  const channels = useSelector((state) => state.channels.channels); 
 
   // modal state
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,6 +27,7 @@ function ServerDetailPage() {
     if (user) {
       dispatch(thunkFetchServers());
       dispatch(thunkFetchServer(id));
+      dispatch(thunkFetchChannels(id));
     }
   }, [dispatch, user, id]);
 
@@ -131,16 +135,22 @@ function ServerDetailPage() {
           )}
           <div className="channel-nav">
             <p>Channels</p>
-            {/* render channels associated with the server */}
-            {server.channels && server.channels.length > 0 ? (
-              <ul>
-                {server.channels.map((channel) => (
+            <ul>
+              {channels && channels.length > 0 ? (
+                channels.map((channel) => (
                   <li key={channel.id}>{channel.name}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>No channels</p>
-            )}
+                ))
+              ) : (
+                <p>No channels</p>
+              )}
+              <li>
+                <OpenModalButton
+                  modalComponent={<ChannelFormModal serverId={id} />}
+                  buttonText="+"
+                  className="create-channel-icon"
+                />
+              </li>
+            </ul>
           </div>
           <div className="profile-nav">
             <div className="profile-info">

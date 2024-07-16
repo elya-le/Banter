@@ -24,7 +24,7 @@ const removeServer = (serverId) => ({
   payload: serverId,
 });
 
-// Thunks
+// thunks
 export const thunkFetchServers = () => async (dispatch) => {
   const response = await fetch('/api/servers/');
   if (response.ok) {
