@@ -9,6 +9,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
+
 import os
 environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
@@ -100,3 +101,18 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
+
+
+
+# -------- below this line is for your migration file
+
+
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
+# if environment == "production":
+#     op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+#     op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
+#     op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")

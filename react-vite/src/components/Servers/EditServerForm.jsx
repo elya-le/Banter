@@ -46,8 +46,7 @@ function EditServerForm() {
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
       console.log("Update successful, navigating to server details page");
-      // Redirect to the server details page after successful update
-      navigate(`/servers/1`);
+      navigate(`/discover-page`);  // correct this redirection later!!! 
     } else {
       console.log("Update failed, result:", result);
     }
@@ -57,7 +56,7 @@ function EditServerForm() {
     e.preventDefault();
     console.log("Deleting server with id:", id);
     await dispatch(thunkDeleteServer(id));
-    navigate('/servers/1'); // navigate to the servers list after deletion
+    navigate('/discover-page'); // correct this redirection later!!! 
   };
 
   if (!server) {
