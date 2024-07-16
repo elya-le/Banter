@@ -1,20 +1,19 @@
-"""initial migration
+"""empty message
 
-Revision ID: a62b13e1cdd8
+Revision ID: 601b5cdf22fa
 Revises: 
-Create Date: 2024-07-16 16:52:46.404522
+Create Date: 2024-07-16 17:18:41.125799
 
 """
 from alembic import op
 import sqlalchemy as sa
-
 
 import os
 environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
-revision = 'a62b13e1cdd8'
+revision = '601b5cdf22fa'
 down_revision = None
 branch_labels = None
 depends_on = None
