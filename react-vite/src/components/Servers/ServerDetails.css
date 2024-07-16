@@ -12,11 +12,24 @@
   justify-content: space-between; 
   padding: 0 10px; 
   height: 50px; 
-  position: relative; /* make this element the reference for the dropdown */
-  cursor: pointer; /* Make the cursor a pointer */
-  border-bottom: 0.5px solid black;
-  /* border: 1px solid red; */
+  position: absolute; /* absolutely position this element */
+  top: 0; /* position it at the top of the banner */
+  left: 0;
+  right: 0;
+  cursor: pointer; /* make the cursor a pointer */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 2), rgba(0, 0, 0, 0)); /* gradient from semi-transparent to transparent */
+  color: white; /* text color to contrast with the background */
 }
+
+.server-name-container.no-banner {
+  position: relative; /* only relatively position this element */
+  top: unset; /* unset the top positioning */
+  left: unset; /* unset the left positioning */
+  right: unset; /* unset the right positioning */
+  background: none; /* remove the background gradient */
+  border-bottom: 1px solid black;
+}
+
 
 .server-name-side-nav {
   font-size: 16px;
@@ -24,6 +37,20 @@
   text-transform: uppercase;
   /* border: 1px solid blue; */
 }
+
+.server-banner {
+  position: relative;
+  width: 100%;
+  height: 135px; /* Adjust the height as needed */
+  overflow: hidden;
+}
+
+.server-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the container proportionally */
+}
+
 
 .dropdown-icon {
   font-size: 12px;

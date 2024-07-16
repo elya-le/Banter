@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session";
-import OpenModalButton from "../OpenModalButton/OpenModalButton"; // Import the OpenModalButton
-import ServerFormModal from "../Servers/ServerFormModal"; // Import the ServerFormModal
+import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the OpenModalButton
+import ServerFormModal from "../Servers/ServerFormModal"; // import the ServerFormModal
 import "./DiscoverPage.css";
 import { FaCompass } from "react-icons/fa6";
 
@@ -26,7 +26,6 @@ function DiscoverPage() {
   if (!user) {
     return <Navigate to="/" />;
   }
-
   return (
     <div className="discover-page">
       <div className="sidebar">
@@ -37,7 +36,11 @@ function DiscoverPage() {
               <li key={server.id} className="server-icon">
                 <Link to={`/servers/${server.id}`}>
                   <div className="icon-circle">
-                    {server.name[0]}  {/* display the first letter of the server name */}
+                    {server.avatar_url ? (
+                      <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                    ) : (
+                      server.name[0].toUpperCase()  // display the first letter of the server name
+                    )}
                   </div>
                 </Link>
               </li>

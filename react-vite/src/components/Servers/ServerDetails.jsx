@@ -74,7 +74,11 @@ function ServerDetailPage() {
                 <li key={server.id} className="server-icon">
                   <Link to={`/servers/${server.id}`}>
                     <div className="icon-circle">
-                      {server.name[0]}  {/* display the first letter of the server name */}
+                      {server.avatar_url ? (
+                        <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                      ) : (
+                        server.name[0].toUpperCase()  // display the first letter of the server name
+                      )}
                     </div>
                   </Link>
                 </li>
@@ -110,7 +114,7 @@ function ServerDetailPage() {
               </div>
             </div>
           ) : (
-            <div className="server-name-container" onClick={toggleDropdown}>
+            <div className="server-name-container no-banner" onClick={toggleDropdown}>
               <h1 className="server-name-side-nav">{server.name}</h1>
               {dropdownOpen ? (
                 <FaTimes className="dropdown-icon" onClick={handleIconClick} />

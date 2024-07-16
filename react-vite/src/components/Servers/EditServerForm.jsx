@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { thunkFetchServer, thunkUpdateServer, thunkDeleteServer } from "../../redux/servers";
-import { FaTrash, FaTimes  } from "react-icons/fa";
+import { FaTrash, FaTimes } from "react-icons/fa";
 import "./EditServerForm.css";
 
 function EditServerForm() {
@@ -48,8 +48,13 @@ function EditServerForm() {
 
   // update the unsaved changes state when inputs change
   useEffect(() => {
-    setHasUnsavedChanges(name !== initialName || description !== initialDescription);
-  }, [name, description, initialName, initialDescription]);
+    setHasUnsavedChanges(
+      name !== initialName ||
+      description !== initialDescription ||
+      avatarFile !== null ||
+      bannerFile !== null
+    );
+  }, [name, description, initialName, initialDescription, avatarFile, bannerFile]);
 
   // handle form submission
   const handleSubmit = async (e) => {
@@ -83,12 +88,20 @@ function EditServerForm() {
   const handleReset = () => {
     setName(initialName);
     setDescription(initialDescription);
+    setAvatarFile(null); // reset the file inputs
+    setBannerFile(null); // reset the file inputs
     setHasUnsavedChanges(false);
   };
 
   // handle input change
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
+    setHasUnsavedChanges(true);
+  };
+
+  // handle file input change
+  const handleFileChange = (setter) => (e) => {
+    setter(e.target.files[0]);
     setHasUnsavedChanges(true);
   };
 
@@ -104,7 +117,7 @@ function EditServerForm() {
   };
 
   if (!server) {
-    return <div>loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -150,7 +163,7 @@ function EditServerForm() {
               <span>avatar</span>
               <input
                 type="file"
-                onChange={(e) => setAvatarFile(e.target.files[0])}
+                onChange={handleFileChange(setAvatarFile)}
               />
             </label>
           </div>
@@ -159,7 +172,7 @@ function EditServerForm() {
               <span>banner</span>
               <input
                 type="file"
-                onChange={(e) => setBannerFile(e.target.files[0])}
+                onChange={handleFileChange(setBannerFile)}
               />
             </label>
           </div>
