@@ -1,8 +1,8 @@
-"""2 feat CRUD local
+"""initial migration
 
-Revision ID: e38c073fc9c1
+Revision ID: a62b13e1cdd8
 Revises: 
-Create Date: 2024-07-16 10:28:51.499736
+Create Date: 2024-07-16 16:52:46.404522
 
 """
 from alembic import op
@@ -14,9 +14,8 @@ environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
 
 
-
 # revision identifiers, used by Alembic.
-revision = 'e38c073fc9c1'
+revision = 'a62b13e1cdd8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -72,6 +71,7 @@ def upgrade():
       op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
       op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
       op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+
     # ### end Alembic commands ###
 
 
