@@ -15,14 +15,15 @@ function EditChannelForm() {
 
   // initialize state with empty strings to ensure controlled components
   const [name, setName] = useState(channel ? channel.name : "");
+  const [serverId, setServerId] = useState(channel ? channel.server_id : null);
 
   // track initial values to reset to if needed
   const [initialName, setInitialName] = useState(channel ? channel.name : "");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [serverId, setServerId] = useState(channel ? channel.serverId : null); // Add serverId state
 
   // state to track if the popup should be red
   const [popupRed, setPopupRed] = useState(false);
+
   useEffect(() => {
     if (!channel) {
       dispatch(thunkFetchChannel(id));
@@ -33,7 +34,7 @@ function EditChannelForm() {
     if (channel) {
       setName(channel.name);
       setInitialName(channel.name);
-      setServerId(channel.serverId); // Set serverId when channel data is available
+      setServerId(channel.server_id); // set serverId when channel data is available
     }
   }, [channel]);
 
@@ -44,13 +45,13 @@ function EditChannelForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { name };
+    const formData = { name, server_id: serverId }; // include server_id in the form data
 
     console.log("Submitting form data:", formData);
     const result = await dispatch(thunkUpdateChannel(id, formData));
     if (result && !result.errors) {
-      console.log("Update successful, navigating to channel details page");
-      navigate(`/servers/${result.serverId}`); // Navigate to the server page using the returned serverId
+      console.log("Update successful, staying on the edit page");
+      setHasUnsavedChanges(false); // set hasUnsavedChanges to false
     } else {
       console.log("Update failed, result:", result);
     }
@@ -59,8 +60,8 @@ function EditChannelForm() {
   const handleDelete = async (e) => {
     e.preventDefault();
     console.log("Deleting channel with id:", id);
-    const result = await dispatch(thunkDeleteChannel(id));
-    navigate(`/servers/${result.serverId}`); // Navigate to the server page using the returned serverId
+    const serverId = await dispatch(thunkDeleteChannel(id)); // retrieve server_id
+    navigate(`/servers/${serverId}`); // navigate to the server page using the returned server_id
   };
 
   const handleReset = () => {
@@ -77,7 +78,7 @@ function EditChannelForm() {
     if (hasUnsavedChanges) {
       e.preventDefault();
       setPopupRed(true);
-      setTimeout(() => setPopupRed(false), 5000); // turn the popup red for 5 seconds
+      setTimeout(() => setPopupRed(false), 2000); // turn the popup red for 2 seconds
     } else {
       navigate(`/servers/${serverId}`);
     }

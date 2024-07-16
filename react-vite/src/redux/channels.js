@@ -1,10 +1,10 @@
-// action types
+// ------ action types
 const SET_CHANNELS = 'channels/setChannels';
 const ADD_CHANNEL = 'channels/addChannel';
 const UPDATE_CHANNEL = 'channels/updateChannel';
 const REMOVE_CHANNEL = 'channels/removeChannel';
 
-// action creators
+// ------ action creators
 const setChannels = (channels) => ({
   type: SET_CHANNELS,
   payload: channels,
@@ -25,7 +25,7 @@ const removeChannel = (channelId) => ({
   payload: channelId,
 });
 
-// thunks
+// ------ thunks
 export const thunkFetchChannels = (serverId) => async (dispatch) => {
   const response = await fetch(`/api/channels/${serverId}`);
   if (response.ok) {
@@ -70,7 +70,7 @@ export const thunkUpdateChannel = (id, channelData) => async (dispatch) => {
   if (response.ok) {
     const channel = await response.json();
     dispatch(updateChannel(channel));
-    return channel; // Return the updated channel object
+    return channel; // return the updated channel object
   } else if (response.status < 500) {
     const errorMessages = await response.json();
     return errorMessages;
@@ -84,11 +84,12 @@ export const thunkDeleteChannel = (channelId) => async (dispatch) => {
     method: 'DELETE',
   });
   if (response.ok) {
-    const channel = await response.json(); // Assuming the server returns the deleted channel
+    const data = await response.json(); // assuming the server returns { message: 'Channel deleted', server_id: <id> }
     dispatch(removeChannel(channelId));
-    return channel; // Return the deleted channel object
+    return data.server_id; // return the server_id
   }
 };
+
 
 // initial state
 const initialState = { channels: [] };

@@ -48,21 +48,25 @@ def update_channel(id):
             server = Server.query.get(form.data['server_id'])
             if server and server.creator_id == current_user.id:
                 channel.name = form.data['name']
+                channel.server_id = form.data['server_id']  # make sure server_id is updated
                 db.session.commit()
                 return jsonify(channel.to_dict())
             return {'error': 'Unauthorized or server not found'}, 403
         return {'errors': form.errors}, 400
     return {'error': 'Channel not found'}, 404
 
+
 @channel_routes.route('/<int:id>', methods=['DELETE'])
 @login_required
 def delete_channel(id):
     channel = Channel.query.get(id)
     if channel:
-        server = Server.query.get(channel.server_id)
+        server_id = channel.server_id  # save the server_id before deleting the channel
+        server = Server.query.get(server_id)
         if server and server.creator_id == current_user.id:
             db.session.delete(channel)
             db.session.commit()
-            return jsonify({'message': 'Channel deleted'}), 200
+            return jsonify({'message': 'Channel deleted', 'server_id': server_id}), 200  # Return server_id
         return {'error': 'Unauthorized'}, 403
     return {'error': 'Channel not found'}, 404
+
