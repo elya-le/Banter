@@ -67,10 +67,7 @@ function ServerDetailPage() {
 
   return (
     <div className="server-details-page">
-
-      
         <div className="sidebar">
-          {/* sidebar content with icons of servers */}
           <nav className="sidebar-nav">
             <ul>
               {servers.map((server) => (
@@ -91,7 +88,6 @@ function ServerDetailPage() {
               </li>
               <li>
                 <Link to="/discover-page" className="discover-page-icon">
-                  {/* replace with discover icon */}
                   <div className="discover-icon">
                     <FaCompass />
                   </div>
@@ -155,10 +151,10 @@ function ServerDetailPage() {
                       <div className="channel-name">
                         {channel.name.toLowerCase()}
                       </div>
-                      <div className="settings-icon">
+                      <Link to={`/channels/${channel.id}/edit`} className="settings-icon">
                         <FaCog />
                         <div className="tooltip">Edit Channel</div>
-                      </div>
+                      </Link>
                     </div>
                   </li>
                 ))
@@ -178,10 +174,8 @@ function ServerDetailPage() {
           </div>
         </div>
         <div className="server-main-content">
-          {/* render real-time chat or server description based on the presence of channel chat content */}
           {server.channels && server.channels.length > 0 ? (
             <div className="chat">
-              {/* real-time chat component goes here */}
               <p>Real-time chat will be here...</p>
             </div>
           ) : (
@@ -200,7 +194,6 @@ function ServerDetailPage() {
             </div>
           )}
         </div>
-      
     </div>
   );
 }

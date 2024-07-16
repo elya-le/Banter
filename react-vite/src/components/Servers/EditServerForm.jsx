@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { thunkFetchServer, thunkUpdateServer, thunkDeleteServer } from "../../redux/servers";
 import { FaTrash, FaTimes  } from "react-icons/fa";
 import "./EditServerForm.css";
@@ -25,6 +25,8 @@ function EditServerForm() {
   const [initialDescription, setInitialDescription] = useState(server ? server.description : "");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // state to track if the popup should be red
+  const [popupRed, setPopupRed] = useState(false);
   useEffect(() => {
     if (!server) {
       dispatch(thunkFetchServer(id));
@@ -41,6 +43,12 @@ function EditServerForm() {
     }
   }, [server]);
 
+  // update the unsaved changes state when inputs change
+  useEffect(() => {
+    setHasUnsavedChanges(name !== initialName || description !== initialDescription);
+  }, [name, description, initialName, initialDescription]);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -54,7 +62,7 @@ function EditServerForm() {
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
       console.log("Update successful, navigating to server details page");
-      navigate(`/servers/${id}`); // correct this redirection later!!! 
+      navigate(`/servers/${id}`); // ------- correct this redirection later!!! 
     } else {
       console.log("Update failed, result:", result);
     }
@@ -64,7 +72,7 @@ function EditServerForm() {
     e.preventDefault();
     console.log("Deleting server with id:", id);
     await dispatch(thunkDeleteServer(id));
-    navigate('/discover-page'); // correct this redirection later!!! 
+    navigate('/discover-page'); // ------ correct this redirection later!!! 
   };
 
   const handleReset = () => {
@@ -76,6 +84,17 @@ function EditServerForm() {
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
     setHasUnsavedChanges(true);
+  };
+
+
+  const handleClose = (e) => {
+    if (hasUnsavedChanges) {
+      e.preventDefault();
+      setPopupRed(true);
+      setTimeout(() => setPopupRed(false), 5000); // turn the popup red for 5 seconds
+    } else {
+      navigate(`/servers/${id}`);
+    }
   };
 
   if (!server) {
@@ -94,9 +113,9 @@ function EditServerForm() {
       <div className="edit-server-input">
         <div className="edit-header">
           <h1>{name}&apos;s server details</h1>
-          <Link to={`/servers/${id}`} className="close-link">
+          <a href="#" onClick={handleClose} className="close-link">
             <FaTimes className="close-icon" />
-          </Link>
+          </a>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -150,10 +169,16 @@ function EditServerForm() {
           </div>
         </form>
         {hasUnsavedChanges && (
-          <div className="unsaved-changes-popup">
-            <span>Careful — you have unsaved changes!</span>
-            <button onClick={handleReset}>Reset</button>
-            <button onClick={handleSubmit}>Save Changes</button>
+          <div className={`unsaved-changes-popup ${popupRed ? "red-popup" : ""}`}>
+            <div className="unsaved-changes-message">
+              <span>Careful — you have unsaved changes!</span>
+            </div>
+            <div className="unsaved-changes-link">
+              <a href="#" onClick={handleReset} className="popup-link">Reset</a>
+            </div>
+            <div className="unsaved-changes-button">
+              <button onClick={handleSubmit} className="save-changes-button">Save Changes</button>
+            </div>
           </div>
         )}
       </div>

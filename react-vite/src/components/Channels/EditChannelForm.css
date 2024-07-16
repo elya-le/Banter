@@ -2,7 +2,7 @@ body {
   background-color: #313338;
 }
 
-.edit-server-container {
+.edit-channel-container {
   display: flex;
   flex-direction: row;
   height: 100vh; 
@@ -22,7 +22,7 @@ body {
   background-color: #2B2D31;
 }
 
-.delete-server-link {
+.delete-channel-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,18 +34,18 @@ body {
   text-decoration: none; 
 }
 
-.delete-server-link:hover {
+.delete-channel-link:hover {
   background-color: #404249;
   width: 230px;
   margin: 5px;
   border-radius: 3px;
 }
 
-.edit-server-nav {
+.edit-channel-nav {
   padding: 5px;
 }
 
-.edit-server-input {
+.edit-channel-input {
   display: flex;
   flex-direction: column;
   width: 400px; 
@@ -93,10 +93,6 @@ body {
   border: none;
   border-radius: 3px;
   background-color: #1E1F22;
-  color: white;
-}
-
-.input-group input[type="file"] {
   color: white;
 }
 

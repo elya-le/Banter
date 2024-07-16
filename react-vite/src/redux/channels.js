@@ -70,6 +70,7 @@ export const thunkUpdateChannel = (id, channelData) => async (dispatch) => {
   if (response.ok) {
     const channel = await response.json();
     dispatch(updateChannel(channel));
+    return channel; // Return the updated channel object
   } else if (response.status < 500) {
     const errorMessages = await response.json();
     return errorMessages;
@@ -83,7 +84,9 @@ export const thunkDeleteChannel = (channelId) => async (dispatch) => {
     method: 'DELETE',
   });
   if (response.ok) {
+    const channel = await response.json(); // Assuming the server returns the deleted channel
     dispatch(removeChannel(channelId));
+    return channel; // Return the deleted channel object
   }
 };
 
