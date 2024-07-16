@@ -30,7 +30,6 @@ class Server(db.Model):
             'avatar_url': self.avatar_url,
             'banner_url': self.banner_url,
             'category': self.category,
-            'channels': [channel.to_dict() for channel in self.channels],
             'creator_id': self.creator_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
