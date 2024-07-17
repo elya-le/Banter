@@ -1,20 +1,20 @@
-"""with updated full list of server seeders
+"""full seeders as sole creator of servers
 
-Revision ID: 6909194d9710
+Revision ID: 6527175dce1c
 Revises: 
-Create Date: 2024-07-16 22:12:13.698892
+Create Date: 2024-07-17 09:46:53.656222
 
 """
 from alembic import op
 import sqlalchemy as sa
 
-
 import os
 environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
 
+
 # revision identifiers, used by Alembic.
-revision = '6909194d9710'
+revision = '6527175dce1c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -66,10 +66,11 @@ def upgrade():
     )
 
     if environment == "production":
-      op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
-      op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
-      op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
-      op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+
     # ### end Alembic commands ###
 
 

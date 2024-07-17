@@ -26,7 +26,7 @@ def seed_user_server_memberships():
         {'user_id': 6, 'server_id': 14},
         {'user_id': 7, 'server_id': 6},
         {'user_id': 7, 'server_id': 15},
-        {'user_id': 7, 'server_id': 16},
+        {'user_id': 7, 'server_id': 5},
     ]
 
     for membership in memberships:
