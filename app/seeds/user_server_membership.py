@@ -2,7 +2,6 @@ from app.models import db, User, Server, user_server_membership, environment, SC
 from sqlalchemy.sql import text
 
 def seed_user_server_memberships():
-    # Clear existing records
     undo_user_server_memberships()
 
     memberships = [
@@ -10,10 +9,26 @@ def seed_user_server_memberships():
         {'user_id': 1, 'server_id': 2},
         {'user_id': 1, 'server_id': 3},
         {'user_id': 1, 'server_id': 4},
-        # Add more memberships as needed
+        {'user_id': 2, 'server_id': 1},
+        {'user_id': 2, 'server_id': 5},
+        {'user_id': 2, 'server_id': 6},
+        {'user_id': 3, 'server_id': 2},
+        {'user_id': 3, 'server_id': 7},
+        {'user_id': 3, 'server_id': 8},
+        {'user_id': 4, 'server_id': 3},
+        {'user_id': 4, 'server_id': 9},
+        {'user_id': 4, 'server_id': 10},
+        {'user_id': 5, 'server_id': 4},
+        {'user_id': 5, 'server_id': 11},
+        {'user_id': 5, 'server_id': 12},
+        {'user_id': 6, 'server_id': 5},
+        {'user_id': 6, 'server_id': 13},
+        {'user_id': 6, 'server_id': 14},
+        {'user_id': 7, 'server_id': 6},
+        {'user_id': 7, 'server_id': 15},
+        {'user_id': 7, 'server_id': 16},
     ]
 
-    # Insert memberships
     for membership in memberships:
         db.session.execute(
             text(f"INSERT INTO {SCHEMA}.user_server_membership (user_id, server_id) VALUES (:user_id, :server_id)")
