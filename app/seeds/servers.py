@@ -23,7 +23,7 @@ def seed_servers():
             name="Post-grad Pad",
             description="For App Academy alumni to network and collaborate.",
             avatar_url="https://portfolio-elya.s3.us-east-2.amazonaws.com/banter-server-seeders/Post-Grad-Pad-a.jpeg",
-            banner_url="https://portfolio-elya.s3.us-east-2.amazonaws.com/banter-server-seeders/Post-Grad-Pad-b.jpeg",
+            banner_url="https://portfolio-elya.s3.us-east-2.amazonaws.com/banter-server-seeders/Post-Grad-Pad-b.jpg",
             category="Networking",
             creator_id=1,
         ),
