@@ -27,20 +27,36 @@ def create_server():
             creator_id=current_user.id,
         )
         db.session.add(server)
+        current_user.joined_servers.append(server)  # automatically join the server when it is created
         db.session.commit()
         return jsonify(server.to_dict()), 201
     return {'errors': form.errors}, 400
 
 
+# @server_routes.route('/', methods=['GET'])
+# @login_required
+# def get_servers():
+#     servers = Server.query.all()
+#     joined_servers = [server.id for server in current_user.joined_servers]
+#     return jsonify({
+#         'servers': [server.to_dict() for server in servers],
+#         'joined_servers': joined_servers
+#     })
+
 @server_routes.route('/', methods=['GET'])
-@login_required
+@login_required  # ensure user is logged in
 def get_servers():
-    servers = Server.query.all()
-    joined_servers = [server.id for server in current_user.joined_servers]
+    servers = Server.query.all()  # fetch all servers from the database
+    joined_servers = [server.id for server in current_user.joined_servers]  # list of IDs of servers the user has joined
+    all_servers = [server.to_dict() for server in servers]  # all servers as dictionaries
+    not_joined_servers = [server.to_dict() for server in servers if server.id not in joined_servers]  # servers not joined by the user
+
     return jsonify({
-        'servers': [server.to_dict() for server in servers],
-        'joined_servers': joined_servers
-    })
+        'all_servers': all_servers,
+        'joined_servers': joined_servers,
+        'not_joined_servers': not_joined_servers
+    })  # return JSON with all, joined, and not joined servers
+
 
 @server_routes.route('/<int:id>', methods=['GET'])
 @login_required
@@ -68,7 +84,7 @@ def update_server(id):
                 if "url" in avatar_upload:
                     server.avatar_url = avatar_upload["url"]
                 else:
-                    return avatar_upload, 400  # return error if upload failed
+                    return jsonify(avatar_upload), 400  # return error if upload failed
 
             # handle banner upload
             if 'banner' in request.files and allowed_file(request.files['banner'].filename):
@@ -77,14 +93,13 @@ def update_server(id):
                 if "url" in banner_upload:
                     server.banner_url = banner_upload["url"]
                 else:
-                    return banner_upload, 400  # return error if upload failed
+                    return jsonify(banner_upload), 400  # return error if upload failed
 
             server.category = form.data.get('category', server.category)
             db.session.commit()
             return jsonify(server.to_dict())
         return {'errors': form.errors}, 400
     return {'error': 'Server not found or unauthorized'}, 404
-
 
 @server_routes.route('/<int:id>', methods=['DELETE'])
 @login_required
@@ -96,22 +111,22 @@ def delete_server(id):
         return {'message': 'Server deleted'}
     return {'error': 'Server not found or unauthorized'}, 404
 
-@server_routes.route('/<int:id>/join', methods=['POST'])
+@server_routes.route('/<int:id>/join', methods=['POST'])  # --------- endpoint to join a server
 @login_required
 def join_server(id):
     server = Server.query.get(id)
     if server:
         current_user.joined_servers.append(server)
         db.session.commit()
-        return {'message': 'Joined server'}
+        return {'message': 'Joined server', 'server': server.to_dict()}
     return {'error': 'Server not found'}, 404
 
-@server_routes.route('/<int:id>/leave', methods=['POST'])
+@server_routes.route('/<int:id>/leave', methods=['POST'])   # --------- endpoint to leave a server
 @login_required
 def leave_server(id):
     server = Server.query.get(id)
     if server:
         current_user.joined_servers.remove(server)
         db.session.commit()
-        return {'message': 'Left server'}
+        return {'message': 'Left server', 'serverId': id}
     return {'error': 'Server not found'}, 404

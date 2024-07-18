@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Navigate, Link, useParams } from "react-router-dom";
-import { thunkFetchServers, thunkFetchServer } from "../../redux/servers";
-import { thunkFetchChannels } from "../../redux/channels";
+import { thunkFetchServers, thunkFetchServer, thunkJoinServer, thunkLeaveServer } from "../../redux/servers"; 
+import { Navigate, Link, useParams } from "react-router-dom"; //<---^-------- join/leave sever update
+import { thunkFetchChannels } from "../../redux/channels"; 
 import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton"; 
 import ServerFormModal from "../Servers/ServerFormModal"; 
@@ -15,9 +15,17 @@ function ServerDetailPage() {
   const dispatch = useDispatch();
   const { id } = useParams(); // get the server ID from the URL parameters
   const user = useSelector((state) => state.session.user);
-  const servers = useSelector((state) => state.servers.servers);
-  const server = useSelector((state) => state.servers.servers.find((s) => s.id === parseInt(id)));
-  const channels = useSelector((state) => state.channels.channels); 
+
+  // const servers = useSelector((state) => state.servers.servers);
+  // const server = useSelector((state) => state.servers.servers.find((s) => s.id === parseInt(id)));
+
+  // -------- explain this part
+  const allServers = useSelector((state) => state.servers.allServers) || []; // ensure default empty array 
+  const joinedServers = useSelector((state) => state.servers.joinedServers) || []; // ensure default empty array 
+  const viewedServers = useSelector((state) => state.servers.viewedServers) || []; // ensure default empty array 
+  // const notJoinedServers = useSelector((state) => state.servers.notJoinedServers); 
+  const server = allServers.find((s) => s.id === parseInt(id)); // find the server by id from allServers 
+  const channels = useSelector((state) => state.channels.channels) || []; // ensure default empty array 
 
   // modal state
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -57,6 +65,15 @@ function ServerDetailPage() {
     toggleDropdown();
   };
 
+  const handleJoinServer = () => { // <-------- join sever update
+    dispatch(thunkJoinServer(id)); 
+  };
+
+  const handleLeaveServer = () => {  // <-------- leave sever update
+    dispatch(thunkLeaveServer(id));
+  };
+
+
   if (!user) {
     return <Navigate to="/" />;
   }
@@ -65,12 +82,15 @@ function ServerDetailPage() {
     return <div>Loading...</div>;
   }
 
+  const isMember = joinedServers.includes(server.id); // <-------- join sever update
+
   return (
     <div className="server-details-page">
+        {/* --------------- sidebar ----------------- */}
         <div className="sidebar">
           <nav className="sidebar-nav">
-            <ul>
-              {servers.map((server) => (
+              {/* --------------- v1  ----------------- */}
+              {/* {servers.map((server) => (
                 <li key={server.id} className="server-icon">
                   <Link to={`/servers/${server.id}`}>
                     <div className="icon-circle">
@@ -82,7 +102,58 @@ function ServerDetailPage() {
                     </div>
                   </Link>
                 </li>
-              ))}
+              ))} */}
+              {/* --------------- v2 only showing joined ----------------- */}
+              {/* {joinedServers.map((serverId) => {
+              const server = allServers.find((s) => s.id === serverId);
+                return (
+                  <li key={server.id} className="server-icon">
+                    <Link to={`/servers/${server.id}`}>
+                      <div className="icon-circle">
+                        {server.avatar_url ? (
+                          <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                        ) : (
+                          server.name[0].toUpperCase()
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })} */}
+              <ul>
+                {/* --------------- Viewed Servers ----------------- */}
+                {viewedServers.map((server) => (
+                  <li key={server.id} className="server-icon">
+                    <Link to={`/servers/${server.id}`}>
+                      <div className="icon-circle">
+                        {server.avatar_url ? (
+                          <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                        ) : (
+                          server.name[0].toUpperCase()
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <ul>
+              {/* --------------- Joined Servers ----------------- */}
+              {joinedServers.map((serverId) => {
+                const server = allServers.find((s) => s.id === serverId);
+                return (
+                  <li key={server.id} className="server-icon">
+                    <Link to={`/servers/${server.id}`}>
+                      <div className="icon-circle">
+                        {server.avatar_url ? (
+                          <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                        ) : (
+                          server.name[0].toUpperCase()
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
               <li>
                 <OpenModalButton
                   modalComponent={<ServerFormModal />}
@@ -100,7 +171,17 @@ function ServerDetailPage() {
             </ul>
           </nav>
         </div>
-        <div className="side-nav">
+        {/* --------------- nav and messages ----------------- */}
+        <div className="channel-nav-and-messages-container">
+          {/* ----------- join server banner */}
+          {!isMember && (
+            <div className="join-server-banner">
+              <p>You are currently in preview mode. Join this server to start chatting!</p>
+              <button onClick={handleJoinServer}>Join {server.name}</button>
+            </div>
+          )}
+          {/* --------------- side nav ----------------- */}
+          <div className="side-nav">
           {server.banner_url ? (
             <div className="server-banner" onClick={toggleDropdown}>
               <img src={server.banner_url} alt={`${server.name} banner`} />
@@ -125,9 +206,11 @@ function ServerDetailPage() {
           )}
           {dropdownOpen && (
             <ul className="server-dropdown-menu">
+               {/* --------------- edit sever link ----------------- */}
               <li>
                 <Link to={`/servers/${id}/edit`} className="server-dd-hover">Edit Server</Link>
               </li>
+              {/* --------------- create sever modal ----------------- */}
               <li className="server-dd-hover create-channel-item">
                 <OpenModalButton
                   modalComponent={<ChannelFormModal serverId={id} />}
@@ -135,6 +218,12 @@ function ServerDetailPage() {
                   className="create-channel-link"
                 />
               </li>
+              {/* --------------- leave sever modal ----------------- */}
+              {isMember && (
+                  <li className="server-dd-hover leave-server-item" onClick={handleLeaveServer}>
+                    Leave Server
+                  </li>
+              )}
             </ul>
           )}
         <div className="channel-list-container">
@@ -180,8 +269,9 @@ function ServerDetailPage() {
               Log Out
             </button>
           </div>
-        </div>
-        <div className="server-main-content">
+          </div>
+          {/* --------------- main content ----------------- */}
+          <div className="server-main-content">
           {server.channels && server.channels.length > 0 ? (
             <div className="chat">
               <p>Real-time chat will be here...</p>
@@ -201,6 +291,7 @@ function ServerDetailPage() {
               </div>
             </div>
           )}
+          </div>
         </div>
     </div>
   );
