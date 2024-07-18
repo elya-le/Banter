@@ -176,7 +176,7 @@ function EditServerForm() {
               />
             </label>
           </div>
-          <div className="input-group">
+          {/* <div className="input-group">
             <label>
               <span>category</span>
               <input
@@ -185,7 +185,7 @@ function EditServerForm() {
                 onChange={handleInputChange(setCategory)}
               />
             </label>
-          </div>
+          </div> */}
           {hasUnsavedChanges && (
             <div className={`unsaved-changes-popup ${popupRed ? "red-popup" : ""}`}>
               <div className="unsaved-changes-message">
