@@ -88,28 +88,42 @@
 
 
 .server-card {
-  background-color: #232428;
-  min-width: 220px; 
+  background-color: #232428 ;
+  /* min-width: 220px; 
   max-width: 300px; 
   min-height: 300px; 
-  max-height: 300px; 
+  max-height: 300px;  */
+  width: 300px; /* consistent width */
+  height: 300px; /* consistent height */
   border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  color: #F2F3F5;
+  position: relative;
+
+}
+
+.server-banner {
+  width: 100%;
+  height: 150px; /* Ensure this is half of the card height */
 }
 
 .server-info {
   padding: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
+  position: absolute;
+  top: 100px; /* Adjust position relative to the banner */
 }
 
 .server-avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  box-shadow: 0 0 0 4px #232428; /* create a border-like effect outside the element */
 }
 
 .server-avatar:hover {
@@ -118,3 +132,32 @@
   border-radius: 30%;
 }
 
+.server-banner-placeholder {
+  background-color: #5865F2; /* set the background color to purple */
+  width: 100%; /* Ensure this takes full width */
+  height: 150px; /* Ensure this is half of the card height */
+}
+
+.server-avatar-placeholder {
+  background-color: #5865F2; 
+  width: 50px; 
+  height: 50px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* set the text color to white */
+  font-size: 24px; /* set the font size to match your design */
+  border-radius: 30%; /* make it circular */
+  box-shadow: 0 0 0 4px #232428;
+}
+
+.server-name {
+  font-weight: bold;
+  margin-top: 10px; /* ensure this accounts for the avatar height */
+}
+
+.server-description {
+  color: grey;
+  text-align: center;
+  padding: 0 10px;
+}

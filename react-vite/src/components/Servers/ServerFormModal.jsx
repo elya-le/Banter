@@ -10,7 +10,7 @@ function ServerFormModal() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [avatarFile, setAvatarFile] = useState(null);
+  // const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
   const modalRef = useRef();
@@ -20,7 +20,7 @@ function ServerFormModal() {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    if (avatarFile) formData.append("avatar", avatarFile);
+    // if (avatarFile) formData.append("avatar", avatarFile);
 
     const result = await dispatch(thunkCreateServer(formData));
     if (result && !result.errors) {
@@ -80,7 +80,7 @@ function ServerFormModal() {
                     maxLength={255} // enforce max length constraint
                   />
                 </label>
-                <label className="upload-label">
+                {/* <label className="upload-label">
                   <span>AVATAR</span>
                   <input
                     type="file"
@@ -88,7 +88,7 @@ function ServerFormModal() {
                     onChange={(e) => setAvatarFile(e.target.files[0])}
                     accept="image/*" // ensure only images can be uploaded
                   />
-                </label>
+                </label> */}
               </div>
             </div>
             <button type="submit" className="create-server-submit">Create Server</button>

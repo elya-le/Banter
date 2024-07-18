@@ -30,7 +30,6 @@
   border-bottom: 1px solid black;
 }
 
-
 .server-name-side-nav {
   font-size: 16px;
   font-weight: 500;
@@ -124,8 +123,58 @@ li.create-channel-item {
   margin-top: 0 !important; /* optional */
 }
 
-/* ---------- channel list ---------- */
+/* ---------- join server banner list ---------- */
 
+.banner-channel-nav-and-messages-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.channel-nav-and-messages-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.join-server-banner {
+  background-color: #4752C4;;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.join-server-banner p {
+  margin: 0;
+}
+
+.join-server-banner button {
+  background-color: #4752C4;
+  color: white;
+  border: 1px solid white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.server-dd-hover.leave-server-item {
+  border-radius: 3px;
+  padding: 10px;
+  color: red;
+  cursor: pointer;
+}
+
+.server-dd-hover.leave-server-item:hover {
+  border-radius: 3px;
+  color: white;
+  background-color: red;
+}
+
+/* ---------- channel list ---------- */
 
 .channel-list-container {
   min-height: 200px;
@@ -280,6 +329,7 @@ li {
   align-items: center;
   justify-content: flex-end; /* center the content vertically */
   height: 100%;
+  width: 100%;
   padding: 20px;
   box-sizing: border-box; /* ensure padding is included in the element's total width and height */
 }

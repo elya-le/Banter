@@ -9,20 +9,20 @@ function EditServerForm() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const server = useSelector((state) =>
-    state.servers.servers.find((s) => s.id === parseInt(id))
-  );
+  const allServers = useSelector((state) => state.servers.allServers) || [];
+  const server = allServers.find((s) => s.id === parseInt(id));
 
   // initialize state with empty strings to ensure controlled components
   const [name, setName] = useState(server ? server.name : "");
   const [description, setDescription] = useState(server ? server.description : "");
   const [avatarFile, setAvatarFile] = useState(null);
   const [bannerFile, setBannerFile] = useState(null);
-  const [category, setCategory] = useState(server ? server.category : "");
 
   // track initial values to reset to if needed
   const [initialName, setInitialName] = useState(server ? server.name : "");
   const [initialDescription, setInitialDescription] = useState(server ? server.description : "");
+  // const [initialAvatarUrl, setInitialAvatarUrl] = useState(server ? server.avatar_url : "");
+  // const [initialBannerUrl, setInitialBannerUrl] = useState(server ? server.banner_url : "");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // state to track if the popup should be red
@@ -40,9 +40,10 @@ function EditServerForm() {
     if (server) {
       setName(server.name);
       setDescription(server.description);
-      setCategory(server.category);
       setInitialName(server.name);
       setInitialDescription(server.description);
+      // setInitialAvatarUrl(server.avatar_url);
+      // setInitialBannerUrl(server.banner_url);
     }
   }, [server]);
 
@@ -64,12 +65,22 @@ function EditServerForm() {
     formData.append("description", description);
     if (avatarFile) formData.append("avatar", avatarFile); // use 'avatar' key for the file
     if (bannerFile) formData.append("banner", bannerFile); // use 'banner' key for the file
-    formData.append("category", category);
 
     console.log("Submitting form data:", formData);
     const result = await dispatch(thunkUpdateServer(id, formData));
     if (result && !result.errors) {
-      console.log("Update successful, navigating to server details page");
+      console.log("Update successful, updating state");
+
+      // Update initial values to the new state
+      setInitialName(name);
+      setInitialDescription(description);
+      // setInitialAvatarUrl(result.avatar_url);
+      // setInitialBannerUrl(result.banner_url);
+      // setAvatarFile(null); // reset the file inputs
+      // setBannerFile(null); // reset the file inputs
+      setHasUnsavedChanges(false);
+
+      console.log("Navigating to server details page");
       navigate(`/servers/${id}`);
     } else {
       console.log("Update failed, result:", result);
@@ -88,8 +99,8 @@ function EditServerForm() {
   const handleReset = () => {
     setName(initialName);
     setDescription(initialDescription);
-    setAvatarFile(null); // reset the file inputs
-    setBannerFile(null); // reset the file inputs
+    // setAvatarFile(null); // reset the file inputs
+    // setBannerFile(null); // reset the file inputs
     setHasUnsavedChanges(false);
   };
 
@@ -195,7 +206,7 @@ function EditServerForm() {
                 <a href="#" onClick={handleReset} className="popup-link">reset</a>
               </div>
               <div className="unsaved-changes-button">
-                <button onClick={handleSubmit} className="save-changes-button">save changes</button>
+                <button type="button" onClick={handleSubmit} className="save-changes-button">save changes</button>
               </div>
             </div>
           )}

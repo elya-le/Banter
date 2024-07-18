@@ -3,15 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 import { thunkFetchServers } from "../../redux/servers";
 import { thunkLogout } from "../../redux/session";
-import OpenModalButton from "../OpenModalButton/OpenModalButton"; // import the OpenModalButton
-import ServerFormModal from "../Servers/ServerFormModal"; // import the ServerFormModal
+import OpenModalButton from "../OpenModalButton/OpenModalButton"; 
+import ServerFormModal from "../Servers/ServerFormModal"; 
 import "./DiscoverPage.css";
 import { FaCompass } from "react-icons/fa6";
 
 function DiscoverPage() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
-  const servers = useSelector((state) => state.servers.servers);
+  // const servers = useSelector((state) => state.servers.servers);
+  const allServers = useSelector((state) => state.servers.allServers) || []; // updated ensure default empty array
+  const joinedServers = useSelector((state) => state.servers.joinedServers) || []; // updated ensure default empty array
+  const viewedServers = useSelector((state) => state.servers.viewedServers) || []; // updated ensure default empty array
 
   useEffect(() => {
     if (user) {
@@ -26,13 +29,35 @@ function DiscoverPage() {
   if (!user) {
     return <Navigate to="/" />;
   }
+
+  // filter out the servers the user has not joined
+  const notJoinedServers = allServers
+    .filter(server => !joinedServers.includes(server.id))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // sort by creation date descending
+
   return (
     <div className="discover-page">
       <div className="sidebar">
         {/* sidebar content with icons of servers */}
         <nav className="sidebar-nav">
           <ul>
-            {servers.map((server) => (
+
+            {/* {servers.map((server) => (
+              <li key={server.id} className="server-icon">
+                <Link to={`/servers/${server.id}`}>
+                  <div className="icon-circle">
+                    {server.avatar_url ? (
+                      <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                    ) : (
+                      server.name[0].toUpperCase()  // display the first letter of the server name
+                    )}
+                  </div>
+                </Link>
+              </li>
+            ))} */}
+
+             {/* --------- viewed servers -------- */}
+            {viewedServers.map((server) => (
               <li key={server.id} className="server-icon">
                 <Link to={`/servers/${server.id}`}>
                   <div className="icon-circle">
@@ -45,6 +70,27 @@ function DiscoverPage() {
                 </Link>
               </li>
             ))}
+          </ul>
+          <ul>
+            {/* ----------joined servers ------------ */}
+            {joinedServers.map((serverId) => {
+              const server = allServers.find((s) => s.id === serverId);
+              return (
+                server && (
+                  <li key={server.id} className="server-icon">
+                    <Link to={`/servers/${server.id}`}>
+                      <div className="icon-circle">
+                        {server.avatar_url ? (
+                          <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar" />
+                        ) : (
+                          server.name[0].toUpperCase()  // display the first letter of the server name
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                )
+              );
+            })}
             <li>
               <OpenModalButton
                 modalComponent={<ServerFormModal />}
@@ -83,18 +129,26 @@ function DiscoverPage() {
         </div>
         <h1>Featured communities</h1>
         <div className="server-grid">
-          {servers.map((server) => (
+          {notJoinedServers.map((server) => ( // <-------------------------- map over not joined servers
             <Link to={`/servers/${server.id}`} key={server.id} className="server-card-link">
-              <div className="server-card">
-                <img src={server.banner_url} alt={`${server.name} banner`} className="server-banner"/>
-                <div className="server-info">
-                  <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar"/>
-                  <div>
-                    <h2>{server.name}</h2>
-                    <p>{server.description}</p>
-                  </div>
+            <div className="server-card">
+              {server.banner_url ? (
+                <img src={server.banner_url} alt={`${server.name} banner`} className="server-banner"/> // <----conditionally render the banner
+              ) : (
+                <div className="server-banner-placeholder"></div> // <---- blank div with background if no banner
+              )}
+              <div className="server-info">
+                {server.avatar_url ? (
+                  <img src={server.avatar_url} alt={`${server.name} avatar`} className="server-avatar"/> // <---- conditionally render the avatar
+                ) : (
+                  <div className="server-avatar-placeholder">{server.name[0].toUpperCase()}</div> // <---- display first letter of server name if no avatar
+                )}
+                <div>
+                  <h2>{server.name}</h2>
+                  <p>{server.description}</p>
                 </div>
               </div>
+            </div>
             </Link>
           ))}
         </div>
