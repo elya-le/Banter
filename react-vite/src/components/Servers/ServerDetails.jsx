@@ -172,16 +172,17 @@ function ServerDetailPage() {
           </nav>
         </div>
         {/* --------------- nav and messages ----------------- */}
-        <div className="channel-nav-and-messages-container">
+        <div className="banner-channel-nav-and-messages-container">
           {/* ----------- join server banner */}
           {!isMember && (
             <div className="join-server-banner">
               <p>You are currently in preview mode. Join this server to start chatting!</p>
-              <button onClick={handleJoinServer}>Join {server.name}</button>
+              <button onClick={handleJoinServer}>Join this server</button>
             </div>
           )}
-          {/* --------------- side nav ----------------- */}
-          <div className="side-nav">
+          <div className="channel-nav-and-messages-container">
+            {/* --------------- side nav ----------------- */}
+            <div className="side-nav">
           {server.banner_url ? (
             <div className="server-banner" onClick={toggleDropdown}>
               <img src={server.banner_url} alt={`${server.name} banner`} />
@@ -269,9 +270,9 @@ function ServerDetailPage() {
               Log Out
             </button>
           </div>
-          </div>
-          {/* --------------- main content ----------------- */}
-          <div className="server-main-content">
+            </div>
+            {/* --------------- main content ----------------- */}
+            <div className="server-main-content">
           {server.channels && server.channels.length > 0 ? (
             <div className="chat">
               <p>Real-time chat will be here...</p>
@@ -282,15 +283,17 @@ function ServerDetailPage() {
                 <h1>Welcome to {server.name}</h1>
               </div>
               <div className="server-action-items">
-                <p>This is your brand new, shiny server. Here are some steps to help you get started:</p>
-                <ul>
+                <p>This is your brand new, shiny server. </p>
+                {/* Here are some steps to help you get started: */}
+                {/* <ul>
                   <li>Add a channel to send your first message</li>
                   <li>Personalize your server with an icon & banner</li>
                   <li>Add a description</li>
-                </ul>
+                </ul> */}
               </div>
             </div>
           )}
+            </div>
           </div>
         </div>
     </div>

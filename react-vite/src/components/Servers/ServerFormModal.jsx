@@ -80,7 +80,7 @@ function ServerFormModal() {
                     maxLength={255} // enforce max length constraint
                   />
                 </label>
-                <label className="upload-label">
+                {/* <label className="upload-label">
                   <span>AVATAR</span>
                   <input
                     type="file"
@@ -88,7 +88,7 @@ function ServerFormModal() {
                     onChange={(e) => setAvatarFile(e.target.files[0])}
                     accept="image/*" // ensure only images can be uploaded
                   />
-                </label>
+                </label> */}
               </div>
             </div>
             <button type="submit" className="create-server-submit">Create Server</button>

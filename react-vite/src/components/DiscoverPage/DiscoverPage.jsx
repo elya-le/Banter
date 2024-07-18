@@ -31,8 +31,9 @@ function DiscoverPage() {
   }
 
   // filter out the servers the user has not joined
-  const notJoinedServers = allServers.filter(server => !joinedServers.includes(server.id)); 
-
+  const notJoinedServers = allServers
+    .filter(server => !joinedServers.includes(server.id))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // sort by creation date descending
 
   return (
     <div className="discover-page">

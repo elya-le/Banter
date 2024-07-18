@@ -125,14 +125,20 @@ li.create-channel-item {
 
 /* ---------- join server banner list ---------- */
 
-.channel-nav-and-messages-container {
+.banner-channel-nav-and-messages-container {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
+.channel-nav-and-messages-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
 .join-server-banner {
-  background-color: #4a90e2;
+  background-color: #4752C4;;
   color: white;
   padding: 10px;
   text-align: center;
@@ -146,9 +152,9 @@ li.create-channel-item {
 }
 
 .join-server-banner button {
-  background-color: #ffffff;
-  color: #4a90e2;
-  border: none;
+  background-color: #4752C4;
+  color: white;
+  border: 1px solid white;
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 3px;
@@ -323,6 +329,7 @@ li {
   align-items: center;
   justify-content: flex-end; /* center the content vertically */
   height: 100%;
+  width: 100%;
   padding: 20px;
   box-sizing: border-box; /* ensure padding is included in the element's total width and height */
 }
