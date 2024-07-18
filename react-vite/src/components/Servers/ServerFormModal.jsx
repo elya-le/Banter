@@ -10,7 +10,7 @@ function ServerFormModal() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [avatarFile, setAvatarFile] = useState(null);
+  // const [avatarFile, setAvatarFile] = useState(null);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
   const modalRef = useRef();
@@ -20,7 +20,7 @@ function ServerFormModal() {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    if (avatarFile) formData.append("avatar", avatarFile);
+    // if (avatarFile) formData.append("avatar", avatarFile);
 
     const result = await dispatch(thunkCreateServer(formData));
     if (result && !result.errors) {

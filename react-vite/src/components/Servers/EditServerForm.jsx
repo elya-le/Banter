@@ -21,8 +21,8 @@ function EditServerForm() {
   // track initial values to reset to if needed
   const [initialName, setInitialName] = useState(server ? server.name : "");
   const [initialDescription, setInitialDescription] = useState(server ? server.description : "");
-  const [initialAvatarUrl, setInitialAvatarUrl] = useState(server ? server.avatar_url : "");
-  const [initialBannerUrl, setInitialBannerUrl] = useState(server ? server.banner_url : "");
+  // const [initialAvatarUrl, setInitialAvatarUrl] = useState(server ? server.avatar_url : "");
+  // const [initialBannerUrl, setInitialBannerUrl] = useState(server ? server.banner_url : "");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // state to track if the popup should be red
@@ -42,8 +42,8 @@ function EditServerForm() {
       setDescription(server.description);
       setInitialName(server.name);
       setInitialDescription(server.description);
-      setInitialAvatarUrl(server.avatar_url);
-      setInitialBannerUrl(server.banner_url);
+      // setInitialAvatarUrl(server.avatar_url);
+      // setInitialBannerUrl(server.banner_url);
     }
   }, [server]);
 
@@ -74,10 +74,10 @@ function EditServerForm() {
       // Update initial values to the new state
       setInitialName(name);
       setInitialDescription(description);
-      setInitialAvatarUrl(result.avatar_url);
-      setInitialBannerUrl(result.banner_url);
-      setAvatarFile(null); // reset the file inputs
-      setBannerFile(null); // reset the file inputs
+      // setInitialAvatarUrl(result.avatar_url);
+      // setInitialBannerUrl(result.banner_url);
+      // setAvatarFile(null); // reset the file inputs
+      // setBannerFile(null); // reset the file inputs
       setHasUnsavedChanges(false);
 
       console.log("Navigating to server details page");
@@ -99,8 +99,8 @@ function EditServerForm() {
   const handleReset = () => {
     setName(initialName);
     setDescription(initialDescription);
-    setAvatarFile(null); // reset the file inputs
-    setBannerFile(null); // reset the file inputs
+    // setAvatarFile(null); // reset the file inputs
+    // setBannerFile(null); // reset the file inputs
     setHasUnsavedChanges(false);
   };
 
