@@ -1,0 +1,34 @@
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-container input {
+  flex: 1;
+  padding-right: 40px; /* Ensure space for the toggle button */
+}
+
+.password-toggle-button {
+  width: 20px;
+  position: absolute;
+  right: 10px; /* Adjust based on your design */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 0px;
+}
+
+.password-toggle-button:hover {
+  position: absolute;
+  right: 10px; /* Adjust based on your design */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.password-toggle-button:focus {
+  outline: none;
+}

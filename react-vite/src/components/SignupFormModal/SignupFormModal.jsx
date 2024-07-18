@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { thunkLogin } from "../../redux/session";
 import { useDispatch } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // added react-icons for eye icons
+import { thunkLogin, thunkSignup } from "../../redux/session";
 import { useModal } from "../../context/Modal";
-import { thunkSignup } from "../../redux/session";
 import "./SignupForm.css";
 
 function SignupFormModal() {
@@ -12,6 +12,8 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false); // state to toggle password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // state to toggle confirm password visibility
   const { closeModal } = useModal();
   const modalRef = useRef();
 
@@ -19,6 +21,7 @@ function SignupFormModal() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
+      console.log("Passwords do not match: ", password, confirmPassword);
       return setErrors({
         confirmPassword:
           "Confirm Password field must be the same as the Password field",
@@ -30,6 +33,7 @@ function SignupFormModal() {
         email,
         username,
         password,
+        confirm_password: confirmPassword // use confirm_password to match backend
       })
     );
 
@@ -41,8 +45,8 @@ function SignupFormModal() {
   };
 
   const handleDemoLogin = async () => {
-    const demoEmail = "demo@aa.io"; 
-    const demoPassword = "password"; 
+    const demoEmail = "demo@aa.io";
+    const demoPassword = "password";
 
     const serverResponse = await dispatch(
       thunkLogin({
@@ -56,6 +60,14 @@ function SignupFormModal() {
     } else {
       closeModal();
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   useEffect(() => {
@@ -110,24 +122,34 @@ function SignupFormModal() {
                     Password
                     {errors.password && <p className="error">{errors.password}</p>}
                   </span>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="password-container">
+                    <input
+                      type={showPassword ? "text" : "password"} // toggles between text and password
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button type="button" onClick={togglePasswordVisibility} className="password-toggle-button">
+                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* icon changes based on state */}
+                    </button>
+                  </div>
                 </label>
                 <label>
                   <span>
                     Confirm Password
                     {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
                   </span>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
+                  <div className="password-container">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"} // toggles between text and password
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    <button type="button" onClick={toggleConfirmPasswordVisibility} className="password-toggle-button"> 
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />} {/* icon changes based on state */}
+                    </button>
+                  </div>
                 </label>
               </div>
             </div>
