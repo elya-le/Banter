@@ -90,3 +90,16 @@ def post_message(channel_id):
     db.session.add(new_message)
     db.session.commit()
     return jsonify(new_message.to_dict())
+
+@channel_routes.route('/messages/<int:id>', methods=['DELETE'])
+@login_required
+def delete_message(id):
+    message = Message.query.get(id)
+    if message:
+        if message.user_id == current_user.id:
+            db.session.delete(message)
+            db.session.commit()
+            return jsonify({'message': 'Message deleted'}), 200
+        else:
+            return jsonify({'error': 'Unauthorized'}), 403
+    return jsonify({'error': 'Message not found'}), 404

@@ -13,9 +13,9 @@ import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
 import io from 'socket.io-client'; 
-import { addMessage, selectMessagesByChannel, setMessages } from "../../redux/messages";
+import { fetchMessages, postMessage, deleteMessage, addMessage, selectMessagesByChannel } from "../../redux/messages";
 
-const socket = io('http://localhost:5000'); // <-- Updated to match Flask server port
+const socket = io('http://localhost:5000');
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ function ServerDetailPage() {
 
   const handleChannelClick = (channel) => {
     setCurrentChannel(channel);
-    dispatch(setMessages({ channelId: channel.id, messages: [] }));
+    dispatch(fetchMessages(channel.id)); // fetch messages when switching channels
   };
 
   const sendMessage = () => {
@@ -96,12 +96,22 @@ function ServerDetailPage() {
       const msg = {
         user: user.username,
         channel: currentChannel.id,
-        text: message,
+        content: message,
       };
       socket.send(msg);
-      dispatch(addMessage({ channelId: currentChannel.id, message: msg }));
+      dispatch(postMessage({ channelId: currentChannel.id, content: message }));
       setMessage('');
     }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  const handleDeleteMessage = (messageId) => {
+    dispatch(deleteMessage(messageId));
   };
 
   if (!user) {
@@ -276,16 +286,24 @@ function ServerDetailPage() {
               <div className="chat">
                 <div className="messages-container">
                   {messages.map((msg, index) => (
-                    <p key={index}><strong>{msg.user}:</strong> {msg.text}</p>
+                    <div key={index} className="message-item"> 
+                      <p><strong>{msg.user.username}:</strong> {msg.content}</p> 
+                      {msg.user.id === user.id && ( // <--- this has been updated for: adding delete button
+                        <button onClick={() => handleDeleteMessage(msg.id)}>Delete</button>
+                      )}
+                    </div>
                   ))}
                 </div>
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type a message..."
-                />
-                <button onClick={sendMessage}>Send</button>
+                <div className="input-container">
+                  <input
+                    type="text"
+                    value={message}
+                    onKeyDown={handleKeyDown} // added onKeyDown event handler
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Type a message..."
+                  />
+                  <button onClick={sendMessage}>Send</button>
+                </div>
               </div>
             ) : (
               <div className="welcome-message">
@@ -305,3 +323,4 @@ function ServerDetailPage() {
 }
 
 export default ServerDetailPage;
+

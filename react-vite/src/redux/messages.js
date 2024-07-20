@@ -26,6 +26,17 @@ export const postMessage = createAsyncThunk(
   }
 );
 
+// added deleteMessage thunk
+export const deleteMessage = createAsyncThunk( // <--- this has been updated for: adding delete functionality
+  'messages/deleteMessage',
+  async (messageId) => {
+    await fetch(`/api/channels/messages/${messageId}`, {
+      method: 'DELETE'
+    });
+    return messageId;
+  }
+);
+
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: {},
@@ -52,6 +63,12 @@ const messagesSlice = createSlice({
         const { channelId, message } = action.payload;
         if (!state[channelId]) state[channelId] = [];
         state[channelId].push(message);
+      })
+      .addCase(deleteMessage.fulfilled, (state, action) => { // <--- this has been updated for: handling deleted messages
+        const messageId = action.payload;
+        for (let channelId in state) {
+          state[channelId] = state[channelId].filter(message => message.id !== messageId);
+        }
       });
   }
 });
@@ -61,6 +78,7 @@ export const { addMessage, setMessages } = messagesSlice.actions;
 export const selectMessagesByChannel = (state, channelId) => state.messages[channelId] || [];
 
 export default messagesSlice.reducer;
+
 
 
 
