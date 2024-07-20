@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
 
     servers = db.relationship('Server', back_populates='creator', cascade='all, delete-orphan')
     joined_servers = db.relationship('Server', secondary=user_server_membership, back_populates='members')
+    messages = db.relationship('Message', back_populates='user')  # <-- Added relationship to messages
 
     @property
     def password(self):

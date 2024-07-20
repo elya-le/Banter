@@ -1,9 +1,12 @@
+# /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/__init__.py
+
 import os
 from flask import Flask, render_template, request, session, redirect, current_app
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
+from flask_socketio import SocketIO, send, emit
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
@@ -15,12 +18,16 @@ import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+app.config.from_object(Config)
 
-# Setup login manager
+# setup flask-socketio
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# setup login manager
 login = LoginManager(app)
 login.login_view = 'auth.unauthorized'
 
@@ -28,18 +35,20 @@ login.login_view = 'auth.unauthorized'
 def load_user(id):
     return User.query.get(int(id))
 
-# Tell flask about our seed commands
+# tell flask about our seed commands
 app.cli.add_command(seed_commands)
 
-app.config.from_object(Config)
+# register blueprints
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
-app.register_blueprint(server_routes, url_prefix='/api/servers') 
+app.register_blueprint(server_routes, url_prefix='/api/servers')
 app.register_blueprint(channel_routes, url_prefix='/api/channels')
+
+# initialize database and migration
 db.init_app(app)
 Migrate(app, db)
 
-# Verify AWS S3 access
+# verify aws s3 access
 def verify_s3_access():
     s3_client = boto3.client(
         's3',
@@ -55,14 +64,10 @@ def verify_s3_access():
 
 verify_s3_access()
 
-# Application Security
+# application security
 CORS(app)
 
-# Since we are deploying with Docker and Flask,
-# we won't be using a buildpack when we deploy to Heroku.
-# Therefore, we need to make sure that in production any
-# request made over http is redirected to https.
-# Well.........
+# redirect http to https in production
 @app.before_request
 def https_redirect():
     if os.environ.get('FLASK_ENV') == 'production':
@@ -85,7 +90,7 @@ def inject_csrf_token(response):
 @app.route("/api/docs")
 def api_help():
     """
-    Returns all API routes and their doc strings
+    returns all api routes and their doc strings
     """
     acceptable_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     route_list = { rule.rule: [[ method for method in rule.methods if method in acceptable_methods ],
@@ -97,7 +102,7 @@ def api_help():
 @app.route('/<path:path>')
 def react_root(path):
     """
-    This route will direct to the public directory in our
+    this route will direct to the public directory in our
     react builds in the production environment for favicon
     or index.html requests
     """
@@ -108,3 +113,9 @@ def react_root(path):
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
+
+# websocket events
+@socketio.on('message')
+def handle_message(message):
+    print('received message: ' + message)
+    send(message, broadcast=True)

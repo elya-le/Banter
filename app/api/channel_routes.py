@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import db, Channel, Server
+from app.models import db, Channel, Server, Message
 from app.forms.channel_form import ChannelForm
 
 channel_routes = Blueprint('channels', __name__)
@@ -70,3 +70,23 @@ def delete_channel(id):
         return {'error': 'Unauthorized'}, 403
     return {'error': 'Channel not found'}, 404
 
+
+# -------- new routes for messages
+@channel_routes.route('/<int:channel_id>/messages', methods=['GET'])
+@login_required
+def get_messages(channel_id):
+    messages = Message.query.filter_by(channel_id=channel_id).order_by(Message.created_at).all()
+    return jsonify([message.to_dict() for message in messages])
+
+@channel_routes.route('/<int:channel_id>/messages', methods=['POST'])
+@login_required
+def post_message(channel_id):
+    data = request.get_json()
+    new_message = Message(
+        user_id=current_user.id,
+        channel_id=channel_id,
+        content=data['content']
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    return jsonify(new_message.to_dict())
