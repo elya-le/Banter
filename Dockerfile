@@ -24,10 +24,9 @@ RUN pip install psycopg2
 
 COPY . .
 
-RUN flask db downgrade
 RUN flask db upgrade
 # uncomment the next line to undo seeds before reseeding
-RUN flask seed undo
+# RUN flask seed undo
 RUN flask seed all
 # this has been updated for: running with eventlet
 CMD gunicorn -k eventlet -w 1 app:app 
