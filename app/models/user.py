@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy import func
 from .user_server_membership import user_server_membership
+from .message import Message  # <--- this has been updated to include Message model
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -21,7 +23,7 @@ class User(db.Model, UserMixin):
 
     servers = db.relationship('Server', back_populates='creator', cascade='all, delete-orphan')
     joined_servers = db.relationship('Server', secondary=user_server_membership, back_populates='members')
-    messages = db.relationship('Message', back_populates='user')  # <-- Added relationship to messages
+    messages = db.relationship('Message', back_populates='author', cascade='all, delete-orphan')  # <--- this has been updated to include messages relationship
 
     @property
     def password(self):
@@ -43,6 +45,7 @@ class User(db.Model, UserMixin):
             'status': self.status,
             'servers': [server.to_dict() for server in self.servers],
             'joined_servers': [server.to_dict() for server in self.joined_servers],
+            'messages': [message.to_dict() for message in self.messages],  # <--- this has been updated to include messages
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }

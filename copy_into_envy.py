@@ -178,3 +178,7 @@ SCHEMA = os.environ.get("SCHEMA")
 # [formatter_generic]
 # format = %(levelname)-5.5s [%(name)s] %(message)s
 # datefmt = %H:%M:%S
+
+
+# uncomment the next line to undo seeds before reseeding
+# RUN flask seed undo

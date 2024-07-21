@@ -1,26 +1,28 @@
-# /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/models/message.py
-
-from .db import db
-from datetime import datetime
+from .db import db, environment, SCHEMA, add_prefix_for_prod
+from sqlalchemy import func
 
 class Message(db.Model):
     __tablename__ = 'messages'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'), nullable=False)
-    content = db.Column(db.String(1000), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
-    user = db.relationship('User', back_populates='messages')
-    channel = db.relationship('Channel', back_populates='messages')
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(2000), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
+    channel_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('channels.id')), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=func.now())
+    updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+
+    author = db.relationship('User', back_populates='messages')  # <--- this has been added for message-author relationship
+    channel = db.relationship('Channel', back_populates='messages')  # <--- this has been added for message-channel relationship
 
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
-            'channel_id': self.channel_id,
             'content': self.content,
-            'created_at': self.created_at.isoformat(),
-            'user': self.user.to_dict()
+            'author_id': self.author_id,
+            'channel_id': self.channel_id,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
         }

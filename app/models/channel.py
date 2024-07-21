@@ -1,5 +1,6 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from sqlalchemy import func
+from .message import Message  # <--- this has been updated to include Message model
 
 class Channel(db.Model):
     __tablename__ = 'channels'
@@ -14,7 +15,7 @@ class Channel(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
     server = db.relationship('Server', back_populates='channels')
-    messages = db.relationship('Message', back_populates='channel', cascade='all, delete-orphan')  # <--- this has been updated for: cascading delete for messages
+    messages = db.relationship('Message', back_populates='channel', cascade='all, delete-orphan')  # <--- this has been updated to include messages relationship
 
     def to_dict(self):
         return {
@@ -22,5 +23,6 @@ class Channel(db.Model):
             'name': self.name,
             'server_id': self.server_id,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'messages': [message.to_dict() for message in self.messages]  # <--- this has been updated to include messages
         }

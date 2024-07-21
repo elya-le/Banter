@@ -20,7 +20,7 @@ class Server(db.Model):
 
     creator = db.relationship('User', back_populates='servers')
     members = db.relationship('User', secondary=user_server_membership, back_populates='joined_servers')
-    channels = db.relationship('Channel', back_populates='server', cascade='all, delete-orphan')  # <--- this has been updated for: cascading delete for channels
+    channels = db.relationship('Channel', back_populates='server', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -33,5 +33,6 @@ class Server(db.Model):
             'creator_id': self.creator_id,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-            'members': [user.id for user in self.members]
+            'members': [user.id for user in self.members],
+            'channels': [channel.to_dict() for channel in self.channels]  # <--- this has been updated to include channels
         }

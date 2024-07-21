@@ -40,12 +40,8 @@ def seed_user_server_memberships():
     db.session.commit()
 
 def undo_user_server_memberships():
-    try:
-        if environment == "production":
-            db.session.execute(f"TRUNCATE table {SCHEMA}.user_server_membership RESTART IDENTITY CASCADE;")
-        else:
-            db.session.execute(text("DELETE FROM user_server_membership"))
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        print(f"Error undoing user server memberships: {e}")
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.user_server_membership RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute(text("DELETE FROM user_server_membership"))
+    db.session.commit()

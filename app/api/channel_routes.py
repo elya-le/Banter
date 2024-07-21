@@ -83,8 +83,8 @@ def get_messages(channel_id):
 def post_message(channel_id):
     data = request.get_json()
     new_message = Message(
-        user_id=current_user.id,
-        channel_id=channel_id,
+        author_id=current_user.id,  # <--- this has been updated to author_id
+        channel_id=channel_id,  # <--- this has been updated to channel_id
         content=data['content']
     )
     db.session.add(new_message)
@@ -96,7 +96,7 @@ def post_message(channel_id):
 def delete_message(id):
     message = Message.query.get(id)
     if message:
-        if message.user_id == current_user.id:
+        if message.author_id == current_user.id:  # <--- this has been updated to author_id
             db.session.delete(message)
             db.session.commit()
             return jsonify({'message': 'Message deleted'}), 200

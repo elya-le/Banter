@@ -92,7 +92,10 @@ function ServerDetailPage() {
   const sendMessage = () => {
     if (message.trim() && currentChannel) {
       const msg = {
-        user: user.username,
+        user: {
+          id: user.id,
+          username: user.username,
+        },
         channel: currentChannel.id,
         content: message,
       };
@@ -287,7 +290,7 @@ function ServerDetailPage() {
                     <div key={index} className="message-item">
                       <div className="message-header">
                         <div className="message-username-timestamp"> 
-                          <strong>{msg.user.username}</strong> 
+                          <strong>{msg.user?.username}</strong> {/* <--- this has been updated to safely access user.username */}
                           <span className="message-timestamp">
                             {new Date(msg.created_at).toLocaleString('en-US', { 
                               day:'2-digit',
@@ -297,10 +300,10 @@ function ServerDetailPage() {
                               minute: '2-digit',
                               hour12: true
                             })}
-                            </span> {/* <-- this has been updated for: adding timestamp */}
+                          </span>
                         </div>
                         <div className="message-delete">
-                          {msg.user.id === user.id && ( // <--- this has been updated for: adding delete button
+                          {msg.user?.id === user.id && ( // <--- this has been updated to safely access user.id
                             <button onClick={() => handleDeleteMessage(msg.id)}>...</button>
                           )}
                         </div>
@@ -319,7 +322,6 @@ function ServerDetailPage() {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message..."
                   />
-                  {/* <button onClick={sendMessage}>Send</button> */}
                 </div>
               </div>
             ) : (
@@ -340,4 +342,3 @@ function ServerDetailPage() {
 }
 
 export default ServerDetailPage;
-
