@@ -46,20 +46,14 @@ function EditChannelForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = { name, server_id: serverId }; // include server_id in the form data
-
-    console.log("Submitting form data:", formData);
     const result = await dispatch(thunkUpdateChannel(id, formData));
     if (result && !result.errors) {
-      console.log("Update successful, staying on the edit page");
       setHasUnsavedChanges(false); // set hasUnsavedChanges to false
-    } else {
-      console.log("Update failed, result:", result);
-    }
+    } 
   };
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    console.log("Deleting channel with id:", id);
     const serverId = await dispatch(thunkDeleteChannel(id)); // retrieve server_id
     navigate(`/servers/${serverId}`); // navigate to the server page using the returned server_id
   };

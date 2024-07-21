@@ -66,7 +66,7 @@ def delete_channel(id):
         if server and server.creator_id == current_user.id:
             db.session.delete(channel)
             db.session.commit()
-            return jsonify({'message': 'Channel deleted', 'server_id': server_id}), 200  # Return server_id
+            return jsonify({'message': 'Channel deleted', 'server_id': server_id}), 200  # return server_id
         return {'error': 'Unauthorized'}, 403
     return {'error': 'Channel not found'}, 404
 

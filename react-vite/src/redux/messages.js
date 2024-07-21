@@ -1,5 +1,3 @@
-// /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/react-vite/src/redux/messages.js
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchMessages = createAsyncThunk(

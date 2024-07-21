@@ -1,5 +1,3 @@
-// /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/react-vite/src/components/Servers/ServerDetails.jsx
-
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkFetchServers, thunkFetchServer, thunkJoinServer, thunkLeaveServer } from "../../redux/servers"; 
@@ -286,11 +284,30 @@ function ServerDetailPage() {
               <div className="chat">
                 <div className="messages-container">
                   {messages.map((msg, index) => (
-                    <div key={index} className="message-item"> 
-                      <p><strong>{msg.user.username}:</strong> {msg.content}</p> 
-                      {msg.user.id === user.id && ( // <--- this has been updated for: adding delete button
-                        <button onClick={() => handleDeleteMessage(msg.id)}>Delete</button>
-                      )}
+                    <div key={index} className="message-item">
+                      <div className="message-header">
+                        <div className="message-username-timestamp"> 
+                          <strong>{msg.user.username}</strong> 
+                          <span className="message-timestamp">
+                            {new Date(msg.created_at).toLocaleString('en-US', { 
+                              day:'2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
+                            </span> {/* <-- this has been updated for: adding timestamp */}
+                        </div>
+                        <div className="message-delete">
+                          {msg.user.id === user.id && ( // <--- this has been updated for: adding delete button
+                            <button onClick={() => handleDeleteMessage(msg.id)}>...</button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="message-content">
+                        {msg.content}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -302,7 +319,7 @@ function ServerDetailPage() {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message..."
                   />
-                  <button onClick={sendMessage}>Send</button>
+                  {/* <button onClick={sendMessage}>Send</button> */}
                 </div>
               </div>
             ) : (

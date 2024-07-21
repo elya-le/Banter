@@ -1,16 +1,22 @@
-"""empty message
+"""added message model and websockets
 
-Revision ID: 73536877a449
+
+Revision ID: 03a7b3c6bb83
 Revises: 
-Create Date: 2024-07-20 16:22:26.203311
+Create Date: 2024-07-20 22:38:18.068993
 
 """
 from alembic import op
 import sqlalchemy as sa
 
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
+
 
 # revision identifiers, used by Alembic.
-revision = '73536877a449'
+revision = '03a7b3c6bb83'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -70,6 +76,13 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+
+    if environment == "production":
+      op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+      op.execute(f"ALTER TABLE messages SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 

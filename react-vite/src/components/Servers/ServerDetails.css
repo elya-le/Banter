@@ -328,28 +328,87 @@ li {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end; /* center the content vertically */
-  height: 100%;
-  width: 100%;
+  height: calc(100vh - 40px); /* adjust height considering padding */
+  width: calc(100% - 310px); /* ensure it takes the remaining width, accounting for sidebar and side-nav */
   padding: 20px;
   box-sizing: border-box; /* ensure padding is included in the element's total width and height */
+  border: 1px solid orange;
+  position: absolute; /* ensure the input-container is positioned relative to the server-main-content */
+  right: 0; /* ensure it is positioned to the right */
+  bottom: 0; /* pin it to the bottom of the page */
 }
 
 .messages-container {
-  border: 1px solid red;
+  flex-grow: 1; /* allow it to take up remaining space */
+  width: 100%; /* ensure it takes the full width */
+  overflow-y: auto; /* enable scrolling if the content overflows */
+  /* border: 1px solid red; */
 }
 
-
 .message-item {
-  border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 20px 0px;
+  /* border: 1px solid blue; */
+}
+
+.message-header {
+  display: flex;
+  flex-direction: row;
+  gap: 200px;
+
+}
+
+.message-username-timestamp {
+  display: flex;
+  flex-direction: row;
+  color: #F2F3F5;
+  gap: 10px;
+  /* border: 1px solid yellow; */
+}
+
+.message-timestamp {
+  color: #949BA4;
+  font-size: 12px;
+  /* border: 1px solid yellow; */
+}
+
+.message-delete {
+  margin-top: 0px;
+}
+
+.message-delete button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  padding: 0px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0px;
+}
+
+.message-content{
+  color: #DCDEE1;
 }
 
 .input-container {
-  border: 1px solid yellow;
   display: flex;
   flex-direction: row;
-  min-width: 500px;
+  width: 100%; /* Changed from min-width to width */
   margin: 20px 0px;
+}
+
+.input-container input {
+  flex-grow: 1;
+  background-color: #383A3F;
+  border: none; /* optional: add some styling */
+  padding: 10px; /* optional: add some padding */
+}
+
+.input-container button {
+  padding: 10px;
 }
 
 .welcome-message {

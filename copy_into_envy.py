@@ -116,6 +116,7 @@ SCHEMA = os.environ.get("SCHEMA")
 #     op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+#     op.execute(f"ALTER TABLE messages SET SCHEMA {SCHEMA};")
 
 
 # -------- below this line is for your migration file alembic

@@ -14,7 +14,7 @@ class Channel(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
     server = db.relationship('Server', back_populates='channels')
-    messages = db.relationship('Message', back_populates='channel') 
+    messages = db.relationship('Message', back_populates='channel', cascade='all, delete-orphan')  # <--- this has been updated for: cascading delete for messages
 
     def to_dict(self):
         return {

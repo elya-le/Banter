@@ -21,7 +21,6 @@ function SignupFormModal() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      console.log("Passwords do not match: ", password, confirmPassword);
       return setErrors({
         confirmPassword:
           "Confirm Password field must be the same as the Password field",

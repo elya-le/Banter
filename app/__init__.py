@@ -1,5 +1,3 @@
-# /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/__init__.py
-
 import os
 from flask import Flask, render_template, request, session, redirect, current_app
 from flask_cors import CORS
@@ -119,3 +117,6 @@ def not_found(e):
 def handle_message(message):
     print('received message: ' + message)
     send(message, broadcast=True)
+
+if __name__ == "__main__":
+    socketio.run(app)  # <-- this has been updated for running the app with SocketIO
