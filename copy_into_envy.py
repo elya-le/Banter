@@ -114,8 +114,8 @@ SCHEMA = os.environ.get("SCHEMA")
 # if environment == "production":
 #     op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
-#     op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
+#     op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
 #     op.execute(f"ALTER TABLE messages SET SCHEMA {SCHEMA};")
 
 
@@ -127,54 +127,54 @@ SCHEMA = os.environ.get("SCHEMA")
 
 
 
-# [alembic]
+[alembic]
 
-# script_location = alembic
-
-
-# file_template = %%Y%%m%%d_%%(rev)s
+script_location = alembic
 
 
-# transactional_ddl = true
-
-# output_encoding = utf-8
+file_template = %%Y%%m%%d_%%(rev)s
 
 
-# [loggers]
-# keys = root,sqlalchemy,alembic,flask_migrate
+transactional_ddl = true
 
-# [handlers]
-# keys = console
+output_encoding = utf-8
 
-# [formatters]
-# keys = generic
 
-# [logger_root]
-# level = WARN
-# handlers = console
-# qualname =
+[loggers]
+keys = root,sqlalchemy,alembic,flask_migrate
 
-# [logger_sqlalchemy]
-# level = WARN
-# handlers =
-# qualname = sqlalchemy.engine
+[handlers]
+keys = console
 
-# [logger_alembic]
-# level = INFO
-# handlers =
-# qualname = alembic
+[formatters]
+keys = generic
 
-# [logger_flask_migrate]
-# level = INFO
-# handlers =
-# qualname = flask_migrate
+[logger_root]
+level = WARN
+handlers = console
+qualname =
 
-# [handler_console]
-# class = StreamHandler
-# args = (sys.stderr,)
-# level = NOTSET
-# formatter = generic
+[logger_sqlalchemy]
+level = WARN
+handlers =
+qualname = sqlalchemy.engine
 
-# [formatter_generic]
-# format = %(levelname)-5.5s [%(name)s] %(message)s
-# datefmt = %H:%M:%S
+[logger_alembic]
+level = INFO
+handlers =
+qualname = alembic
+
+[logger_flask_migrate]
+level = INFO
+handlers =
+qualname = flask_migrate
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(levelname)-5.5s [%(name)s] %(message)s
+datefmt = %H:%M:%S
