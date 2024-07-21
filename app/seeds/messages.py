@@ -1,4 +1,4 @@
-from app.models import db, Message, Channel, User, environment, SCHEMA
+from app.models import db, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_messages():
@@ -6,23 +6,11 @@ def seed_messages():
         if environment == "production":
             db.session.execute(f"TRUNCATE table {SCHEMA}.messages RESTART IDENTITY CASCADE;")
         else:
-            db.session.execute(text("TRUNCATE table messages RESTART IDENTITY CASCADE;"))
+            db.session.execute(text("DELETE FROM messages"))
         db.session.commit()
 
-        channels = Channel.query.all()
-        users = User.query.all()  # Ensure users are seeded first
-
-        if not users:
-            raise ValueError("Users must be seeded before seeding messages.")
-
-        messages = [
-            Message(user_id=users[0].id, channel_id=channel.id, content='Hello, everyone!') for channel in channels
-        ] + [
-            Message(user_id=users[1].id, channel_id=channel.id, content='Welcome to the channel!') for channel in channels
-        ]
-
-        db.session.bulk_save_objects(messages)
-        db.session.commit()
+        # no need to add any new messages
+        print("Messages table truncated and no new messages seeded.")
 
     except Exception as e:
         db.session.rollback()
@@ -33,7 +21,7 @@ def undo_messages():
         if environment == "production":
             db.session.execute(f"TRUNCATE table {SCHEMA}.messages RESTART IDENTITY CASCADE;")
         else:
-            db.session.execute(text("TRUNCATE table messages RESTART IDENTITY CASCADE;"))
+            db.session.execute(text("DELETE FROM messages"))
         db.session.commit()
     except Exception as e:
         db.session.rollback()
