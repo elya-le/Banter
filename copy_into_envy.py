@@ -180,11 +180,11 @@ SCHEMA = os.environ.get("SCHEMA")
 # datefmt = %H:%M:%S
 
 
+
+# ---------- Docker:
+
 # uncomment the next line to undo seeds before reseeding
 # RUN flask seed undo
-
-
-
 
 # FROM python:3.9.18-alpine3.18
 
