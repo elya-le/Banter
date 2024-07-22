@@ -1,8 +1,8 @@
-"""revise message model and update cascade delete in models
+"""migrate gevent and eventlet differences
 
-Revision ID: 54629b2b2102
+Revision ID: 68c909b52336
 Revises: 
-Create Date: 2024-07-21 11:45:23.460863
+Create Date: 2024-07-22 07:56:26.085242
 
 """
 from alembic import op
@@ -12,8 +12,9 @@ import os
 environment = os.getenv("FLASK_ENV")
 SCHEMA = os.environ.get("SCHEMA")
 
+
 # revision identifiers, used by Alembic.
-revision = '54629b2b2102'
+revision = '68c909b52336'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -75,15 +76,13 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
 
-
     if environment == "production":
         op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE messages SET SCHEMA {SCHEMA};")
-
-
+        
     # ### end Alembic commands ###
 
 

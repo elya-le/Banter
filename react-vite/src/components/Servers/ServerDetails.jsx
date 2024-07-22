@@ -9,7 +9,8 @@ import ServerFormModal from "../Servers/ServerFormModal";
 import ChannelFormModal from "../Channels/ChannelFormModal"; 
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
-import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
+import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa"; 
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
 import io from 'socket.io-client'; 
 import { fetchMessages, postMessage, deleteMessage, addMessage, selectMessagesByChannel } from "../../redux/messages";
 
@@ -29,6 +30,7 @@ function ServerDetailPage() {
   const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const [dropdownMessageId, setDropdownMessageId] = useState(null); // <--- added for dropdown state
 
   // fetch servers and server details when user/id changes
   useEffect(() => {
@@ -42,8 +44,9 @@ function ServerDetailPage() {
   // event listener for closing dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.server-name-container') && !event.target.closest('.server-dropdown-menu')) {
+      if (!event.target.closest('.server-name-container') && !event.target.closest('.server-dropdown-menu') && !event.target.closest('.message-actions-button') && !event.target.closest('.message-dropdown-menu')) { // <--- updated to close message dropdown
         setDropdownOpen(false);
+        setDropdownMessageId(null); // <--- reset dropdown message id
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -92,7 +95,7 @@ function ServerDetailPage() {
   const sendMessage = () => {
     if (message.trim() && currentChannel) {
       const msg = {
-        user: {
+        author: {
           id: user.id,
           username: user.username,
         },
@@ -115,6 +118,19 @@ function ServerDetailPage() {
     dispatch(deleteMessage(messageId));
   };
 
+  const toggleMessageDropdown = (messageId) => {
+    setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
+  };
+
+  // const shouldDisplayTimestamp = (messages, index) => {
+  //   if (index === 0) return true; // Always display for the first message
+  //   const previousMessage = messages[index - 1];
+  //   const currentMessage = messages[index];
+  //   const timeDifference = new Date(currentMessage.created_at) - new Date(previousMessage.created_at);
+  //   const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+  //   return previousMessage.author.id !== currentMessage.author.id || timeDifference > fiveMinutes;
+  // };
+
   if (!user) {
     return <Navigate to="/" />;
   }
@@ -126,7 +142,7 @@ function ServerDetailPage() {
   const isMember = joinedServers.includes(server.id);
 
   return (
-    <div className="server-details-page">
+    <div className="server-details-page-container">
       {/* --------------- sidebar ----------------- */}
       <div className="sidebar">
         <nav className="sidebar-nav">
@@ -181,18 +197,24 @@ function ServerDetailPage() {
           </ul>
         </nav>
       </div>
-      {/* --------------- nav and messages ----------------- */}
-      <div className="banner-channel-nav-and-messages-container">
+      <div className="banner-channel-main-container">
+        <div className="banner-channel-nav-container">
         {/* ----------- join server banner */}
         {!isMember && (
-          <div className="join-server-banner">
-            <p>You are currently in preview mode. Join this server to start chatting!</p>
-            <button onClick={handleJoinServer}>Join this server</button>
+        <div className="join-server-banner-container">
+          <div className="join-server-call-to-action">
+            <div className="join-server-words">
+              <p>You are currently in preview mode. Join this server to start chatting!</p>
+            </div>
+            <button className="join-server-button" onClick={handleJoinServer}>Join this server</button>
           </div>
+        </div>
         )}
-        <div className="channel-nav-and-messages-container">
+        </div>
+        <div className="channel-and-main">
+          <div className="channel-nav">
           {/* --------------- side nav ----------------- */}
-          <div className="side-nav">
+
             {server.banner_url ? (
               <div className="server-banner" onClick={toggleDropdown}>
                 <img src={server.banner_url} alt={`${server.name} banner`} />
@@ -267,7 +289,9 @@ function ServerDetailPage() {
                       </li>
                     ))
                   ) : (
-                    <p>No channels</p>
+                    <div className="no-channels">
+                      <p>You have no active channels <br></br> Create a channel to start messaging</p>
+                    </div>
                   )}
                 </ul>
               </div>
@@ -280,9 +304,11 @@ function ServerDetailPage() {
                 Log Out
               </button>
             </div>
-          </div>
+          {/* </div> */}
           {/* --------------- main content ----------------- */}
-          <div className="server-main-content">
+          </div>
+          <div className="server-main-content-container">
+            <div className="server-main-content">
             {currentChannel ? (
               <div className="chat">
                 <div className="messages-container">
@@ -290,7 +316,7 @@ function ServerDetailPage() {
                     <div key={index} className="message-item">
                       <div className="message-header">
                         <div className="message-username-timestamp"> 
-                          <strong>{msg.user?.username}</strong> {/* <--- this has been updated to safely access user.username */}
+                          <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
                           <span className="message-timestamp">
                             {new Date(msg.created_at).toLocaleString('en-US', { 
                               day:'2-digit',
@@ -302,11 +328,20 @@ function ServerDetailPage() {
                             })}
                           </span>
                         </div>
-                        <div className="message-delete">
-                          {msg.user?.id === user.id && ( // <--- this has been updated to safely access user.id
-                            <button onClick={() => handleDeleteMessage(msg.id)}>...</button>
-                          )}
-                        </div>
+                        {msg.author.id === user.id && ( // <--- check if the message is sent by the current user
+                          <div className="message-actions">
+                            <button onClick={() => toggleMessageDropdown(msg.id)} className="message-actions-button">
+                            <IoEllipsisHorizontalSharp />
+                            </button>
+                            {dropdownMessageId === msg.id && (
+                              <ul className="message-dropdown-menu">
+                                <li onClick={() => handleDeleteMessage(msg.id)}>Delete Message</li>
+                                <li>Edit Message (Coming soon)</li>
+                                <li>Add Reaction (Coming soon)</li>
+                              </ul>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="message-content">
                         {msg.content}
@@ -320,7 +355,7 @@ function ServerDetailPage() {
                     value={message}
                     onKeyDown={handleKeyDown} // added onKeyDown event handler
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Type a message..."
+                    placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
                   />
                 </div>
               </div>
@@ -334,9 +369,12 @@ function ServerDetailPage() {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
+
       </div>
+      {/* --------------- nav and messages ----------------- */}
     </div>
   );
 }

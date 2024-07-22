@@ -181,7 +181,7 @@ SCHEMA = os.environ.get("SCHEMA")
 
 
 
-# ---------- Docker:
+# --------------------- Docker:
 
 # uncomment the next line to undo seeds before reseeding
 # RUN flask seed undo

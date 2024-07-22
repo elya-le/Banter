@@ -89,7 +89,7 @@ button:hover {
   height: 100vh; /* ensure it takes the full height */
   width: 70px;
   background-color: #1E1F22;
-  padding: 10px 0; /* remove left/right padding to be flush with left side */
+  padding: 10px 10px; /* remove left/right padding to be flush with left side */
   display: flex;
   flex-direction: column;
   align-items: center; /* center icons horizontally */

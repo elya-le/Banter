@@ -24,5 +24,9 @@ class Message(db.Model):
             'author_id': self.author_id,
             'channel_id': self.channel_id,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'author': {
+                'id': self.author.id,
+                'username': self.author.username
+            }  # <--- this has been updated to include author details
         }

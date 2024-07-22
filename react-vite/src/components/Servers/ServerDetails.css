@@ -1,9 +1,11 @@
-.server-details-page {
+.server-details-page-container {
   display: flex;
   align-items: flex-start;
   height: 100vh; /* ensure full viewport height */
-  width: 100%; 
+  width: 100vw; 
   justify-content: flex-start !important;
+  /* border: 5px solid green; */
+
 }
 
 .server-name-container {
@@ -125,33 +127,60 @@ li.create-channel-item {
 
 /* ---------- join server banner list ---------- */
 
-.banner-channel-nav-and-messages-container {
+.banner-channel-nav-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  /* border: 1px solid yellow;    */
 }
 
-.channel-nav-and-messages-container {
+.channel-and-main {
+  /* border: 1px solid yellow;  */
+  
+  display: flex;
+}
+
+
+.channel-nav {
   display: flex;
   flex-direction: row;
   width: 100%;
-}
-
-.join-server-banner {
-  background-color: #4752C4;;
-  color: white;
-  padding: 10px;
-  text-align: center;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-between; 
+  height: 100vh;
+  font-size: 12px;
+  width: 240px;
+  background-color: #2B2D31;
+  /* border: 1px solid red; */
+}
+
+.join-server-banner-container {
+  background-color: #4752C4;;
+  /* border: 3px solid white; */
+  height: 40px;
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.join-server-call-to-action {
+  /* border: 1px solid green; */
+  display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.join-server-banner p {
-  margin: 0;
-}
 
-.join-server-banner button {
+
+.join-server-words {
+  /* border: 1px solid red; */
+  font-size: 12px;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+.join-server-button {
   background-color: #4752C4;
   color: white;
   border: 1px solid white;
@@ -159,6 +188,8 @@ li.create-channel-item {
   cursor: pointer;
   border-radius: 3px;
   font-weight: bold;
+  margin-top: 0px;
+
 }
 
 .server-dd-hover.leave-server-item {
@@ -210,6 +241,10 @@ li.create-channel-item {
   background-color:transparent;
 }
 
+.no-channels {
+  margin: 10px 10px 10px 10px;
+  color: #5a5d66;
+}
 
 /* ---- remove the default marker from list items */
 
@@ -270,6 +305,7 @@ li {
   margin-left: 8px;
   color: #80848E;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .settings-icon:hover {
@@ -322,18 +358,21 @@ li {
 }
 
 /* ---------- main content chat ---------- */
+.server-main-content-container {
+  padding: 0px 20px;
+  height: 100vh;
+  width: 600px;
+  display: flex;
+  justify-content: baseline;
+  /* border: 1px solid blue; */
+
+}
 
 .server-main-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end; /* center the content vertically */
-  height: calc(100vh - 40px); /* adjust height considering padding */
-  width: calc(100% - 310px); /* ensure it takes the remaining width, accounting for sidebar and side-nav */
-  padding: 20px;
-  box-sizing: border-box; /* ensure padding is included in the element's total width and height */
-  border: 1px solid orange;
-  position: absolute; /* ensure the input-container is positioned relative to the server-main-content */
+  justify-content: flex-end; 
+
   right: 0; /* ensure it is positioned to the right */
   bottom: 0; /* pin it to the bottom of the page */
 }
@@ -344,6 +383,8 @@ li {
   overflow-y: auto; /* enable scrolling if the content overflows */
   /* border: 1px solid red; */
 }
+
+
 
 .message-item {
   display: flex;
@@ -365,17 +406,62 @@ li {
   flex-direction: row;
   color: #F2F3F5;
   gap: 10px;
-  /* border: 1px solid yellow; */
+  align-items: flex-end;
+  /* border: 1px solid blue; */
 }
 
 .message-timestamp {
   color: #949BA4;
   font-size: 12px;
+  align-self: flex-end; 
   /* border: 1px solid yellow; */
+}
+
+.message-actions {
+  position: relative;
+}
+
+.message-actions-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.message-dropdown-menu {
+  display: flex; /* <--- use flex for layout */
+  flex-direction: column; /* <--- column layout */
+  list-style: none;
+  background-color: #0e0e0e;
+  margin: 10px 0; /* adjust margin as needed */
+  padding: 5px;
+  width: 220px;
+  border-radius: 4px;
+  font-size: 14px;
+  position: absolute;
+  top: 20px; /* adjust position as needed */
+  right: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.message-dropdown-menu li {
+  color: gray;
+  padding: 10px;
+  cursor: pointer;
+  text-align: left; /* align text to the left */
+}
+
+.message-dropdown-menu li:hover {
+  background-color: #4752C4;
+  color: white;
+  border-radius: 3px;
 }
 
 .message-delete {
   margin-top: 0px;
+  /* border: 1px solid red; */
 }
 
 .message-delete button {
@@ -387,6 +473,7 @@ li {
   cursor: pointer;
   width: 100%;
   margin-top: 0px;
+  /* border: 1px solid red; */
 }
 
 .message-content{
@@ -396,19 +483,23 @@ li {
 .input-container {
   display: flex;
   flex-direction: row;
-  width: 100%; /* Changed from min-width to width */
+  width: 1000px; /* Changed from min-width to width */
   margin: 20px 0px;
+  /* border: 1px solid red; */
 }
 
 .input-container input {
   flex-grow: 1;
   background-color: #383A3F;
+  color: white;
   border: none; /* optional: add some styling */
-  padding: 10px; /* optional: add some padding */
+  padding: 15px;
+  margin: 0px 50px 10px 0px;
+  border-radius: 10px;
 }
 
 .input-container button {
-  padding: 10px;
+  padding: 8px;
 }
 
 .welcome-message {
