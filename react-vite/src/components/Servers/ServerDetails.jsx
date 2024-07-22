@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { thunkFetchServers, thunkFetchServer, thunkJoinServer, thunkLeaveServer } from "../../redux/servers"; 
-import { Navigate, Link, useParams } from "react-router-dom"; 
-import { thunkFetchChannels } from "../../redux/channels"; 
+import { thunkFetchServers, thunkFetchServer, thunkJoinServer, thunkLeaveServer } from "../../redux/servers";
+import { Navigate, Link, useParams } from "react-router-dom";
+import { thunkFetchChannels } from "../../redux/channels";
 import { thunkLogout } from "../../redux/session";
-import OpenModalButton from "../OpenModalButton/OpenModalButton"; 
-import ServerFormModal from "../Servers/ServerFormModal"; 
-import ChannelFormModal from "../Channels/ChannelFormModal"; 
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import ServerFormModal from "../Servers/ServerFormModal";
+import ChannelFormModal from "../Channels/ChannelFormModal";
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
-import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa"; 
+import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
-import io from 'socket.io-client'; 
+import io from 'socket.io-client';
 import { fetchMessages, postMessage, deleteMessage, addMessage, selectMessagesByChannel } from "../../redux/messages";
 
 const socket = io('http://localhost:5000');
@@ -26,13 +26,13 @@ function ServerDetailPage() {
   const viewedServers = useSelector((state) => state.servers.viewedServers) || [];
   const server = allServers.find((s) => s.id === parseInt(id));
   const channels = useSelector((state) => state.channels.channels) || [];
-  const [currentChannel, setCurrentChannel] = useState(null); 
-  const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []); 
+  const [currentChannel, setCurrentChannel] = useState(null);
+  const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const [dropdownMessageId, setDropdownMessageId] = useState(null); // <--- added for dropdown state
+  const [dropdownMessageId, setDropdownMessageId] = useState(null);
 
-  // fetch servers and server details when user/id changes
+  // Fetch servers and server details when user/id changes
   useEffect(() => {
     if (user) {
       dispatch(thunkFetchServers());
@@ -41,12 +41,15 @@ function ServerDetailPage() {
     }
   }, [dispatch, user, id]);
 
-  // event listener for closing dropdown when clicking outside
+  // Event listener for closing dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.server-name-container') && !event.target.closest('.server-dropdown-menu') && !event.target.closest('.message-actions-button') && !event.target.closest('.message-dropdown-menu')) { // <--- updated to close message dropdown
+      if (!event.target.closest('.server-name-container') && 
+          !event.target.closest('.server-dropdown-menu') &&
+          !event.target.closest('.message-actions-button') &&
+          !event.target.closest('.message-dropdown-menu')) {
         setDropdownOpen(false);
-        setDropdownMessageId(null); // <--- reset dropdown message id
+        setDropdownMessageId(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -55,9 +58,10 @@ function ServerDetailPage() {
     };
   }, []);
 
-  // setup websocket event listeners
+  // Setup websocket event listeners
   useEffect(() => {
     socket.on('message', (msg) => {
+      console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
       dispatch(addMessage({ channelId: msg.channel, message: msg }));
     });
 
@@ -80,7 +84,7 @@ function ServerDetailPage() {
   };
 
   const handleJoinServer = () => {
-    dispatch(thunkJoinServer(id)); 
+    dispatch(thunkJoinServer(id));
   };
 
   const handleLeaveServer = () => {
@@ -89,7 +93,7 @@ function ServerDetailPage() {
 
   const handleChannelClick = (channel) => {
     setCurrentChannel(channel);
-    dispatch(fetchMessages(channel.id)); // fetch messages when switching channels
+    dispatch(fetchMessages(channel.id)); // Fetch messages when switching channels
   };
 
   const sendMessage = () => {
@@ -121,15 +125,6 @@ function ServerDetailPage() {
   const toggleMessageDropdown = (messageId) => {
     setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
   };
-
-  // const shouldDisplayTimestamp = (messages, index) => {
-  //   if (index === 0) return true; // Always display for the first message
-  //   const previousMessage = messages[index - 1];
-  //   const currentMessage = messages[index];
-  //   const timeDifference = new Date(currentMessage.created_at) - new Date(previousMessage.created_at);
-  //   const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
-  //   return previousMessage.author.id !== currentMessage.author.id || timeDifference > fiveMinutes;
-  // };
 
   if (!user) {
     return <Navigate to="/" />;
@@ -265,7 +260,7 @@ function ServerDetailPage() {
                 <div className="create-channel-tooltip-wrapper">
                   <OpenModalButton
                     modalComponent={<ChannelFormModal serverId={id} />}
-                    buttonText={<FaPlus />} 
+                    buttonText={<FaPlus />}
                     className="create-channel-icon"
                   />
                   <div className="tooltip">Create Channel</div>
@@ -315,10 +310,10 @@ function ServerDetailPage() {
                   {messages.map((msg, index) => (
                     <div key={index} className="message-item">
                       <div className="message-header">
-                        <div className="message-username-timestamp"> 
+                        <div className="message-username-timestamp">
                           <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
                           <span className="message-timestamp">
-                            {new Date(msg.created_at).toLocaleString('en-US', { 
+                            {new Date(msg.created_at).toLocaleString('en-US', {
                               day:'2-digit',
                               month: '2-digit',
                               year: 'numeric',

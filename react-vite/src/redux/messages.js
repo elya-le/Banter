@@ -24,8 +24,7 @@ export const postMessage = createAsyncThunk(
   }
 );
 
-// added deleteMessage thunk
-export const deleteMessage = createAsyncThunk( // <--- this has been updated for: adding delete functionality
+export const deleteMessage = createAsyncThunk(
   'messages/deleteMessage',
   async (messageId) => {
     await fetch(`/api/channels/messages/${messageId}`, {
@@ -62,7 +61,7 @@ const messagesSlice = createSlice({
         if (!state[channelId]) state[channelId] = [];
         state[channelId].push(message);
       })
-      .addCase(deleteMessage.fulfilled, (state, action) => { // <--- this has been updated for: handling deleted messages
+      .addCase(deleteMessage.fulfilled, (state, action) => {
         const messageId = action.payload;
         for (let channelId in state) {
           state[channelId] = state[channelId].filter(message => message.id !== messageId);
@@ -76,6 +75,7 @@ export const { addMessage, setMessages } = messagesSlice.actions;
 export const selectMessagesByChannel = (state, channelId) => state.messages[channelId] || [];
 
 export default messagesSlice.reducer;
+
 
 
 

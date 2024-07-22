@@ -115,7 +115,7 @@ def not_found(e):
 # websocket events
 @socketio.on('message')
 def handle_message(message):
-    print('received message: ' + message)
+    print('received message: ' + str(message))  # <-- this has been updated to ensure proper string conversion
     send(message, broadcast=True)
 
 if __name__ == "__main__":
