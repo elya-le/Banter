@@ -1,6 +1,7 @@
 # /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/__init__.py
 import os
 from flask import Flask, render_template, request, session, redirect
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
@@ -59,9 +60,8 @@ def create_app():
             print(f"S3 Access Error: {e}")
 
     verify_s3_access()
-
-    # Application security
-    # CORS(app)
+    
+    CORS(app, resources={r"/": {"origins": ""}})   # <--- brian any luck if you change that to: CORS(app, resources={r"/": {"origins": ""}})  INSTEAD of explicitly setting it to 'http://localhost:5173'
 
     # Redirect http to https in production
     @app.before_request
