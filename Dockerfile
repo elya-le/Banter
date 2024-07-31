@@ -26,4 +26,4 @@ COPY . .
 RUN flask db upgrade
 RUN flask seed all
 
-CMD gunicorn app:app
+CMD gunicorn --worker-class eventlet -w 1 app:app

@@ -1,5 +1,6 @@
+# /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/__init__.py
 import os
-from flask import Flask, render_template, request, session, redirect, current_app
+from flask import Flask, render_template, request, session, redirect
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -22,8 +23,23 @@ load_dotenv()
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 app.config.from_object(Config)
 
-# setup flask-socketio
-socketio = SocketIO(app, cors_allowed_origins="*")
+# Set CORS origins based on environment
+if os.environ.get('FLASK_ENV') == 'production':
+    origins = [
+        'https://elya-le-banter.onrender.com'
+    ]
+else:
+    origins = [
+        "http://localhost:5173",
+        "http://localhost:5000",
+        "*"
+    ]
+
+# setup flask-socketio with specific CORS settings
+socketio = SocketIO(app, cors_allowed_origins=origins, logger=True, engineio_logger=True)
+
+# setup CORS for the Flask app
+CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)
 
 # setup login manager
 login = LoginManager(app)
@@ -63,7 +79,7 @@ def verify_s3_access():
 verify_s3_access()
 
 # application security
-CORS(app)
+# CORS(app)
 
 # redirect http to https in production
 @app.before_request
@@ -115,8 +131,8 @@ def not_found(e):
 # websocket events
 @socketio.on('message')
 def handle_message(message):
-    print('received message: ' + str(message))  # <-- this has been updated to ensure proper string conversion
+    print('received message: ' + str(message))
     send(message, broadcast=True)
 
 if __name__ == "__main__":
-    socketio.run(app)  # <-- this has been updated for running the app with SocketIO
+    socketio.run(app)
