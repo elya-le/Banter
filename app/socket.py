@@ -6,23 +6,18 @@ from flask_cors import CORS
 
 # Set CORS origins based on environment
 if os.environ.get('FLASK_ENV') == 'production':
-    origins = [
-        'https://elya-le-banter.onrender.com'
-    ]
+    origins = ['https://elya-le-banter.onrender.com']
 else:
-    origins = [
-        "http://localhost:5173",
-        "http://localhost:5000",
-        "*"
-    ]
+    origins = ['http://localhost:5173']
 
-# Initialize SocketIO with CORS support
-socketio = SocketIO(cors_allowed_origins=origins)
-
+# Initialize Flask app
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)  # <-- ensure this is set
+    CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)
     return app
+
+app = create_app()
+socketio = SocketIO(app, cors_allowed_origins=origins, logger=True, engineio_logger=True)
 
 # Handle chat messages
 @socketio.on("chat")

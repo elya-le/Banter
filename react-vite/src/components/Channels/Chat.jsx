@@ -1,6 +1,8 @@
+// /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/react-vite/src/components/Channels/Chat.jsx
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
+import { WEBSOCKET_URL } from "../../config"; // import the WebSocket URL
 
 let socket;
 
@@ -10,8 +12,10 @@ const Chat = () => {
     const user = useSelector(state => state.session.user);
 
     useEffect(() => {
-        console.log("Connecting to WebSocket...");
-        socket = io("http://localhost:5000"); // Add the server URL here
+        console.log("connecting to WebSocket...");
+        socket = io(WEBSOCKET_URL, {  // use the WebSocket URL from config
+            withCredentials: true,
+        });
 
         socket.on("connect", () => {
             console.log("WebSocket connection established");
@@ -31,7 +35,7 @@ const Chat = () => {
         });
 
         return () => {
-            console.log("Disconnecting WebSocket...");
+            console.log("disconnecting WebSocket...");
             socket.disconnect();
         };
     }, []);
@@ -42,27 +46,29 @@ const Chat = () => {
 
     const sendChat = (e) => {
         e.preventDefault();
-        console.log("Sending chat message:", chatInput);
+        console.log("sending chat message: ", chatInput);
         socket.emit("chat", { user: user.username, msg: chatInput });
         setChatInput("");
     };
 
-    return (user && (
-        <div>
+    return (
+        user && (
             <div>
-                {messages.map((message, ind) => (
-                    <div key={ind}>{`${message.user}: ${message.msg}`}</div>
-                ))}
+                <div>
+                    {messages.map((message, ind) => (
+                        <div key={ind}>{`${message.user}: ${message.msg}`}</div>
+                    ))}
+                </div>
+                <form onSubmit={sendChat}>
+                    <input
+                        value={chatInput}
+                        onChange={updateChatInput}
+                    />
+                    <button type="submit">Send</button>
+                </form>
             </div>
-            <form onSubmit={sendChat}>
-                <input
-                    value={chatInput}
-                    onChange={updateChatInput}
-                />
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    ));
+        )
+    );
 };
 
 export default Chat;

@@ -1,11 +1,9 @@
 # /Users/elya/Desktop/aa-projects/_AA_Banter/Banter/app/__init__.py
 import os
 from flask import Flask, render_template, request, session, redirect
-from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from flask_socketio import SocketIO, send, emit
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
@@ -16,123 +14,112 @@ from .config import Config
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from dotenv import load_dotenv
+from .socket import socketio
 
-# load environment variables from .env file
+# Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
-app.config.from_object(Config)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-# Set CORS origins based on environment
-if os.environ.get('FLASK_ENV') == 'production':
-    origins = [
-        'https://elya-le-banter.onrender.com'
-    ]
-else:
-    origins = [
-        "http://localhost:5173",
-        "http://localhost:5000",
-        "*"
-    ]
+    # Setup login manager
+    login = LoginManager(app)
+    login.login_view = 'auth.unauthorized'
 
-# setup flask-socketio with specific CORS settings
-socketio = SocketIO(app, cors_allowed_origins=origins, logger=True, engineio_logger=True)
+    @login.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
-# setup CORS for the Flask app
-CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)
+    # Tell Flask about our seed commands
+    app.cli.add_command(seed_commands)
 
-# setup login manager
-login = LoginManager(app)
-login.login_view = 'auth.unauthorized'
+    # Register blueprints
+    app.register_blueprint(user_routes, url_prefix='/api/users')
+    app.register_blueprint(auth_routes, url_prefix='/api/auth')
+    app.register_blueprint(server_routes, url_prefix='/api/servers')
+    app.register_blueprint(channel_routes, url_prefix='/api/channels')
 
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+    # Initialize database and migration
+    db.init_app(app)
+    Migrate(app, db)
 
-# tell flask about our seed commands
-app.cli.add_command(seed_commands)
+    # Verify AWS S3 access
+    def verify_s3_access():
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+            region_name=os.getenv('AWS_REGION')
+        )
+        try:
+            s3_client.list_buckets()
+            print("S3 Access Verified!")
+        except (NoCredentialsError, PartialCredentialsError) as e:
+            print(f"S3 Access Error: {e}")
 
-# register blueprints
-app.register_blueprint(user_routes, url_prefix='/api/users')
-app.register_blueprint(auth_routes, url_prefix='/api/auth')
-app.register_blueprint(server_routes, url_prefix='/api/servers')
-app.register_blueprint(channel_routes, url_prefix='/api/channels')
+    verify_s3_access()
 
-# initialize database and migration
-db.init_app(app)
-Migrate(app, db)
+    # Application security
+    # CORS(app)
 
-# verify aws s3 access
-def verify_s3_access():
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-        region_name=os.getenv('AWS_REGION')
-    )
-    try:
-        s3_client.list_buckets()
-        print("S3 Access Verified!")
-    except (NoCredentialsError, PartialCredentialsError) as e:
-        print(f"S3 Access Error: {e}")
+    # Redirect http to https in production
+    @app.before_request
+    def https_redirect():
+        if os.environ.get('FLASK_ENV') == 'production':
+            if request.headers.get('X-Forwarded-Proto') == 'http':
+                url = request.url.replace('http://', 'https://', 1)
+                code = 301
+                return redirect(url, code=code)
 
-verify_s3_access()
+    @app.after_request
+    def inject_csrf_token(response):
+        response.set_cookie(
+            'csrf_token',
+            generate_csrf(),
+            secure=True if os.environ.get('FLASK_ENV') == 'production' else False,
+            samesite='Strict' if os.environ.get(
+                'FLASK_ENV') == 'production' else None,
+            httponly=True)
+        return response
 
-# application security
-# CORS(app)
+    @app.route("/api/docs")
+    def api_help():
+        """
+        returns all api routes and their doc strings
+        """
+        acceptable_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+        route_list = { rule.rule: [[ method for method in rule.methods if method in acceptable_methods ],
+                        app.view_functions[rule.endpoint].__doc__ ]
+                        for rule in app.url_map.iter_rules() if rule.endpoint != 'static' }
+        return route_list
 
-# redirect http to https in production
-@app.before_request
-def https_redirect():
-    if os.environ.get('FLASK_ENV') == 'production':
-        if request.headers.get('X-Forwarded-Proto') == 'http':
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def react_root(path):
+        """
+        this route will direct to the public directory in our
+        react builds in the production environment for favicon
+        or index.html requests
+        """
+        if path == 'favicon.ico':
+            return app.send_from_directory('public', 'favicon.ico')
+        return app.send_static_file('index.html')
 
-@app.after_request
-def inject_csrf_token(response):
-    response.set_cookie(
-        'csrf_token',
-        generate_csrf(),
-        secure=True if os.environ.get('FLASK_ENV') == 'production' else False,
-        samesite='Strict' if os.environ.get(
-            'FLASK_ENV') == 'production' else None,
-        httponly=True)
-    return response
+    @app.errorhandler(404)
+    def not_found(e):
+        return app.send_static_file('index.html')
 
-@app.route("/api/docs")
-def api_help():
-    """
-    returns all api routes and their doc strings
-    """
-    acceptable_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-    route_list = { rule.rule: [[ method for method in rule.methods if method in acceptable_methods ],
-                    app.view_functions[rule.endpoint].__doc__ ]
-                    for rule in app.url_map.iter_rules() if rule.endpoint != 'static' }
-    return route_list
+    # WebSocket events
+    @socketio.on('message')
+    def handle_message(message):
+        print('received message: ' + str(message))
+        send(message, broadcast=True)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def react_root(path):
-    """
-    this route will direct to the public directory in our
-    react builds in the production environment for favicon
-    or index.html requests
-    """
-    if path == 'favicon.ico':
-        return app.send_from_directory('public', 'favicon.ico')
-    return app.send_static_file('index.html')
+    return app
 
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file('index.html')
+app = create_app()
 
-# websocket events
-@socketio.on('message')
-def handle_message(message):
-    print('received message: ' + str(message))
-    send(message, broadcast=True)
-
+# Only call app.run() if this script is being run directly, not when it's imported
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, host="0.0.0.0", port=5000)
