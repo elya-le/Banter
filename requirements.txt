@@ -23,16 +23,14 @@ sqlalchemy==1.4.46; python_version >= '2.7' and python_version not in '3.0, 3.1,
 werkzeug==2.2.2; python_version >= '3.7'
 wtforms==3.0.1; python_version >= '3.7'
 zipp==3.17.0; python_version >= '3.8'
-boto3==1.34.140  # from existing project
-email-validator==2.0.0.post2  # from existing project
-psycopg2==2.9.6  # from your existing project
-eventlet==0.31.0  # Updated to resolve conflict with dnspython
-flask-socketio==5.3.6  # ensure the same version of Flask-SocketIO
-python-engineio==4.9.1  # required by Flask-SocketIO
-python-socketio==5.11.3  # required by Flask-SocketIO
-simple-websocket==1.0.0  # required by Flask-SocketIO
-dnspython==2.6.1  # Compatible version for email-validator and eventlet
 s3transfer==0.10.2
 botocore==1.34.152
 jmespath==1.0.1
 idna==3.7
+boto3==1.34.140  
+psycopg2==2.9.6  
+eventlet==0.30.2  # Eventlet for Flask-SocketIO compatibility
+flask-socketio==5.3.6  # ensure the same version of Flask-SocketIO
+python-engineio==4.9.1  # required by Flask-SocketIO
+python-socketio==5.11.3  # required by Flask-SocketIO
+simple-websocket==1.0.0  # required by Flask-SocketIO
