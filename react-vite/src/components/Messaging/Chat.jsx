@@ -1,5 +1,4 @@
-// src/components/Chat.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { io } from 'socket.io-client';
 import './Chat.css'; // import the CSS file
@@ -10,6 +9,9 @@ const Chat = ({ currentChannel }) => {
     const [chatInput, setChatInput] = useState("");
     const [messages, setMessages] = useState([]);
     const user = useSelector(state => state.session.user);
+    const [dropdownOpen, setDropdownOpen] = useState(null); // <-- updated for dropdown
+    const messagesEndRef = useRef(null); // <-- useRef to scroll to the bottom
+    const dropdownRef = useRef(null); // <-- ref to track the dropdown menu
 
     useEffect(() => {
         console.log("Component mounted");
@@ -60,9 +62,11 @@ const Chat = ({ currentChannel }) => {
                     user: message.author.username,
                     msg: message.content,
                     channel_id: message.channel_id,
-                    created_at: message.created_at  // <-- include created_at timestamp
+                    created_at: message.created_at,  // <-- include created_at timestamp
+                    id: message.id  // <-- include message ID for deletion
                 })); // <-- map backend message structure to frontend structure
                 setMessages(mappedMessages);  // <-- this has been updated to map messages
+                scrollToBottom(); // <-- scroll to the bottom after fetching messages
             } catch (error) {
                 console.error("Failed to fetch messages:", error);
             }
@@ -70,6 +74,14 @@ const Chat = ({ currentChannel }) => {
 
         fetchMessages();
     }, [currentChannel]);
+
+    useEffect(() => {
+        scrollToBottom(); // <-- scroll to the bottom when messages change
+    }, [messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     const updateChatInput = (e) => {
         console.log("Updating chat input:", e.target.value);
@@ -113,6 +125,34 @@ const Chat = ({ currentChannel }) => {
         return new Date(dateString).toLocaleString('en-US', options).replace(',', ''); // <-- remove comma between date and time
     };
 
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            await fetch(`/api/channels/messages/${messageId}`, {
+                method: "DELETE"
+            });
+            setMessages(messages.filter(message => message.id !== messageId));  // <-- update state after deletion
+        } catch (error) {
+            console.error("Failed to delete message:", error);
+        }
+    };
+
+    const toggleDropdown = (messageId) => {
+        setDropdownOpen(dropdownOpen === messageId ? null : messageId);  // <-- toggle dropdown state
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setDropdownOpen(null);  // <-- close the dropdown if click is outside
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     if (!currentChannel) {
         return <div className="chat-error">Please select a channel to view the chat.</div>;  // <-- added class
     }
@@ -123,21 +163,36 @@ const Chat = ({ currentChannel }) => {
                 {messages.map((message, ind) => (
                     <div key={ind} className="chat-message">  
                         <div className="chat-message-header">  
-                            <strong className="chat-message-user">{message.user}</strong> <span className="chat-message-date">{formatDate(message.created_at)}</span>  {/* <-- added classes */}
+                            <div className="name-date">
+                              <strong className="chat-message-user">{message.user}</strong> 
+                              <span className="chat-message-date">{formatDate(message.created_at)}</span>  {/* <-- added classes */}
+                            </div>
+                            {user.username === message.user && (
+                                <div className="message-actions-container" ref={dropdownRef}>
+                                    <a href="#" className="message-actions-link" onClick={(e) => { e.preventDefault(); toggleDropdown(message.id); }}>
+                                        ...
+                                    </a>
+                                    {dropdownOpen === message.id && (
+                                        <ul className="message-dropdown-menu">
+                                            <li onClick={() => handleDeleteMessage(message.id)} className="server-dd-hover">Delete Message</li>
+                                        </ul>
+                                    )}
+                                </div>
+                            )}
                         </div>
                         <div className="chat-message-content"> 
                             {message.msg}  {/* <-- display message content on the next line */}
                         </div>
                     </div>
                 ))}
+                <div ref={messagesEndRef} /> {/* <-- added div to scroll to */}
             </div>
-            <form className="chat-input-form" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>  
+            <form className="chat-input-form">  
                 <input
                     className="chat-input"  // <-- added class
                     value={chatInput}
                     onChange={updateChatInput}
                     onKeyDown={sendChat} // <-- handle key down event to send message on enter
-                    style={{ width: '90%', marginBottom: '10px' }}
                     placeholder={`Message #${currentChannel.name}`}  // <-- add placeholder text
                 />
             </form>
