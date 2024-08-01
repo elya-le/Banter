@@ -14,6 +14,7 @@ function LoginFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Logging in with:", { email, password });  // - log login attempt
 
     const serverResponse = await dispatch(
       thunkLogin({
@@ -23,8 +24,10 @@ function LoginFormModal() {
     );
 
     if (serverResponse) {
+      console.log("Login errors:", serverResponse);  // - log login errors
       setErrors(serverResponse);
     } else {
+      console.log("Login successful");  // - log successful login
       closeModal();
     }
   };
@@ -32,6 +35,8 @@ function LoginFormModal() {
   const handleDemoLogin = async () => {
     const demoEmail = "demo@aa.io"; 
     const demoPassword = "password"; 
+    console.log("Logging in with demo credentials");  // - log demo login attempt
+
 
     const serverResponse = await dispatch(
       thunkLogin({
@@ -41,8 +46,10 @@ function LoginFormModal() {
     );
 
     if (serverResponse) {
+      console.log("Demo login errors:", serverResponse);  // - log demo login errors
       setErrors(serverResponse);
     } else {
+      console.log("Demo login successful");  // - log successful demo login
       closeModal();
     }
   };
