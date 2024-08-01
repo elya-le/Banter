@@ -1,10 +1,10 @@
+# app/__init__.py
 import os
 from flask import Flask, render_template, request, session, redirect, current_app
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from flask_socketio import SocketIO, send, emit
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
@@ -12,6 +12,7 @@ from .api.server_routes import server_routes
 from .api.channel_routes import channel_routes
 from .seeds import seed_commands
 from .config import Config
+from .socket import socketio  # <-- this has been updated to import socketio from the new socket.py file
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from dotenv import load_dotenv
@@ -21,9 +22,6 @@ load_dotenv()
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 app.config.from_object(Config)
-
-# setup flask-socketio
-socketio = SocketIO(app, cors_allowed_origins="*")
 
 # setup login manager
 login = LoginManager(app)
@@ -46,6 +44,9 @@ app.register_blueprint(channel_routes, url_prefix='/api/channels')
 db.init_app(app)
 Migrate(app, db)
 
+# initialize the app with the socket instance
+socketio.init_app(app)  # <-- this has been updated to initialize socketio with the app
+
 # verify aws s3 access
 def verify_s3_access():
     s3_client = boto3.client(
@@ -63,7 +64,9 @@ def verify_s3_access():
 verify_s3_access()
 
 # application security
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # <-- ensure this line is present
+# CORS(app)
+
 
 # redirect http to https in production
 @app.before_request
@@ -80,8 +83,7 @@ def inject_csrf_token(response):
         'csrf_token',
         generate_csrf(),
         secure=True if os.environ.get('FLASK_ENV') == 'production' else False,
-        samesite='Strict' if os.environ.get(
-            'FLASK_ENV') == 'production' else None,
+        samesite='Strict' if os.environ.get('FLASK_ENV') == 'production' else None,
         httponly=True)
     return response
 
@@ -91,9 +93,11 @@ def api_help():
     returns all api routes and their doc strings
     """
     acceptable_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-    route_list = { rule.rule: [[ method for method in rule.methods if method in acceptable_methods ],
-                    app.view_functions[rule.endpoint].__doc__ ]
-                    for rule in app.url_map.iter_rules() if rule.endpoint != 'static' }
+    route_list = {
+        rule.rule: [[method for method in rule.methods if method in acceptable_methods],
+                    app.view_functions[rule.endpoint].__doc__]
+        for rule in app.url_map.iter_rules() if rule.endpoint != 'static'
+    }
     return route_list
 
 @app.route('/', defaults={'path': ''})
@@ -112,11 +116,9 @@ def react_root(path):
 def not_found(e):
     return app.send_static_file('index.html')
 
-# websocket events
-@socketio.on('message')
-def handle_message(message):
-    print('received message: ' + str(message))  # <-- this has been updated to ensure proper string conversion
-    send(message, broadcast=True)
-
 if __name__ == "__main__":
-    socketio.run(app)  # <-- this has been updated for running the app with SocketIO
+    import eventlet
+    eventlet.monkey_patch()
+    print("Starting server with Eventlet...")
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))  # Use the PORT environment variable for production
+    # socketio.run(app, host='0.0.0.0', port=5001)  # <-- this has been updated to port 5001 to avoid address conflict

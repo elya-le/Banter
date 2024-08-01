@@ -11,10 +11,10 @@ import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
 import { IoEllipsisHorizontalSharp } from "react-icons/io5";
-import io from 'socket.io-client';
-import { fetchMessages, postMessage, deleteMessage, addMessage, selectMessagesByChannel } from "../../redux/messages";
+// import io from 'socket.io-client';
+import { fetchMessages, deleteMessage, selectMessagesByChannel } from "../../redux/messages";
 
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -59,16 +59,16 @@ function ServerDetailPage() {
   }, []);
 
   // Setup websocket event listeners
-  useEffect(() => {
-    socket.on('message', (msg) => {
-      console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
-      dispatch(addMessage({ channelId: msg.channel, message: msg }));
-    });
+  // useEffect(() => {
+  //   socket.on('message', (msg) => {
+  //     console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
+  //     dispatch(addMessage({ channelId: msg.channel, message: msg }));
+  //   });
 
-    return () => {
-      socket.off('message');
-    };
-  }, [dispatch]);
+  //   return () => {
+  //     socket.off('message');
+  //   };
+  // }, [dispatch]);
 
   const handleLogout = () => {
     dispatch(thunkLogout());
@@ -96,27 +96,27 @@ function ServerDetailPage() {
     dispatch(fetchMessages(channel.id)); // Fetch messages when switching channels
   };
 
-  const sendMessage = () => {
-    if (message.trim() && currentChannel) {
-      const msg = {
-        author: {
-          id: user.id,
-          username: user.username,
-        },
-        channel: currentChannel.id,
-        content: message,
-      };
-      socket.send(msg);
-      dispatch(postMessage({ channelId: currentChannel.id, content: message }));
-      setMessage('');
-    }
-  };
+  // const sendMessage = () => {
+  //   if (message.trim() && currentChannel) {
+  //     const msg = {
+  //       author: {
+  //         id: user.id,
+  //         username: user.username,
+  //       },
+  //       channel: currentChannel.id,
+  //       content: message,
+  //     };
+  //     socket.send(msg);
+  //     dispatch(postMessage({ channelId: currentChannel.id, content: message }));
+  //     setMessage('');
+  //   }
+  // };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      sendMessage();
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     sendMessage();
+  //   }
+  // };
 
   const handleDeleteMessage = (messageId) => {
     dispatch(deleteMessage(messageId));
@@ -348,7 +348,7 @@ function ServerDetailPage() {
                   <input
                     type="text"
                     value={message}
-                    onKeyDown={handleKeyDown} // added onKeyDown event handler
+                    // onKeyDown={handleKeyDown} // added onKeyDown event handler
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
                   />

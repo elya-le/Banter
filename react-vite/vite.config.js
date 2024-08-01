@@ -1,3 +1,4 @@
+// vite.config.js
 import { defineConfig } from "vite";
 import eslintPlugin from "vite-plugin-eslint";
 import react from "@vitejs/plugin-react";
@@ -14,7 +15,12 @@ export default defineConfig((mode) => ({
   server: {
     open: true,
     proxy: {
-      "/api": "http://127.0.0.1:5000",
+      "/api": "http://127.0.0.1:5000",  // keep existing proxy settings
+    },
+  },
+  build: {
+    rollupOptions: {
+      external: ['socket.io-client'], // add this line to externalize socket.io-client
     },
   },
 }));

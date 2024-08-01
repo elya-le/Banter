@@ -1,8 +1,8 @@
-"""migrate gevent and eventlet differences
+"""initial migration with 5001
 
-Revision ID: 68c909b52336
+Revision ID: bf24893f569c
 Revises: 
-Create Date: 2024-07-22 07:56:26.085242
+Create Date: 2024-07-31 21:31:54.237253
 
 """
 from alembic import op
@@ -14,7 +14,7 @@ SCHEMA = os.environ.get("SCHEMA")
 
 
 # revision identifiers, used by Alembic.
-revision = '68c909b52336'
+revision = 'bf24893f569c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -75,14 +75,12 @@ def upgrade():
     sa.ForeignKeyConstraint(['channel_id'], ['channels.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-
     if environment == "production":
         op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE servers SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE user_server_membership SET SCHEMA {SCHEMA};")
         op.execute(f"ALTER TABLE messages SET SCHEMA {SCHEMA};")
-        
     # ### end Alembic commands ###
 
 
