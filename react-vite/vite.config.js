@@ -15,7 +15,7 @@ export default defineConfig((mode) => ({
   server: {
     open: true,
     proxy: {
-      "/api": "http://127.0.0.1:5000",  // keep existing proxy settings
+      "/api": "http://127.0.0.1:5001",  // keep existing proxy settings
     },
   },
   build: {

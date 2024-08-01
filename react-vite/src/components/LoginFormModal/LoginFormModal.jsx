@@ -16,43 +16,92 @@ function LoginFormModal() {
     e.preventDefault();
     console.log("Logging in with:", { email, password });  // - log login attempt
 
-    const serverResponse = await dispatch(
-      thunkLogin({
-        email,
-        password,
-      })
-    );
+    try {
+      const serverResponse = await dispatch(
+        thunkLogin({
+          email,
+          password,
+        })
+      );
+      console.log("Server response:", serverResponse);  // - log server response
 
-    if (serverResponse) {
-      console.log("Login errors:", serverResponse);  // - log login errors
-      setErrors(serverResponse);
-    } else {
-      console.log("Login successful");  // - log successful login
-      closeModal();
+      if (serverResponse) {
+        console.log("Login errors:", serverResponse);  // - log login errors
+        setErrors(serverResponse);
+      } else {
+        console.log("Login successful");  // - log successful login
+        closeModal();
+      }
+    } catch (error) {
+      console.error("Error during login:", error);  // - log any errors
     }
   };
 
+  //   const serverResponse = await dispatch(
+  //     thunkLogin({
+  //       email,
+  //       password,
+  //     })
+  //   );
+  //   console.log("Server response:", serverResponse);  // - log server response
+
+  //   if (serverResponse) {
+  //     console.log("Login errors:", serverResponse);  // - log login errors
+  //     setErrors(serverResponse);
+  //   } else {
+  //     console.log("Login successful");  // - log successful login
+  //     closeModal();
+  //   }
+  // };
   const handleDemoLogin = async () => {
     const demoEmail = "demo@aa.io"; 
     const demoPassword = "password"; 
     console.log("Logging in with demo credentials");  // - log demo login attempt
-
-
-    const serverResponse = await dispatch(
-      thunkLogin({
-        email: demoEmail,
-        password: demoPassword,
-      })
-    );
-
-    if (serverResponse) {
-      console.log("Demo login errors:", serverResponse);  // - log demo login errors
-      setErrors(serverResponse);
-    } else {
-      console.log("Demo login successful");  // - log successful demo login
-      closeModal();
+  
+    try {
+      const serverResponse = await dispatch(
+        thunkLogin({
+          email: demoEmail,
+          password: demoPassword,
+        })
+      );
+      console.log("Server response:", serverResponse);  // - log server response
+    
+      if (serverResponse) {
+        console.log("Demo login errors:", serverResponse);  // - log demo login errors
+        setErrors(serverResponse);
+      } else {
+        console.log("Demo login successful");  // - log successful demo login
+        closeModal();
+      }
+    } catch (error) {
+      console.error("Error during demo login:", error);  // - log any errors
     }
   };
+
+
+
+  // const handleDemoLogin = async () => {
+  //   const demoEmail = "demo@aa.io"; 
+  //   const demoPassword = "password"; 
+  //   console.log("Logging in with demo credentials");  // - log demo login attempt
+
+
+  //   const serverResponse = await dispatch(
+  //     thunkLogin({
+  //       email: demoEmail,
+  //       password: demoPassword,
+  //     })
+  //   );
+
+  //   if (serverResponse) {
+  //     console.log("Demo login errors:", serverResponse);  // - log demo login errors
+  //     setErrors(serverResponse);
+  //   } else {
+  //     console.log("Demo login successful");  // - log successful demo login
+  //     closeModal();
+  //   }
+  // };
 
   useEffect(() => {
     const handleOutsideClick = (e) => {

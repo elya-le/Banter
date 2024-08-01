@@ -64,15 +64,15 @@ def verify_s3_access():
 verify_s3_access()
 
 # application security
-if os.environ.get('FLASK_ENV') == 'production':
-    CORS(app, resources={r"/*": {"origins": [
-        'https://elya-le-banter.onrender.com',
-        'http://elya-le-banter.onrender.com'
-    ]}})
-else:
-    CORS(app, resources={r"/*": {"origins": "*"}})
+# if os.environ.get('FLASK_ENV') == 'production':
+#     CORS(app, resources={r"/*": {"origins": [
+#         'https://elya-le-banter.onrender.com',
+#         'http://elya-le-banter.onrender.com'
+#     ]}})
+# else:
+#     CORS(app, resources={r"/*": {"origins": "*"}})
 
-# CORS(app, resources={r"/*": {"origins": "*"}})  # temporarily allow all origins
+CORS(app, resources={r"/*": {"origins": "*"}})  # temporarily allow all origins
 # CORS(app, resources={r"/*": {"origins": "http://localhost:5001"}})  # <-- ensure this line is present from working sockets
 # CORS(app)
 
