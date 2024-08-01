@@ -1,6 +1,8 @@
+// src/components/Chat.jsx
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { io } from 'socket.io-client';
+import './Chat.css'; // import the CSS file
 
 let socket;
 
@@ -58,6 +60,7 @@ const Chat = ({ currentChannel }) => {
                     user: message.author.username,
                     msg: message.content,
                     channel_id: message.channel_id,
+                    created_at: message.created_at  // <-- include created_at timestamp
                 })); // <-- map backend message structure to frontend structure
                 setMessages(mappedMessages);  // <-- this has been updated to map messages
             } catch (error) {
@@ -74,52 +77,69 @@ const Chat = ({ currentChannel }) => {
     };
 
     const sendChat = (e) => {
-        e.preventDefault();
-        if (!currentChannel) {
-            console.error("No current channel provided");
-            return;
-        }
-        const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id };
-        console.log("Sending chat message:", message);
-        socket.emit("chat", message);
-
-        // save message to the database
-        const saveMessage = async () => {
-            try {
-                await fetch(`/api/channels/${currentChannel.id}/messages`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ content: chatInput })
-                });
-            } catch (error) {
-                console.error("Failed to save message:", error);
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (!currentChannel) {
+                console.error("No current channel provided");
+                return;
             }
-        };
+            const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id };
+            console.log("Sending chat message:", message);
+            socket.emit("chat", message);
 
-        saveMessage();
+            // save message to the database
+            const saveMessage = async () => {
+                try {
+                    await fetch(`/api/channels/${currentChannel.id}/messages`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ content: chatInput })
+                    });
+                } catch (error) {
+                    console.error("Failed to save message:", error);
+                }
+            };
 
-        setChatInput("");
+            saveMessage();
+
+            setChatInput("");
+        }
+    };
+
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true };
+        return new Date(dateString).toLocaleString('en-US', options).replace(',', ''); // <-- remove comma between date and time
     };
 
     if (!currentChannel) {
-        return <div>Please select a channel to view the chat.</div>;
+        return <div className="chat-error">Please select a channel to view the chat.</div>;  // <-- added class
     }
 
     return (user && (
-        <div>
-            <div>
+        <div className="chat-container">  
+            <div className="chat-messages">  
                 {messages.map((message, ind) => (
-                    <div key={ind}>{`${message.user}: ${message.msg}`}</div>  // <-- use user and msg
+                    <div key={ind} className="chat-message">  
+                        <div className="chat-message-header">  
+                            <strong className="chat-message-user">{message.user}</strong> <span className="chat-message-date">{formatDate(message.created_at)}</span>  {/* <-- added classes */}
+                        </div>
+                        <div className="chat-message-content"> 
+                            {message.msg}  {/* <-- display message content on the next line */}
+                        </div>
+                    </div>
                 ))}
             </div>
-            <form onSubmit={sendChat}>
+            <form className="chat-input-form" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>  
                 <input
+                    className="chat-input"  // <-- added class
                     value={chatInput}
                     onChange={updateChatInput}
+                    onKeyDown={sendChat} // <-- handle key down event to send message on enter
+                    style={{ width: '90%', marginBottom: '10px' }}
+                    placeholder={`Message #${currentChannel.name}`}  // <-- add placeholder text
                 />
-                <button type="submit">Send</button>
             </form>
         </div>
     ));

@@ -5,7 +5,7 @@ import WelcomePage from '../components/WelcomePage';
 import ServerDetails from '../components/Servers/ServerDetails';
 import EditServerForm from '../components/Servers/EditServerForm';
 import EditChannelForm from '../components/Channels/EditChannelForm'; 
-import Chat from '../components/Chat'; // <-- import Chat component
+import Chat from '../components/Messaging/Chat'; // <-- import Chat component
 
 export const router = createBrowserRouter([
   {

@@ -7,7 +7,7 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import ServerFormModal from "../Servers/ServerFormModal";
 import ChannelFormModal from "../Channels/ChannelFormModal";
-import Chat from "../Chat"; // <-- import Chat component
+import Chat from "../Messaging/Chat"; // <-- import Chat component
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
