@@ -21,6 +21,7 @@ WORKDIR /var/www
 
 # copy and install Python dependencies
 COPY requirements.txt .
+RUN pip install --upgrade pip  # Upgrade pip to the latest version
 RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
@@ -31,5 +32,5 @@ COPY . .
 RUN flask db upgrade
 RUN flask seed all
 
-# define the command to run the application using Gunicorn with Eventlet workers
-CMD gunicorn --worker-class eventlet -w 1 app:app  # <-- this has been updated to use eventlet for WebSocket support
+# define the command to run the application using Gunicorn with Eventlet workers this has been updated to use eventlet for WebSocket support
+CMD gunicorn --worker-class eventlet -w 1 app:app  
