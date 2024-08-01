@@ -5,6 +5,7 @@ import WelcomePage from '../components/WelcomePage';
 import ServerDetails from '../components/Servers/ServerDetails';
 import EditServerForm from '../components/Servers/EditServerForm';
 import EditChannelForm from '../components/Channels/EditChannelForm'; 
+import Chat from '../components/Messaging/Chat'; // <-- import Chat component
 
 export const router = createBrowserRouter([
   {
@@ -27,8 +28,12 @@ export const router = createBrowserRouter([
         element: <EditServerForm />,
       },
       {
-        path: "channels/:id/edit",  // Add this route for editing channels
+        path: "channels/:id/edit",  
         element: <EditChannelForm />,
+      },
+      {
+        path: "chat",  // <-- add Chat route
+        element: <Chat />,
       },
     ],
   },

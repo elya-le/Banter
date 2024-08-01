@@ -7,14 +7,16 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import ServerFormModal from "../Servers/ServerFormModal";
 import ChannelFormModal from "../Channels/ChannelFormModal";
+import Chat from "../Messaging/Chat"; // <-- import Chat component
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
-import { IoEllipsisHorizontalSharp } from "react-icons/io5";
-import io from 'socket.io-client';
-import { fetchMessages, postMessage, deleteMessage, addMessage, selectMessagesByChannel } from "../../redux/messages";
+// import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+// import io from 'socket.io-client';
+import { fetchMessages } from "../../redux/messages";
+// import { selectMessagesByChannel, deleteMessage } from "../../redux/messages";
 
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 
 function ServerDetailPage() {
   const dispatch = useDispatch();
@@ -27,10 +29,10 @@ function ServerDetailPage() {
   const server = allServers.find((s) => s.id === parseInt(id));
   const channels = useSelector((state) => state.channels.channels) || [];
   const [currentChannel, setCurrentChannel] = useState(null);
-  const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []);
+  // const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [dropdownMessageId, setDropdownMessageId] = useState(null);
+  // const [message, setMessage] = useState('');
+  // const [dropdownMessageId, setDropdownMessageId] = useState(null);
 
   // Fetch servers and server details when user/id changes
   useEffect(() => {
@@ -49,7 +51,7 @@ function ServerDetailPage() {
           !event.target.closest('.message-actions-button') &&
           !event.target.closest('.message-dropdown-menu')) {
         setDropdownOpen(false);
-        setDropdownMessageId(null);
+        // setDropdownMessageId(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -59,16 +61,16 @@ function ServerDetailPage() {
   }, []);
 
   // Setup websocket event listeners
-  useEffect(() => {
-    socket.on('message', (msg) => {
-      console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
-      dispatch(addMessage({ channelId: msg.channel, message: msg }));
-    });
+  // useEffect(() => {
+  //   socket.on('message', (msg) => {
+  //     console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
+  //     dispatch(addMessage({ channelId: msg.channel, message: msg }));
+  //   });
 
-    return () => {
-      socket.off('message');
-    };
-  }, [dispatch]);
+  //   return () => {
+  //     socket.off('message');
+  //   };
+  // }, [dispatch]);
 
   const handleLogout = () => {
     dispatch(thunkLogout());
@@ -96,35 +98,35 @@ function ServerDetailPage() {
     dispatch(fetchMessages(channel.id)); // Fetch messages when switching channels
   };
 
-  const sendMessage = () => {
-    if (message.trim() && currentChannel) {
-      const msg = {
-        author: {
-          id: user.id,
-          username: user.username,
-        },
-        channel: currentChannel.id,
-        content: message,
-      };
-      socket.send(msg);
-      dispatch(postMessage({ channelId: currentChannel.id, content: message }));
-      setMessage('');
-    }
-  };
+  // const sendMessage = () => {
+  //   if (message.trim() && currentChannel) {
+  //     const msg = {
+  //       author: {
+  //         id: user.id,
+  //         username: user.username,
+  //       },
+  //       channel: currentChannel.id,
+  //       content: message,
+  //     };
+  //     socket.send(msg);
+  //     dispatch(postMessage({ channelId: currentChannel.id, content: message }));
+  //     setMessage('');
+  //   }
+  // };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      sendMessage();
-    }
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     sendMessage();
+  //   }
+  // };
 
-  const handleDeleteMessage = (messageId) => {
-    dispatch(deleteMessage(messageId));
-  };
+  // const handleDeleteMessage = (messageId) => {
+  //   dispatch(deleteMessage(messageId));
+  // };
 
-  const toggleMessageDropdown = (messageId) => {
-    setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
-  };
+  // const toggleMessageDropdown = (messageId) => {
+  //   setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
+  // };
 
   if (!user) {
     return <Navigate to="/" />;
@@ -306,54 +308,57 @@ function ServerDetailPage() {
             <div className="server-main-content">
             {currentChannel ? (
               <div className="chat">
-                <div className="messages-container">
-                  {messages.map((msg, index) => (
-                    <div key={index} className="message-item">
-                      <div className="message-header">
-                        <div className="message-username-timestamp">
-                          <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
-                          <span className="message-timestamp">
-                            {new Date(msg.created_at).toLocaleString('en-US', {
-                              day:'2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              hour12: true
-                            })}
-                          </span>
-                        </div>
-                        {msg.author.id === user.id && ( // <--- check if the message is sent by the current user
-                          <div className="message-actions">
-                            <button onClick={() => toggleMessageDropdown(msg.id)} className="message-actions-button">
-                            <IoEllipsisHorizontalSharp />
-                            </button>
-                            {dropdownMessageId === msg.id && (
-                              <ul className="message-dropdown-menu">
-                                <li onClick={() => handleDeleteMessage(msg.id)}>Delete Message</li>
-                                <li>Edit Message (Coming soon)</li>
-                                <li>Add Reaction (Coming soon)</li>
-                              </ul>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="message-content">
-                        {msg.content}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="input-container">
-                  <input
-                    type="text"
-                    value={message}
-                    onKeyDown={handleKeyDown} // added onKeyDown event handler
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
-                  />
-                </div>
+                <Chat currentChannel={currentChannel} /> {/* <-- integrated Chat component */}
               </div>
+              // <div className="chat">
+              //   <div className="messages-container">
+              //     {messages.map((msg, index) => (
+              //       <div key={index} className="message-item">
+              //         <div className="message-header">
+              //           <div className="message-username-timestamp">
+              //             <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
+              //             <span className="message-timestamp">
+              //               {new Date(msg.created_at).toLocaleString('en-US', {
+              //                 day:'2-digit',
+              //                 month: '2-digit',
+              //                 year: 'numeric',
+              //                 hour: 'numeric',
+              //                 minute: '2-digit',
+              //                 hour12: true
+              //               })}
+              //             </span>
+              //           </div>
+              //           {msg.author.id === user.id && ( // <--- check if the message is sent by the current user
+              //             <div className="message-actions">
+              //               <button onClick={() => toggleMessageDropdown(msg.id)} className="message-actions-button">
+              //               <IoEllipsisHorizontalSharp />
+              //               </button>
+              //               {dropdownMessageId === msg.id && (
+              //                 <ul className="message-dropdown-menu">
+              //                   <li onClick={() => handleDeleteMessage(msg.id)}>Delete Message</li>
+              //                   <li>Edit Message (Coming soon)</li>
+              //                   <li>Add Reaction (Coming soon)</li>
+              //                 </ul>
+              //               )}
+              //             </div>
+              //           )}
+              //         </div>
+              //         <div className="message-content">
+              //           {msg.content}
+              //         </div>
+              //       </div>
+              //     ))}
+              //   </div>
+              //   <div className="input-container">
+              //     <input
+              //       type="text"
+              //       value={message}
+              //       // onKeyDown={handleKeyDown} // added onKeyDown event handler
+              //       onChange={(e) => setMessage(e.target.value)}
+              //       placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
+              //     />
+              //   </div>
+              // </div>
             ) : (
               <div className="welcome-message">
                 <div className="welcome-message-header">

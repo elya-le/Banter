@@ -23,22 +23,46 @@ export const thunkAuthenticate = () => async (dispatch) => {
 };
 
 export const thunkLogin = (credentials) => async dispatch => {
-  const response = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials)
-  });
+  try {
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials)
+    });
 
-  if(response.ok) {
-    const data = await response.json();
-    dispatch(setUser(data));
-  } else if (response.status < 500) {
-    const errorMessages = await response.json();
-    return errorMessages
-  } else {
+    if(response.ok) {
+      const data = await response.json();
+      dispatch(setUser(data));
+    } else if (response.status < 500) {
+      const errorMessages = await response.json();
+      return errorMessages;
+    } else {
+      console.error("Server error during login:", response);
+      return { server: "Something went wrong. Please try again" }
+    }
+  } catch (error) {
+    console.error("Error during login request:", error);
     return { server: "Something went wrong. Please try again" }
   }
 };
+
+// export const thunkLogin = (credentials) => async dispatch => {
+//   const response = await fetch("/api/auth/login", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(credentials)
+//   });
+
+//   if(response.ok) {
+//     const data = await response.json();
+//     dispatch(setUser(data));
+//   } else if (response.status < 500) {
+//     const errorMessages = await response.json();
+//     return errorMessages
+//   } else {
+//     return { server: "Something went wrong. Please try again" }
+//   }
+// };
 
 
 export const thunkSignup = (user) => async (dispatch) => {
