@@ -64,7 +64,8 @@ def verify_s3_access():
 verify_s3_access()
 
 # application security
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # <-- ensure this line is present
+CORS(app, resources={r"/*": {"origins": "*"}})  # temporarily allow all origins
+# CORS(app, resources={r"/*": {"origins": "http://localhost:5001"}})  # <-- ensure this line is present from working sockets
 # CORS(app)
 
 

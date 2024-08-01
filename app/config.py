@@ -1,5 +1,5 @@
-
 import os
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -9,6 +9,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     FLASK_RUN_PORT = os.environ.get('FLASK_RUN_PORT')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
     # Check if DATABASE_URL is set
     database_url = os.environ.get('DATABASE_URL')
     if database_url:
@@ -18,7 +19,13 @@ class Config:
         SQLALCHEMY_DATABASE_URI = database_url
     else:
         raise ValueError("No DATABASE_URL set for Flask application")
+    
     SQLALCHEMY_ECHO = False
+
+# Add logging to capture the database URL
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.debug(f"DATABASE_URL: {os.environ.get('DATABASE_URL')}")
 
 
 # import os
