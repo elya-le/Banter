@@ -11,9 +11,10 @@ import Chat from "../Chat"; // <-- import Chat component
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
-import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+// import { IoEllipsisHorizontalSharp } from "react-icons/io5";
 // import io from 'socket.io-client';
-import { fetchMessages, deleteMessage, selectMessagesByChannel } from "../../redux/messages";
+import { fetchMessages } from "../../redux/messages";
+// import { selectMessagesByChannel, deleteMessage } from "../../redux/messages";
 
 // const socket = io('http://localhost:5000');
 
@@ -28,10 +29,10 @@ function ServerDetailPage() {
   const server = allServers.find((s) => s.id === parseInt(id));
   const channels = useSelector((state) => state.channels.channels) || [];
   const [currentChannel, setCurrentChannel] = useState(null);
-  const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []);
+  // const messages = useSelector((state) => currentChannel ? selectMessagesByChannel(state, currentChannel.id) : []);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [dropdownMessageId, setDropdownMessageId] = useState(null);
+  // const [message, setMessage] = useState('');
+  // const [dropdownMessageId, setDropdownMessageId] = useState(null);
 
   // Fetch servers and server details when user/id changes
   useEffect(() => {
@@ -50,7 +51,7 @@ function ServerDetailPage() {
           !event.target.closest('.message-actions-button') &&
           !event.target.closest('.message-dropdown-menu')) {
         setDropdownOpen(false);
-        setDropdownMessageId(null);
+        // setDropdownMessageId(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -119,13 +120,13 @@ function ServerDetailPage() {
   //   }
   // };
 
-  const handleDeleteMessage = (messageId) => {
-    dispatch(deleteMessage(messageId));
-  };
+  // const handleDeleteMessage = (messageId) => {
+  //   dispatch(deleteMessage(messageId));
+  // };
 
-  const toggleMessageDropdown = (messageId) => {
-    setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
-  };
+  // const toggleMessageDropdown = (messageId) => {
+  //   setDropdownMessageId((prevId) => (prevId === messageId ? null : messageId));
+  // };
 
   if (!user) {
     return <Navigate to="/" />;

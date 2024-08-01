@@ -1,17 +1,21 @@
-// src/components/Chat.jsx
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { io } from 'socket.io-client';
 
 let socket;
 
-const Chat = () => {
+const Chat = ({ currentChannel }) => {
     const [chatInput, setChatInput] = useState("");
     const [messages, setMessages] = useState([]);
     const user = useSelector(state => state.session.user);
 
     useEffect(() => {
         console.log("Component mounted");
+
+        if (!currentChannel) {
+            console.error("No current channel provided");
+            return;
+        }
 
         // open socket connection
         console.log("Connecting to socket...");
@@ -26,8 +30,10 @@ const Chat = () => {
         });
 
         socket.on("chat", (chat) => {
-            console.log("Received chat message on client:", chat);
-            setMessages(messages => [...messages, chat]);
+            if (chat.channel_id === currentChannel.id) {  // <-- make sure to use channel_id
+                console.log("Received chat message on client:", chat);
+                setMessages(messages => [...messages, chat]);
+            }
         });
 
         // when component unmounts, disconnect
@@ -35,7 +41,32 @@ const Chat = () => {
             console.log("Disconnecting from socket...");
             socket.disconnect();
         };
-    }, []);
+    }, [currentChannel]);
+
+    useEffect(() => {
+        if (!currentChannel) {
+            console.error("No current channel provided");
+            return;
+        }
+
+        // fetch initial messages for the current channel
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch(`/api/channels/${currentChannel.id}/messages`);
+                const data = await response.json();
+                const mappedMessages = data.map(message => ({
+                    user: message.author.username,
+                    msg: message.content,
+                    channel_id: message.channel_id,
+                })); // <-- map backend message structure to frontend structure
+                setMessages(mappedMessages);  // <-- this has been updated to map messages
+            } catch (error) {
+                console.error("Failed to fetch messages:", error);
+            }
+        };
+
+        fetchMessages();
+    }, [currentChannel]);
 
     const updateChatInput = (e) => {
         console.log("Updating chat input:", e.target.value);
@@ -44,17 +75,43 @@ const Chat = () => {
 
     const sendChat = (e) => {
         e.preventDefault();
-        const message = { user: user.username, msg: chatInput };
+        if (!currentChannel) {
+            console.error("No current channel provided");
+            return;
+        }
+        const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id };
         console.log("Sending chat message:", message);
         socket.emit("chat", message);
+
+        // save message to the database
+        const saveMessage = async () => {
+            try {
+                await fetch(`/api/channels/${currentChannel.id}/messages`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ content: chatInput })
+                });
+            } catch (error) {
+                console.error("Failed to save message:", error);
+            }
+        };
+
+        saveMessage();
+
         setChatInput("");
     };
+
+    if (!currentChannel) {
+        return <div>Please select a channel to view the chat.</div>;
+    }
 
     return (user && (
         <div>
             <div>
                 {messages.map((message, ind) => (
-                    <div key={ind}>{`${message.user}: ${message.msg}`}</div>
+                    <div key={ind}>{`${message.user}: ${message.msg}`}</div>  // <-- use user and msg
                 ))}
             </div>
             <form onSubmit={sendChat}>
