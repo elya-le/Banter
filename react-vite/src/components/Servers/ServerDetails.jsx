@@ -7,6 +7,7 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import ServerFormModal from "../Servers/ServerFormModal";
 import ChannelFormModal from "../Channels/ChannelFormModal";
+import Chat from "../Chat"; // <-- import Chat component
 import "../DiscoverPage/DiscoverPage.css";
 import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
@@ -306,54 +307,57 @@ function ServerDetailPage() {
             <div className="server-main-content">
             {currentChannel ? (
               <div className="chat">
-                <div className="messages-container">
-                  {messages.map((msg, index) => (
-                    <div key={index} className="message-item">
-                      <div className="message-header">
-                        <div className="message-username-timestamp">
-                          <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
-                          <span className="message-timestamp">
-                            {new Date(msg.created_at).toLocaleString('en-US', {
-                              day:'2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              hour12: true
-                            })}
-                          </span>
-                        </div>
-                        {msg.author.id === user.id && ( // <--- check if the message is sent by the current user
-                          <div className="message-actions">
-                            <button onClick={() => toggleMessageDropdown(msg.id)} className="message-actions-button">
-                            <IoEllipsisHorizontalSharp />
-                            </button>
-                            {dropdownMessageId === msg.id && (
-                              <ul className="message-dropdown-menu">
-                                <li onClick={() => handleDeleteMessage(msg.id)}>Delete Message</li>
-                                <li>Edit Message (Coming soon)</li>
-                                <li>Add Reaction (Coming soon)</li>
-                              </ul>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <div className="message-content">
-                        {msg.content}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="input-container">
-                  <input
-                    type="text"
-                    value={message}
-                    // onKeyDown={handleKeyDown} // added onKeyDown event handler
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
-                  />
-                </div>
+                <Chat currentChannel={currentChannel} /> {/* <-- integrated Chat component */}
               </div>
+              // <div className="chat">
+              //   <div className="messages-container">
+              //     {messages.map((msg, index) => (
+              //       <div key={index} className="message-item">
+              //         <div className="message-header">
+              //           <div className="message-username-timestamp">
+              //             <strong>{msg.author.username}</strong> {/* <--- this has been updated to safely access user.username */}
+              //             <span className="message-timestamp">
+              //               {new Date(msg.created_at).toLocaleString('en-US', {
+              //                 day:'2-digit',
+              //                 month: '2-digit',
+              //                 year: 'numeric',
+              //                 hour: 'numeric',
+              //                 minute: '2-digit',
+              //                 hour12: true
+              //               })}
+              //             </span>
+              //           </div>
+              //           {msg.author.id === user.id && ( // <--- check if the message is sent by the current user
+              //             <div className="message-actions">
+              //               <button onClick={() => toggleMessageDropdown(msg.id)} className="message-actions-button">
+              //               <IoEllipsisHorizontalSharp />
+              //               </button>
+              //               {dropdownMessageId === msg.id && (
+              //                 <ul className="message-dropdown-menu">
+              //                   <li onClick={() => handleDeleteMessage(msg.id)}>Delete Message</li>
+              //                   <li>Edit Message (Coming soon)</li>
+              //                   <li>Add Reaction (Coming soon)</li>
+              //                 </ul>
+              //               )}
+              //             </div>
+              //           )}
+              //         </div>
+              //         <div className="message-content">
+              //           {msg.content}
+              //         </div>
+              //       </div>
+              //     ))}
+              //   </div>
+              //   <div className="input-container">
+              //     <input
+              //       type="text"
+              //       value={message}
+              //       // onKeyDown={handleKeyDown} // added onKeyDown event handler
+              //       onChange={(e) => setMessage(e.target.value)}
+              //       placeholder={`Message #${currentChannel ? currentChannel.name.toLowerCase() : ''}`} // <--- updated placeholder
+              //     />
+              //   </div>
+              // </div>
             ) : (
               <div className="welcome-message">
                 <div className="welcome-message-header">
