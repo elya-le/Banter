@@ -1,7 +1,7 @@
-# run.py
 import eventlet
 eventlet.monkey_patch()  # this must be called before any other imports
 
+import os  # <-- make sure os is imported
 import select  # import select after monkey patching
 from app import app, socketio
 

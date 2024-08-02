@@ -10,3 +10,4 @@ dist-ssr
 build
 
 copy_into_envy.py
+node_modules

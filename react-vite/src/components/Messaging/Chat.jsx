@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { io } from 'socket.io-client'; 
+import { format } from 'date-fns'; // <-- import date-fns for date formatting
 import './Chat.css'; // import the CSS file
 
 let socket;
@@ -56,7 +57,7 @@ const Chat = ({ currentChannel }) => {
                     user: message.author.username,
                     msg: message.content,
                     channel_id: message.channel_id,
-                    created_at: message.created_at,  // <-- include created_at timestamp
+                    created_at: new Date(message.created_at).toISOString(),  // <-- ensure correct date format
                     id: message.id  // <-- include message ID for deletion
                 })); // <-- map backend message structure to frontend structure
                 setMessages(mappedMessages);  // <-- this has been updated to map messages
@@ -88,7 +89,7 @@ const Chat = ({ currentChannel }) => {
                 console.error("No current channel provided");
                 return;
             }
-            const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id };
+            const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id, created_at: new Date().toISOString() };
             socket.emit("chat", message);
 
             // save message to the database
@@ -113,8 +114,7 @@ const Chat = ({ currentChannel }) => {
     };
 
     const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true };
-        return new Date(dateString).toLocaleString('en-US', options).replace(',', ''); // <-- remove comma between date and time
+        return format(new Date(dateString), 'MM/dd/yyyy hh:mm a'); // <-- use date-fns to format the date
     };
 
     const handleDeleteMessage = async (messageId) => {
@@ -146,7 +146,7 @@ const Chat = ({ currentChannel }) => {
     }, []);
 
     if (!currentChannel) {
-        return <div className="chat-error">Please select a channel send messages</div>;  // <-- added class
+        return <div className="chat-error">Please select a channel to view the chat.</div>;  // <-- added class
     }
 
     return (user && (
