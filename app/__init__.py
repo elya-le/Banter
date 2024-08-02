@@ -63,9 +63,7 @@ def verify_s3_access():
 verify_s3_access()
 
 CORS(app, resources={r"/*": {"origins": "*"}})  # temporarily allow all origins
-# CORS(app, resources={r"/*": {"origins": "http://localhost:5001"}})  # <-- ensure this line is present from working sockets
 # CORS(app)
-
 
 # redirect http to https in production
 @app.before_request
@@ -124,4 +122,3 @@ if __name__ == "__main__":
     import eventlet
     eventlet.monkey_patch()
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))  # use the PORT environment variable for production
-    # socketio.run(app, host='0.0.0.0', port=5001)  # <-- this has been updated to port 5001 to avoid address conflict

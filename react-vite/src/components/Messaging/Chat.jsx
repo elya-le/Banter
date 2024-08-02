@@ -20,7 +20,8 @@ const Chat = ({ currentChannel }) => {
         }
 
         // open socket connection
-        socket = io("http://localhost:5001"); // <-- this has been updated to port 5001
+        const socketUrl = process.env.NODE_ENV === 'production' ? 'https://elya-le-banter.onrender.com' : 'http://localhost:5001';
+        socket = io(socketUrl);
 
         socket.on("connect", () => {
         });
@@ -145,7 +146,7 @@ const Chat = ({ currentChannel }) => {
     }, []);
 
     if (!currentChannel) {
-        return <div className="chat-error">Please select a channel to view the chat.</div>;  // <-- added class
+        return <div className="chat-error">Please select a channel send messages</div>;  // <-- added class
     }
 
     return (user && (

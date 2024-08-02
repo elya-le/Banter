@@ -3,7 +3,7 @@ import eslintPlugin from "vite-plugin-eslint";
 import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
-export default defineConfig((mode) => ({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     eslintPlugin({
@@ -14,7 +14,7 @@ export default defineConfig((mode) => ({
   server: {
     open: true,
     proxy: {
-      "/api": "http://127.0.0.1:5001",  // keep existing proxy settings
+      "/api": mode === "production" ? "https://elya-le-banter.onrender.com" : "http://127.0.0.1:5001",
     },
   },
 }));
