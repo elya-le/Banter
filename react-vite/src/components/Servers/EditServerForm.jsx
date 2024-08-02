@@ -1,3 +1,5 @@
+// File: EditServerForm.js
+
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
@@ -21,8 +23,6 @@ function EditServerForm() {
   // track initial values to reset to if needed
   const [initialName, setInitialName] = useState(server ? server.name : "");
   const [initialDescription, setInitialDescription] = useState(server ? server.description : "");
-  // const [initialAvatarUrl, setInitialAvatarUrl] = useState(server ? server.avatar_url : "");
-  // const [initialBannerUrl, setInitialBannerUrl] = useState(server ? server.banner_url : "");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // state to track if the popup should be red
@@ -42,20 +42,15 @@ function EditServerForm() {
       setDescription(server.description);
       setInitialName(server.name);
       setInitialDescription(server.description);
-      // setInitialAvatarUrl(server.avatar_url);
-      // setInitialBannerUrl(server.banner_url);
     }
   }, [server]);
 
   // update the unsaved changes state when inputs change
   useEffect(() => {
     setHasUnsavedChanges(
-      name !== initialName ||
-      description !== initialDescription ||
-      avatarFile !== null ||
-      bannerFile !== null
+      name !== initialName || description !== initialDescription
     );
-  }, [name, description, initialName, initialDescription, avatarFile, bannerFile]);
+  }, [name, description, initialName, initialDescription]);
 
   // handle form submission
   const handleSubmit = async (e) => {
@@ -71,10 +66,6 @@ function EditServerForm() {
       // Update initial values to the new state
       setInitialName(name);
       setInitialDescription(description);
-      // setInitialAvatarUrl(result.avatar_url);
-      // setInitialBannerUrl(result.banner_url);
-      // setAvatarFile(null); // reset the file inputs
-      // setBannerFile(null); // reset the file inputs
       setHasUnsavedChanges(false);
 
       navigate(`/servers/${id}`);
@@ -92,8 +83,8 @@ function EditServerForm() {
   const handleReset = () => {
     setName(initialName);
     setDescription(initialDescription);
-    // setAvatarFile(null); // reset the file inputs
-    // setBannerFile(null); // reset the file inputs
+    setAvatarFile(null); // reset the file inputs
+    setBannerFile(null); // reset the file inputs
     setHasUnsavedChanges(false);
   };
 
@@ -106,7 +97,6 @@ function EditServerForm() {
   // handle file input change
   const handleFileChange = (setter) => (e) => {
     setter(e.target.files[0]);
-    setHasUnsavedChanges(true);
   };
 
   // handle form close
@@ -180,16 +170,6 @@ function EditServerForm() {
               />
             </label>
           </div>
-          {/* <div className="input-group">
-            <label>
-              <span>category</span>
-              <input
-                type="text"
-                value={category}
-                onChange={handleInputChange(setCategory)}
-              />
-            </label>
-          </div> */}
           {hasUnsavedChanges && (
             <div className={`unsaved-changes-popup ${popupRed ? "red-popup" : ""}`}>
               <div className="unsaved-changes-message">

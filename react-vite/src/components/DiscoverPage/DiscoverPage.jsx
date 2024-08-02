@@ -123,6 +123,7 @@ function DiscoverPage() {
         </div>
       </div>
       <div className="main-content">
+        <div className="main-content-container">
         <div className="hero-section">
           <h1>Welcome {user.username}! Find your community on Discord</h1>
           <p>From gaming, to music, to learning, there&apos;s a place for you.</p>
@@ -153,6 +154,8 @@ function DiscoverPage() {
               </div>
             </Link>
           ))}
+        </div>
+
         </div>
       </div>
     </div>
