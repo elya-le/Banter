@@ -60,18 +60,6 @@ function ServerDetailPage() {
     };
   }, []);
 
-  // Setup websocket event listeners
-  // useEffect(() => {
-  //   socket.on('message', (msg) => {
-  //     console.log('Received message:', msg);  // <-- this has been updated to log received messages for debugging
-  //     dispatch(addMessage({ channelId: msg.channel, message: msg }));
-  //   });
-
-  //   return () => {
-  //     socket.off('message');
-  //   };
-  // }, [dispatch]);
-
   const handleLogout = () => {
     dispatch(thunkLogout());
   };

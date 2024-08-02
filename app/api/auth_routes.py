@@ -23,20 +23,15 @@ def login():
     """
     Logs a user in
     """
-    print("Login endpoint hit")
     form = LoginForm()
     # Get the csrf_token from the request cookie and put it into the
     # form manually to validate_on_submit can be used
     form['csrf_token'].data = request.cookies['csrf_token']
-    print("CSRF token:", request.cookies['csrf_token'])  # --------- log CSRF token
-    print("Form data received:", request.json)  # ---------- log received form data
     if form.validate_on_submit():
         # Add the user to the session, we are logged in!
         user = User.query.filter(User.email == form.data['email']).first()
         login_user(user)
-        print("User logged in:", user.to_dict())  # -------------- log successful
         return user.to_dict()
-    print("login form errors:", form.errors)  # ------------ log form errors
     return form.errors, 401
 
 
@@ -55,8 +50,6 @@ def sign_up():
     """
     form = SignUpForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    
-    print("form data received:", request.json)  # ----addeeed this line for debugging
 
     if form.validate_on_submit():
         user = User(
@@ -67,11 +60,9 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
         login_user(user)
-        print("User signed up and logged in:", user.to_dict())  # - log successful signup
         return user.to_dict()
     else:
         logger.error("Form validation failed with errors: %s", form.errors)
-    print("Signup form errors:", form.errors)  # - log form errors
     return form.errors, 401
 
 

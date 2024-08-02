@@ -14,19 +14,15 @@ const Chat = ({ currentChannel }) => {
     const dropdownRef = useRef(null); // <-- ref to track the dropdown menu
 
     useEffect(() => {
-        console.log("Component mounted");
-
         if (!currentChannel) {
             console.error("No current channel provided");
             return;
         }
 
         // open socket connection
-        console.log("Connecting to socket...");
         socket = io("http://localhost:5001"); // <-- this has been updated to port 5001
 
         socket.on("connect", () => {
-            console.log("Connected to socket");
         });
 
         socket.on("connect_error", (err) => {
@@ -35,14 +31,11 @@ const Chat = ({ currentChannel }) => {
 
         socket.on("chat", (chat) => {
             if (chat.channel_id === currentChannel.id) {  // <-- make sure to use channel_id
-                console.log("Received chat message on client:", chat);
                 setMessages(messages => [...messages, chat]);
             }
         });
-
         // when component unmounts, disconnect
         return () => {
-            console.log("Disconnecting from socket...");
             socket.disconnect();
         };
     }, [currentChannel]);
@@ -84,7 +77,6 @@ const Chat = ({ currentChannel }) => {
     };
 
     const updateChatInput = (e) => {
-        console.log("Updating chat input:", e.target.value);
         setChatInput(e.target.value);
     };
 
@@ -96,7 +88,6 @@ const Chat = ({ currentChannel }) => {
                 return;
             }
             const message = { user: user.username, msg: chatInput, channel_id: currentChannel.id };
-            console.log("Sending chat message:", message);
             socket.emit("chat", message);
 
             // save message to the database

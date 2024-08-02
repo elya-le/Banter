@@ -57,20 +57,10 @@ def verify_s3_access():
     )
     try:
         s3_client.list_buckets()
-        print("S3 Access Verified!")
     except (NoCredentialsError, PartialCredentialsError) as e:
         print(f"S3 Access Error: {e}")
 
 verify_s3_access()
-
-# application security
-# if os.environ.get('FLASK_ENV') == 'production':
-#     CORS(app, resources={r"/*": {"origins": [
-#         'https://elya-le-banter.onrender.com',
-#         'http://elya-le-banter.onrender.com'
-#     ]}})
-# else:
-#     CORS(app, resources={r"/*": {"origins": "*"}})
 
 CORS(app, resources={r"/*": {"origins": "*"}})  # temporarily allow all origins
 # CORS(app, resources={r"/*": {"origins": "http://localhost:5001"}})  # <-- ensure this line is present from working sockets
@@ -128,12 +118,10 @@ def not_found(e):
 # websocket events
 @socketio.on('message')
 def handle_message(message):
-    print('received message: ' + str(message))  # ensure proper string conversion
     send(message, broadcast=True)
 
 if __name__ == "__main__":
     import eventlet
     eventlet.monkey_patch()
-    print("Starting server with Eventlet...")
     socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))  # use the PORT environment variable for production
     # socketio.run(app, host='0.0.0.0', port=5001)  # <-- this has been updated to port 5001 to avoid address conflict

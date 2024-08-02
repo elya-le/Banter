@@ -32,17 +32,6 @@ def create_server():
         return jsonify(server.to_dict()), 201
     return {'errors': form.errors}, 400
 
-
-# @server_routes.route('/', methods=['GET'])
-# @login_required
-# def get_servers():
-#     servers = Server.query.all()
-#     joined_servers = [server.id for server in current_user.joined_servers]
-#     return jsonify({
-#         'servers': [server.to_dict() for server in servers],
-#         'joined_servers': joined_servers
-#     })
-
 @server_routes.route('/', methods=['GET'])
 @login_required  # ensure user is logged in
 def get_servers():
