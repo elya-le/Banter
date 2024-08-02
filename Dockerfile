@@ -30,6 +30,7 @@ COPY . .
 
 # run database migrations and seed the database
 RUN flask db upgrade
+RUN flask seed undo
 RUN flask seed all
 
 # define the command to run the application using Gunicorn with Eventlet workers this has been updated to use eventlet for WebSocket support
