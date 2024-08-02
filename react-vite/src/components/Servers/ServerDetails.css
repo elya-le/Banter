@@ -359,10 +359,12 @@ li {
 
 /* ---------- main content chat ---------- */
 .server-main-content-container {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
   padding: 0px 10px;
   height: 100vh;
-  width: 2600px;
-  display: flex;
   justify-content: baseline;
   /* border: 1px solid blue; */
 
@@ -370,6 +372,7 @@ li {
 
 .server-main-content {
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: flex-end; 
 
