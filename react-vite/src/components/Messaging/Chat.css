@@ -9,17 +9,18 @@
   height: 100vh; /* full viewport height */
   width: 100%;
   border-radius: 5px;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* border: 1px solid yellow; */
 }
 .chat-messages {
-  display: flex;
-  flex-direction: column; /* order messages normally */
-  flex: 1;
+  display: block; /* Change to block to use margin auto technique */
   width: 100%;
   overflow-y: auto; /* scroll only when needed */
   padding: 10px;
-  /* border: 1px solid red; */
+  margin-top: auto; /* Pushes content to the bottom */
+  /* Hide the scrollbar but allow scrolling */
+  -ms-overflow-style: none; /* for Internet Explorer and Edge */
+  scrollbar-width: none; /* for Firefox */
 }
 
 
@@ -39,6 +40,7 @@
   margin-bottom: 10px;
   padding: 5px 10px;
   border-radius: 5px;
+  position: relative;
   /* border: 1px solid red; */
 }
 
@@ -50,6 +52,11 @@
   gap: 100px;
   overflow: hidden;
   /* border: 1px solid red; */
+}
+
+.chat-message:hover .message-actions-link,
+.message-actions-link.active {
+  display: inline; /* Show on hover or if active */
 }
 
 .chat-message-user {
@@ -111,16 +118,15 @@
 }
 
 
-
 .message-actions-link {
+  display: none; /* Hide by default */
   background-color: none !important;
   border: none;
   color: white;
   cursor: pointer;
   font-size: 16px;
-  position: relative; /* relative to ensure absolute positioning of dropdown */
+  position: relative;
   overflow: hidden;
-  /* border: 1px solid red;  */
 }
 
 .message-dropdown-menu {

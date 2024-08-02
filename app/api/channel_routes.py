@@ -96,9 +96,10 @@ def post_message(channel_id):
 def delete_message(id):
     message = Message.query.get(id)
     if message:
-        if message.author_id == current_user.id:  # <--- this has been updated to author_id
+        if message.author_id == current_user.id:
             db.session.delete(message)
             db.session.commit()
+            emit('messageDeleted', {'messageId': id}, broadcast=True)  # Emit the event
             return jsonify({'message': 'Message deleted'}), 200
         else:
             return jsonify({'error': 'Unauthorized'}), 403
