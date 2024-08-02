@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import LoginButton from "../components/TopNavigation/LoginButton";
 import "../index.css";
 
 function HomePage() {
@@ -11,8 +12,7 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <h1>Welcome to our app — </h1>
-      <p>Please login to use Discord in your browser</p>
+      <LoginButton className="home-page-button">Open Discord in your browser</LoginButton>
     </div>
   );
 }

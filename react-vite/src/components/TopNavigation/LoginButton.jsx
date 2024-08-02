@@ -4,7 +4,7 @@ import { thunkLogout } from "../../redux/session";
 import LoginFormModal from "../LoginFormModal";
 import "./LoginButton.css";
 
-function LoginButton() {
+function LoginButton({ className, children }) {
   const dispatch = useDispatch();
   const { setModalContent } = useModal();
   const user = useSelector((state) => state.session.user);
@@ -18,8 +18,8 @@ function LoginButton() {
   };
 
   return (
-    <button onClick={user ? logout : openLoginModal} className="login-button">
-      {user ? "Log Out" : "Login"}
+    <button onClick={user ? logout : openLoginModal} className={className}>
+      {children || (user ? "Log Out" : "Login")}
     </button>
   );
 }

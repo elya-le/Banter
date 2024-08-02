@@ -210,3 +210,39 @@ button:hover {
   /* height: 100px;
   object-fit: cover; */
 }
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 100vw;
+  min-height: 100vh; /* Ensure the section takes at least the full viewport height */
+  text-align: center;
+  background: url('https://portfolio-elya.s3.us-east-2.amazonaws.com/hero-banners/welcome-page-2.png') no-repeat center center fixed; /* Background image */
+  background-size: cover; /* Ensure the image covers the entire background */
+  color: white; /* Adjust text color to contrast with the background */
+  padding: 50px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.home-page-button {
+  width: 400px;
+  display: inline-block;
+  background-color: white; /* Change this to match the button color */
+  color: black;
+  margin-top: 600px;
+  padding: 20px 30px;
+  border: none;
+  border-radius: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-page-button:hover {
+  background-color: #4752C4; /* Slightly darker shade for hover effect */
+}
