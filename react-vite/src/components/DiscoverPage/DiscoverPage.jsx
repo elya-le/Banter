@@ -81,6 +81,7 @@ function DiscoverPage() {
                 )
               );
             })}
+            <li className="divider"></li> {/* add the divider here */}
             <li>
               <OpenModalButton
                 modalComponent={<ServerFormModal />}

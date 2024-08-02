@@ -12,6 +12,16 @@
   display: none;
 }
 
+.divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 2px;
+  background-color: #2C2F33;
+  margin: 10px 5px 0px 10px;
+}
+
 /* ---------- global font ---------- */
 
 body {

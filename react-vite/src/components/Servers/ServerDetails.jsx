@@ -13,8 +13,6 @@ import "./ServerDetails.css";
 import { FaCompass, FaChevronDown, FaTimes, FaPlus, FaHashtag, FaCog } from "react-icons/fa";
 import { fetchMessages } from "../../redux/messages";
 
-
-
 function ServerDetailPage() {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -28,7 +26,6 @@ function ServerDetailPage() {
   const [currentChannel, setCurrentChannel] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-
   // Fetch servers and server details when user/id changes
   useEffect(() => {
     if (user) {
@@ -37,6 +34,20 @@ function ServerDetailPage() {
       dispatch(thunkFetchChannels(id));
     }
   }, [dispatch, user, id]);
+
+  // Set default channel to #general if it exists
+  useEffect(() => {
+    if (channels.length > 0) {
+      const generalChannel = channels.find(channel => channel.name.toLowerCase() === 'general');
+      if (generalChannel) {
+        setCurrentChannel(generalChannel);
+        dispatch(fetchMessages(generalChannel.id));
+      } else {
+        setCurrentChannel(channels[0]);
+        dispatch(fetchMessages(channels[0].id));
+      }
+    }
+  }, [channels, dispatch]);
 
   // Event listener for closing dropdown when clicking outside
   useEffect(() => {
@@ -81,7 +92,6 @@ function ServerDetailPage() {
     dispatch(fetchMessages(channel.id)); // Fetch messages when switching channels
   };
 
-
   if (!user) {
     return <Navigate to="/" />;
   }
@@ -98,7 +108,7 @@ function ServerDetailPage() {
       <div className="sidebar">
         <nav className="sidebar-nav">
           <ul>
-            {/* --------------- Viewed Servers ----------------- */}
+            {/* --------------- viewed Servers ----------------- */}
             {viewedServers.map((server) => (
               <li key={server.id} className="server-icon">
                 <Link to={`/servers/${server.id}`}>
@@ -114,7 +124,7 @@ function ServerDetailPage() {
             ))}
           </ul>
           <ul>
-            {/* --------------- Joined Servers ----------------- */}
+            {/* --------------- joined Servers ----------------- */}
             {joinedServers.map((serverId) => {
               const server = allServers.find((s) => s.id === serverId);
               return (
@@ -131,6 +141,7 @@ function ServerDetailPage() {
                 </li>
               );
             })}
+            <li className="divider"></li> {/* add the divider here */}
             <li>
               <OpenModalButton
                 modalComponent={<ServerFormModal />}
@@ -149,23 +160,19 @@ function ServerDetailPage() {
         </nav>
       </div>
       <div className="banner-channel-main-container">
-        <div className="banner-channel-nav-container">
-        {/* ----------- join server banner */}
         {!isMember && (
-        <div className="join-server-banner-container">
-          <div className="join-server-call-to-action">
-            <div className="join-server-words">
-              <p>You are currently in preview mode. Join this server to start chatting!</p>
+          <div className="join-server-banner-container">
+            <div className="join-server-call-to-action">
+              <div className="join-server-words">
+                <p>You are currently in preview mode. Join this server to start chatting!</p>
+              </div>
+              <button className="join-server-button" onClick={handleJoinServer}>Join this server</button>
             </div>
-            <button className="join-server-button" onClick={handleJoinServer}>Join this server</button>
           </div>
-        </div>
         )}
-        </div>
         <div className="channel-and-main">
-          <div className="channel-nav">
+          <div className={`channel-nav ${!isMember ? 'with-banner' : ''}`}>
           {/* --------------- side nav ----------------- */}
-
             {server.banner_url ? (
               <div className="server-banner" onClick={toggleDropdown}>
                 <img src={server.banner_url} alt={`${server.name} banner`} />
@@ -190,11 +197,11 @@ function ServerDetailPage() {
             )}
             {dropdownOpen && (
               <ul className="server-dropdown-menu">
-                {/* --------------- edit sever link ----------------- */}
+                {/* --------------- edit server link ----------------- */}
                 <li>
                   <Link to={`/servers/${id}/edit`} className="server-dd-hover">Edit Server</Link>
                 </li>
-                {/* --------------- create sever modal ----------------- */}
+                {/* --------------- create server modal ----------------- */}
                 <li className="server-dd-hover create-channel-item">
                   <OpenModalButton
                     modalComponent={<ChannelFormModal serverId={id} />}
@@ -202,7 +209,7 @@ function ServerDetailPage() {
                     className="create-channel-link"
                   />
                 </li>
-                {/* --------------- leave sever modal ----------------- */}
+                {/* --------------- leave server modal ----------------- */}
                 {isMember && (
                   <li className="server-dd-hover leave-server-item" onClick={handleLeaveServer}>
                     Leave Server
@@ -227,7 +234,7 @@ function ServerDetailPage() {
                   {channels && channels.length > 0 ? (
                     channels.map((channel) => (
                       <li key={channel.id} onClick={() => handleChannelClick(channel)}>
-                        <div className="channel-list-item">
+                        <div className={channel.id === currentChannel?.id ? 'channel-list-item active' : 'channel-list-item'}>
                           <FaHashtag className="channel-icon" />
                           <div className="channel-name">
                             {channel.name.toLowerCase()}
@@ -255,31 +262,28 @@ function ServerDetailPage() {
                 Log Out
               </button>
             </div>
-          {/* </div> */}
-          {/* --------------- main content ----------------- */}
           </div>
-          <div className="server-main-content-container">
+          {/* --------------- main content ----------------- */}
+          <div className={`server-main-content-container ${!isMember ? 'with-banner' : ''}`}>
             <div className="server-main-content">
-            {currentChannel ? (
-              <div className="chat">
-                <Chat currentChannel={currentChannel} /> {/* <-- integrated Chat component */}
-              </div>
-            ) : (
-              <div className="welcome-message">
-                <div className="welcome-message-header">
-                  <h1>Welcome to {server.name}</h1>
+              {currentChannel ? (
+                <div className="chat">
+                  <Chat currentChannel={currentChannel} /> {/* <-- integrated Chat component */}
                 </div>
-                <div className="server-action-items">
-                  <p>This is your brand new, shiny server.</p>
+              ) : (
+                <div className="welcome-message">
+                  <div className="welcome-message-header">
+                    <h1>Welcome to your {server.name} server</h1>
+                  </div>
+                  <div className="server-action-items">
+                    <p>Select a channel to start messaging</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
-
       </div>
-      {/* --------------- nav and messages ----------------- */}
     </div>
   );
 }

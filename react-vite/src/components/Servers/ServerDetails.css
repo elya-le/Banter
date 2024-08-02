@@ -1,3 +1,8 @@
+.banner-channel-main-container {
+  width: 100vw; 
+}
+
+
 .server-details-page-container {
   display: flex;
   align-items: flex-start;
@@ -139,28 +144,29 @@ li.create-channel-item {
   display: flex;
 }
 
-
 .channel-nav {
-  display: flex;
-  flex-direction: row;
-  /* width: 100%; */
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
-  height: 100vh;
   font-size: 12px;
   min-width: 240px;
+  max-width: 240px;
   background-color: #2B2D31;
-  /* border: 1px solid red; */
+  height: 100vh; /* default height */
+  transition: height 0.3s ease; /* Add a transition for height */
+}
+
+.channel-nav.with-banner {
+  height: calc(100vh - 40px); /* reduced height when banner is present */
 }
 
 .join-server-banner-container {
-  background-color: #4752C4;;
-  /* border: 3px solid white; */
+  background-color: #4752C4;
   height: 40px;
   color: white;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .join-server-call-to-action {
@@ -175,12 +181,14 @@ li.create-channel-item {
 
 .join-server-words {
   /* border: 1px solid red; */
+  width: 380px;
   font-size: 12px;
   white-space: nowrap;
   align-items: center;
   justify-content: center;
 }
 .join-server-button {
+  width: 200px;
   background-color: #4752C4;
   color: white;
   border: 1px solid white;
@@ -271,6 +279,11 @@ li {
   margin: 3px;
   border-radius: 4px;
   background-color: transparent; /* ensure background is transparent by default */
+}
+.channel-list-item.active {
+  color: white;
+  background-color: #404249;
+  border-radius: 3px;
 }
 
 .channel-list-item:hover{
@@ -364,10 +377,13 @@ li {
   padding: 10px;
   box-sizing: border-box;
   padding: 0px 10px;
-  height: 100vh;
+  height: 100vh; /* default height */
   justify-content: baseline;
-  /* border: 1px solid blue; */
+  transition: height 0.3s ease; /* Add a transition for height */
+}
 
+.server-main-content-container.with-banner {
+  height: calc(100vh - 40px); /* reduced height when banner is present */
 }
 
 .server-main-content {
@@ -507,7 +523,7 @@ li {
 
 .welcome-message {
   /* border: 1px solid red; */
-  max-width: 360px ;
+  width: 600px;
   display: flex;
   flex-direction: column;
   align-items: baseline;
@@ -522,7 +538,7 @@ li {
 
 
 .welcome-message p {
-  font-size: 12px;
+  font-size: 18px;
   color: #80848E;
   margin-bottom: 20px;
   text-align: left;
@@ -555,4 +571,28 @@ li {
   max-width: 340px ;
   width: 100%; /* ensure it spans the full width of parent */
   text-align: left; 
+}
+
+
+.welcome-message-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.server-action-items {
+  max-width: 340px;
+  width: 100%;
+  text-align: left;
+}
+
+.edit-channel-link {
+  color: #5865F2;
+  text-decoration: none;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.edit-channel-link:hover {
+  text-decoration: underline;
 }
