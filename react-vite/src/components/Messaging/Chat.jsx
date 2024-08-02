@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'; 
 import './Chat.css'; // import the CSS file
 
 let socket;
