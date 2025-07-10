@@ -84,14 +84,14 @@ This full-stack application demonstrates proficiency in modern web development t
 
 ### Built With
 
-* [![React][React.js]][React-url]
-* [![Redux][Redux.js]][Redux-url]
-* [![Vite][Vite.js]][Vite-url]
-* [![Flask][Flask.palletsprojects.com]][Flask-url]
-* [![SQLAlchemy][SQLAlchemy.org]][SQLAlchemy-url]
-* [![WebSockets][WebSockets.org]][WebSockets-url]
-* [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
-* [![JWT][JWT.io]][JWT-url]
+[![React][React.js]][React-url]
+[![Redux][Redux.js]][Redux-url]
+[![Vite][Vite.js]][Vite-url]
+[![Flask][Flask.palletsprojects.com]][Flask-url]
+[![SQLAlchemy][SQLAlchemy.org]][SQLAlchemy-url]
+[![WebSockets][WebSockets.org]][WebSockets-url]
+[![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
+[![JWT][JWT.io]][JWT-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
