@@ -1,19 +1,13 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
 
-
-
-
 <!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -24,7 +18,19 @@
 
 <h1 align="center">Banter</h1>
 
-</div> 
+  <p align="center">
+    A modern Discord-inspired chat application for seamless real-time communication
+    <br />
+    <a href="https://github.com/elya-le/Banter"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/elya-le/Banter">View Demo</a>
+    ·
+    <a href="https://github.com/elya-le/Banter/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    ·
+    <a href="https://github.com/elya-le/Banter/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -34,6 +40,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#key-features">Key Features</a></li>
       </ul>
     </li>
     <li>
@@ -44,6 +51,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#api-endpoints">API Endpoints</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -52,8 +60,6 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -61,15 +67,20 @@
 
 Banter is a modern chat application designed to replicate and enhance the features of Discord. It offers real-time messaging, along with various tools for community building and management. Built with a focus on user experience and performance, Banter aims to provide a seamless and enjoyable communication platform for gamers, hobbyists, and professional communities alike.
 
-### Key features include:
+This full-stack application demonstrates proficiency in modern web development technologies, real-time communication protocols, and database management. It serves as a comprehensive portfolio piece showcasing both frontend and backend development skills.
 
-- Text channels for organized communication
-- Direct messaging for private conversations
-- Rich media sharing (images, videos, links)
+### Key Features
+
+- **Real-time Messaging**: Instant communication powered by WebSockets
+- **Server & Channel Management**: Create and organize servers with multiple text channels
+- **Direct Messaging**: Private conversations between users
+- **User Authentication**: Secure registration and login with JWT tokens
+- **Rich Media Sharing**: Support for images, videos, and links
+- **User Profiles**: Customizable user profiles with avatar support
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Message History**: Persistent message storage and retrieval
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -82,86 +93,158 @@ Banter is a modern chat application designed to replicate and enhance the featur
 * [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
 * [![JWT][JWT.io]][JWT-url]
 
-<!-- Reference-style links for technologies -->
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Redux.js]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white
-[Redux-url]: https://redux.js.org/
-[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
-[Vite-url]: https://vitejs.dev/
-[Flask.palletsprojects.com]: https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white
-[Flask-url]: https://flask.palletsprojects.com/
-[SQLAlchemy.org]: https://img.shields.io/badge/SQLAlchemy-454545?style=for-the-badge&logo=sqlalchemy&logoColor=red
-[SQLAlchemy-url]: https://www.sqlalchemy.org/
-[WebSockets.org]: https://img.shields.io/badge/WebSockets-0083A3?style=for-the-badge&logo=websockets&logoColor=white
-[WebSockets-url]: https://websockets.readthedocs.io/
-[PostgreSQL.org]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
-[PostgreSQL-url]: https://www.postgresql.org/
-[JWT.io]: https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white
-[JWT-url]: https://jwt.io/
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running, follow these steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+Before you begin, ensure you have the following installed:
+* Node.js (v14 or higher)
 * npm
   ```sh
   npm install npm@latest -g
   ```
+* Python (v3.8 or higher)
+* PostgreSQL
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repository
    ```sh
    git clone https://github.com/elya-le/Banter.git
+   cd Banter
    ```
-3. Install NPM packages
+
+2. Set up the backend
    ```sh
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+3. Set up the database
+   ```sh
+   # Create a PostgreSQL database named 'banter'
+   createdb banter
+   ```
+
+4. Configure environment variables
+   ```sh
+   # Create a .env file in the backend directory
+   touch .env
+   ```
+   Add the following to your `.env` file:
+   ```env
+   DATABASE_URL=postgresql://username:password@localhost/banter
+   SECRET_KEY=your-secret-key-here
+   JWT_SECRET_KEY=your-jwt-secret-key-here
+   ```
+
+5. Initialize the database
+   ```sh
+   flask db upgrade
+   ```
+
+6. Set up the frontend
+   ```sh
+   cd ../frontend
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+
+7. Start the development servers
+   
+   Backend (from backend directory):
+   ```sh
+   flask run
+   ```
+   
+   Frontend (from frontend directory):
+   ```sh
+   npm run dev
    ```
 
+8. Open your browser and navigate to `http://localhost:5173`
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### Creating an Account
+1. Navigate to the registration page
+2. Enter your username, email, and password
+3. Click "Sign Up" to create your account
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### Joining a Server
+1. Use an invite link or create a new server
+2. Browse available channels within the server
+3. Click on a channel to start messaging
+
+### Sending Messages
+- Type your message in the input field at the bottom
+- Press Enter or click Send to post your message
+- Messages appear in real-time for all users in the channel
+
+### Direct Messaging
+1. Click on a user's profile
+2. Select "Send Direct Message"
+3. Start your private conversation
+
+_For more detailed usage instructions, please refer to the [Documentation](https://github.com/elya-le/Banter/wiki)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- API ENDPOINTS -->
+## API Endpoints
 
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user
+- `DELETE /api/auth/logout` - Logout user
+
+### Servers
+- `GET /api/servers` - Get all servers for authenticated user
+- `POST /api/servers` - Create a new server
+- `GET /api/servers/:id` - Get server details
+- `PUT /api/servers/:id` - Update server
+- `DELETE /api/servers/:id` - Delete server
+
+### Channels
+- `GET /api/servers/:serverId/channels` - Get channels for a server
+- `POST /api/servers/:serverId/channels` - Create a new channel
+- `PUT /api/channels/:id` - Update channel
+- `DELETE /api/channels/:id` - Delete channel
+
+### Messages
+- `GET /api/channels/:channelId/messages` - Get messages for a channel
+- `POST /api/channels/:channelId/messages` - Send a message
+- `PUT /api/messages/:id` - Edit message
+- `DELETE /api/messages/:id` - Delete message
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [x] Basic real-time messaging
+- [x] User authentication and authorization
+- [x] Server and channel management
+- [x] Direct messaging
+- [ ] Voice channels
+- [ ] File sharing and attachments
+- [ ] Emoji reactions and custom emojis
+- [ ] User roles and permissions
+- [ ] Message search functionality
+- [ ] Mobile app development
+- [ ] Push notifications
+- [ ] Screen sharing capabilities
 
 See the [open issues](https://github.com/elya-le/Banter/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -180,37 +263,27 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Elya Le - hello@elya.dev
 
-Project Link: [https://github.com/elya-le/Banter](https://github.com/elya-le/Banter)
+Project Link: [https://elya-le-banter.onrender.com/)
+
+Portfolio: [https://elya.dev)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+* [Socket.IO](https://socket.io/)
+* [React Icons](https://react-icons.github.io/react-icons/)
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -225,21 +298,23 @@ Project Link: [https://github.com/elya-le/Banter](https://github.com/elya-le/Ban
 [license-shield]: https://img.shields.io/github/license/elya-le/Banter.svg?style=for-the-badge
 [license-url]: https://github.com/elya-le/Banter/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://linkedin.com/in/your-linkedin-username
 [product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
+
+<!-- Technology badges -->
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[Redux.js]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white
+[Redux-url]: https://redux.js.org/
+[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vitejs.dev/
+[Flask.palletsprojects.com]: https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white
+[Flask-url]: https://flask.palletsprojects.com/
+[SQLAlchemy.org]: https://img.shields.io/badge/SQLAlchemy-454545?style=for-the-badge&logo=sqlalchemy&logoColor=red
+[SQLAlchemy-url]: https://www.sqlalchemy.org/
+[WebSockets.org]: https://img.shields.io/badge/WebSockets-0083A3?style=for-the-badge&logo=websockets&logoColor=white
+[WebSockets-url]: https://websockets.readthedocs.io/
+[PostgreSQL.org]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
+[PostgreSQL-url]: https://www.postgresql.org/
+[JWT.io]: https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white
+[JWT-url]: https://jwt.io/
